@@ -21,6 +21,8 @@
       --text: #111D25;
       --muted: #4B4450;
       --faint: #7D7481;
+      --ok: #2F9E44;
+      --warn: #F2B84B;
       --error: #BA1A1A;
       --error-soft: #FFDAD6;
       --gradient-brand: linear-gradient(135deg, #0072CE 0%, #582C83 100%);
@@ -283,6 +285,63 @@
       line-height: 1.3;
       margin-top: 4px;
     }
+
+    .device-lines {
+      display: grid;
+      gap: 8px;
+      margin-top: 9px;
+    }
+
+    .device-line {
+      display: grid;
+      grid-template-columns: 34px 1fr 38px;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .power-bar {
+      height: 9px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: var(--container);
+      border: 1px solid rgba(215, 228, 239, 0.9);
+    }
+
+    .power-bar span {
+      display: block;
+      height: 100%;
+      margin: 0;
+      border-radius: inherit;
+      background: var(--ok);
+    }
+
+    .power-bar.status-warn span { background: var(--warn); }
+    .power-bar.status-danger span { background: var(--error); }
+    .power-bar.status-offline span { width: 8% !important; background: #9DA7B0; }
+
+    .status-color-key {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-top: 10px;
+      color: var(--faint);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .status-chip {
+      width: 9px;
+      height: 9px;
+      border-radius: 3px;
+      display: inline-block;
+    }
+
+    .status-chip.ok { background: var(--ok); }
+    .status-chip.warn { background: var(--warn); }
+    .status-chip.danger { background: var(--error); }
 
     .issue-cloud {
       position: relative;
@@ -1038,6 +1097,51 @@
       margin-top: 14px;
     }
 
+    .care-package {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .package-row {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      gap: 10px;
+      align-items: center;
+      min-height: 58px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 17px;
+      background: rgba(255,255,255,0.82);
+    }
+
+    .package-row i {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-style: normal;
+      color: #fff;
+      background: var(--gradient-ai);
+      font-weight: 900;
+    }
+
+    .package-row strong {
+      display: block;
+      font-family: "Plus Jakarta Sans";
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    .package-row span {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.25;
+    }
+
     .more-list {
       display: grid;
       gap: 10px;
@@ -1156,6 +1260,23 @@
       cursor: pointer;
     }
 
+    .flow-actions {
+      display: grid;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .flow-secondary {
+      width: 100%;
+      height: 48px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--brand);
+      font-weight: 800;
+      cursor: pointer;
+    }
+
     @media (max-width: 1100px) {
       .page {
         grid-template-columns: 1fr;
@@ -1229,6 +1350,23 @@
                   <small>Devices</small>
                   <strong id="device-status-title">Both connected</strong>
                   <span id="device-status-copy">Left 85% · Right 92%</span>
+                  <div class="device-lines" aria-label="Battery and connection status">
+                    <div class="device-line">
+                      <span>Left</span>
+                      <div class="power-bar" id="left-power"><span style="width: 85%"></span></div>
+                      <span id="left-power-label">85%</span>
+                    </div>
+                    <div class="device-line">
+                      <span>Right</span>
+                      <div class="power-bar" id="right-power"><span style="width: 92%"></span></div>
+                      <span id="right-power-label">92%</span>
+                    </div>
+                  </div>
+                  <div class="status-color-key" aria-label="Status color key">
+                    <span><span class="status-chip ok"></span> good</span>
+                    <span><span class="status-chip warn"></span> low</span>
+                    <span><span class="status-chip danger"></span> urgent</span>
+                  </div>
                 </article>
                 <article class="status-tile" data-insight="care-mini">
                   <small>Care</small>
@@ -1263,7 +1401,7 @@
                   <button class="issue-option" data-insight="care-request" data-problem="care">
                     <span class="issue-icon">+</span>
                     <strong>Ask someone</strong>
-                    <span>Send this to your audiologist.</span>
+                    <span>Package sound and settings for your audiologist.</span>
                   </button>
                 </div>
 
@@ -1342,10 +1480,20 @@
               <button class="primary-action" data-insight="care-request">
                 <div>
                   <strong>Ask my audiologist</strong>
-                  <span>Send current sound situation for review.</span>
+                  <span>Send current sound, device status, and safe settings for review.</span>
                 </div>
                 <strong aria-hidden="true">→</strong>
               </button>
+              <article class="card" data-insight="care-package">
+                <small>What gets sent</small>
+                <h3>Care package</h3>
+                <p>No raw medical photo or confusing dashboard. Merry summarizes what Dr. Elena needs to help.</p>
+                <div class="care-package">
+                  <div class="package-row"><i>♪</i><div><strong>Current sound environment</strong><span>Speech direction, nearby noise, and harshness snapshot.</span></div></div>
+                  <div class="package-row"><i>⚙</i><div><strong>Device and battery status</strong><span>Connection, left/right battery colors, and last sync time.</span></div></div>
+                  <div class="package-row"><i>✓</i><div><strong>Safe setting parameters</strong><span>Current AI recommendation and comfort limits.</span></div></div>
+                </div>
+              </article>
             </div>
           </section>
 
@@ -1374,10 +1522,18 @@
 
         <div class="flow-overlay" id="flow">
           <div class="flow-card">
-            <div class="flow-orb">AI</div>
-            <h3>Checking your sound</h3>
-            <p>AI checks speech, noise, and comfort first. Manual controls stay hidden unless needed.</p>
-            <button class="close-flow" id="close-flow">Back to Now</button>
+            <div class="flow-orb" id="flow-orb">AI</div>
+            <h3 id="flow-title">Checking your sound</h3>
+            <p id="flow-copy">AI checks speech, noise, and comfort first. Manual controls stay hidden unless needed.</p>
+            <div class="care-package" id="flow-package" hidden>
+              <div class="package-row"><i>♪</i><div><strong>Sound environment</strong><span id="flow-sound">Stable room, front speech, light background noise.</span></div></div>
+              <div class="package-row"><i>●</i><div><strong>Device status</strong><span id="flow-device">Both connected · Left 85% · Right 92%</span></div></div>
+              <div class="package-row"><i>✓</i><div><strong>Safe settings</strong><span id="flow-settings">Current clarity profile and comfort limits.</span></div></div>
+            </div>
+            <div class="flow-actions">
+              <button class="close-flow" id="send-care" hidden>Send to Dr. Elena</button>
+              <button class="flow-secondary" id="close-flow">Back to Now</button>
+            </div>
           </div>
         </div>
       </div>
@@ -1508,8 +1664,14 @@
       "care-request": {
         kicker: "Escalation",
         title: "AI 不夠時，轉真人",
-        copy: "這條路徑承認 AI 不是萬能，也讓使用者知道問題可以被送給聽力師，而不是自己亂調。",
-        list: ["透明說明會送出什麼。", "保留使用者留言。", "建立醫療照護感。"]
+        copy: "這條路徑承認 AI 不是萬能，也讓使用者知道可以直接把當下情境打包給聽力師，而不是自己亂調。",
+        list: ["打包目前聲音環境與裝置狀態。", "帶上安全設定參數，讓聽力師理解前因後果。", "使用者只需確認送出，不必整理技術資料。"]
+      },
+      "care-package": {
+        kicker: "Care package",
+        title: "真人求助要帶著上下文",
+        copy: "按下求助時，不只是送一則空訊息。Merry 會整理聲音環境、左右耳連線與電量顏色、目前 AI 建議與安全限制，讓聽檢師能直接判斷。",
+        list: ["聲音：speech / noise / harshness snapshot。", "裝置：連線、左右耳電量、同步狀態。", "設定：目前清晰度、舒適度與 AI 建議。"]
       },
       "more-device": {
         kicker: "More",
@@ -1555,6 +1717,10 @@
         primaryCopy: "AI will try a clearer setting.",
         battery: "Right 92%",
         batteryWidth: "92%",
+        leftPower: 85,
+        rightPower: 92,
+        leftStatus: "ok",
+        rightStatus: "ok",
         deviceTitle: "Both connected",
         deviceCopy: "Left 85% · Right 92%",
         soundscapeTitle: "Around you feels stable.",
@@ -1572,6 +1738,10 @@
         primaryCopy: "Start a simple AI adjustment.",
         battery: "Right 92%",
         batteryWidth: "92%",
+        leftPower: 85,
+        rightPower: 92,
+        leftStatus: "ok",
+        rightStatus: "ok",
         deviceTitle: "Both connected",
         deviceCopy: "Left 85% · Right 92%",
         soundscapeTitle: "Front speech is important.",
@@ -1589,6 +1759,10 @@
         primaryCopy: "Guide me through a simple fix.",
         battery: "Right offline",
         batteryWidth: "0%",
+        leftPower: 85,
+        rightPower: 0,
+        leftStatus: "ok",
+        rightStatus: "offline",
         deviceTitle: "Right offline",
         deviceCopy: "Left still connected",
         soundscapeTitle: "Sound check is paused.",
@@ -1606,6 +1780,10 @@
         primaryCopy: "See case status and charging steps.",
         battery: "Right 12%",
         batteryWidth: "12%",
+        leftPower: 85,
+        rightPower: 12,
+        leftStatus: "ok",
+        rightStatus: "danger",
         deviceTitle: "Right 12%",
         deviceCopy: "Charge soon",
         soundscapeTitle: "Your area is calm enough.",
@@ -1623,8 +1801,12 @@
         primaryCopy: "Check comfort and reduce harshness.",
         battery: "Right 92%",
         batteryWidth: "92%",
+        leftPower: 85,
+        rightPower: 62,
+        leftStatus: "ok",
+        rightStatus: "warn",
         deviceTitle: "Both connected",
-        deviceCopy: "Left 85% · Right 92%",
+        deviceCopy: "Left 85% · Right 62%",
         soundscapeTitle: "Nearby sound is busy.",
         soundscapeCopy: "Merry notices sharper noise around you and will soften it without hiding speech.",
         issue: false
@@ -1640,6 +1822,10 @@
         primaryCopy: "Send current sound situation for review.",
         battery: "Right 92%",
         batteryWidth: "92%",
+        leftPower: 85,
+        rightPower: 92,
+        leftStatus: "ok",
+        rightStatus: "ok",
         deviceTitle: "Both connected",
         deviceCopy: "Left 85% · Right 92%",
         soundscapeTitle: "Current sound can be shared.",
@@ -1702,12 +1888,12 @@
         flowCopy: "Merry will show what needs charging and what can keep working."
       },
       care: {
-        confirm: "Confirm: Ask my audiologist",
-        trackingTitle: "Preparing care request",
-        step2: "Gathering recent listening situation",
-        step3: "Next: send summary to your audiologist",
-        flowTitle: "Preparing care request",
-        flowCopy: "Merry will collect the current sound situation so your audiologist can review it."
+        confirm: "Send care package to Dr. Elena",
+        trackingTitle: "Preparing care package",
+        step2: "Bundling sound, device status, and safe settings",
+        step3: "Next: send to Dr. Elena for review",
+        flowTitle: "Care package ready",
+        flowCopy: "Merry has bundled the current sound environment, device status, battery colors, and safe setting parameters for Dr. Elena."
       }
     };
 
@@ -1739,10 +1925,51 @@
       document.getElementById("hero-copy").textContent = state.heroCopy;
       document.getElementById("device-status-title").textContent = state.deviceTitle;
       document.getElementById("device-status-copy").textContent = state.deviceCopy;
+      updatePower("left", state.leftPower ?? 85, state.leftStatus || "ok");
+      updatePower("right", state.rightPower ?? 92, state.rightStatus || "ok");
       document.getElementById("soundscape-title").textContent = state.soundscapeTitle;
       document.getElementById("soundscape-copy").textContent = state.soundscapeCopy;
       document.querySelector(".issue-cloud").classList.toggle("issue", state.issue);
       setInsight(insightKey);
+    }
+
+    function updatePower(side, value, status) {
+      const bar = document.getElementById(`${side}-power`);
+      const fill = bar.querySelector("span");
+      const label = document.getElementById(`${side}-power-label`);
+      bar.classList.remove("status-warn", "status-danger", "status-offline");
+      if (status === "warn") bar.classList.add("status-warn");
+      if (status === "danger") bar.classList.add("status-danger");
+      if (status === "offline") bar.classList.add("status-offline");
+      fill.style.width = `${Math.max(0, Math.min(100, value))}%`;
+      label.textContent = status === "offline" ? "Off" : `${value}%`;
+    }
+
+    function openCarePackage(mode = "ready") {
+      const state = states[selectedProblem] || states.ready;
+      document.getElementById("flow").classList.add("active");
+      document.getElementById("flow-package").hidden = false;
+      document.getElementById("send-care").hidden = false;
+      document.getElementById("flow-orb").textContent = mode === "sent" ? "✓" : "Care";
+      document.getElementById("flow-title").textContent = mode === "sent" ? "Sent to Dr. Elena" : "Care package ready";
+      document.getElementById("flow-copy").textContent = mode === "sent"
+        ? "Dr. Elena received the current listening situation and can review it without asking you to explain technical settings."
+        : problemCopy.care.flowCopy;
+      document.getElementById("flow-sound").textContent = state.soundscapeTitle.replace(".", "") + " · recent speech and noise snapshot.";
+      document.getElementById("flow-device").textContent = state.deviceCopy + " · color-coded battery and connection status.";
+      document.getElementById("flow-settings").textContent = "Current clarity profile, comfort limit, and last AI recommendation.";
+      document.getElementById("send-care").textContent = mode === "sent" ? "Sent" : "Send to Dr. Elena";
+      document.getElementById("send-care").disabled = mode === "sent";
+      setInsight("care-package");
+    }
+
+    function openAiFlow(copy) {
+      document.getElementById("flow").classList.add("active");
+      document.getElementById("flow-package").hidden = true;
+      document.getElementById("send-care").hidden = true;
+      document.getElementById("flow-orb").textContent = "AI";
+      document.getElementById("flow-title").textContent = copy.flowTitle;
+      document.getElementById("flow-copy").textContent = copy.flowCopy;
     }
 
     function updateRing() {
@@ -1816,6 +2043,10 @@
 
     document.getElementById("confirm-problem").addEventListener("click", () => {
       const copy = problemCopy[selectedProblem];
+      if (selectedProblem === "care") {
+        openCarePackage("ready");
+        return;
+      }
       const ringMap = { unclear: 0, disconnected: 1, noise: 2, battery: 1, care: 0 };
       ringIndex = ringMap[selectedProblem] ?? 0;
       updateRing();
@@ -1839,17 +2070,17 @@
     document.querySelectorAll(".primary-action").forEach(button => {
       button.addEventListener("click", () => {
         selectedProblem = "care";
-        document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-        document.querySelector('[data-screen="now"]').classList.add("active");
-        document.querySelectorAll(".nav button").forEach(b => b.classList.toggle("active", b.dataset.target === "now"));
-        ringIndex = ringCards.findIndex(card => card.dataset.problem === "care");
-        updateRing();
-        document.getElementById("confirm-problem").focus();
+        applyState("care", "care-package");
+        openCarePackage("ready");
       });
     });
 
     document.getElementById("close-flow").addEventListener("click", () => {
       document.getElementById("flow").classList.remove("active");
+    });
+
+    document.getElementById("send-care").addEventListener("click", () => {
+      openCarePackage("sent");
     });
 
     updateRing();
