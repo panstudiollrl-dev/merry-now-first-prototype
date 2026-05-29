@@ -748,7 +748,7 @@
     }
 
     .total-volume-card {
-      min-height: 148px;
+      min-height: 176px;
       display: grid;
       align-content: center;
       justify-items: center;
@@ -769,8 +769,8 @@
 
     .total-volume-card .total-meter {
       position: relative;
-      width: 14px;
-      height: 44px;
+      width: 16px;
+      height: 78px;
       overflow: hidden;
       border-radius: 999px;
       background: rgba(215,228,239,.9);
@@ -795,7 +795,10 @@
     }
 
     .total-volume-card strong {
-      color: var(--purple);
+      color: transparent;
+      background: var(--total-gradient, var(--brand-grad));
+      -webkit-background-clip: text;
+      background-clip: text;
       font-size: 34px;
       line-height: .95;
       font-family: "Plus Jakarta Sans", system-ui, sans-serif;
@@ -2574,6 +2577,7 @@
     const totalVolumeControl = document.getElementById("total-volume-control");
     const totalVolumeValue = document.getElementById("total-volume-value");
     const totalMeterFill = document.getElementById("total-meter-fill");
+    const totalVolumeCard = document.getElementById("total-volume-control");
     const arcDial = document.getElementById("arc-dial");
     const connectionDemo = document.getElementById("connection-demo");
     const connectionLabel = document.getElementById("connection-label");
@@ -2593,6 +2597,18 @@
     function updateTotalReadout() {
       totalVolumeValue.textContent = totalVolume;
       totalMeterFill.style.height = `${totalVolume}%`;
+      const gradient = totalVolume < 40
+        ? "linear-gradient(180deg, #0072CE, #3CA0E8)"
+        : totalVolume < 72
+          ? "linear-gradient(180deg, #0072CE, #00A3AD)"
+          : "linear-gradient(180deg, #00A3AD, #582C83)";
+      const fill = totalVolume < 40
+        ? "linear-gradient(0deg, #0072CE, #3CA0E8)"
+        : totalVolume < 72
+          ? "linear-gradient(0deg, #0072CE, #00A3AD)"
+          : "linear-gradient(0deg, #0072CE, #00A3AD 48%, #582C83)";
+      totalVolumeCard.style.setProperty("--total-gradient", gradient);
+      totalMeterFill.style.background = fill;
     }
 
     let connectionIssue = false;
