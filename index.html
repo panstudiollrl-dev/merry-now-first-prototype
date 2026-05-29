@@ -463,6 +463,87 @@
       color: var(--white);
     }
 
+    .help-surface.solution-mode > h3,
+    .help-surface.solution-mode > p,
+    .help-surface.solution-mode .option-list {
+      display: none;
+    }
+
+    .solution-card {
+      display: none;
+      animation: rise-in 220ms ease-out;
+    }
+
+    .help-surface.solution-mode .solution-card {
+      display: block;
+    }
+
+    @keyframes rise-in {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .solution-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+      margin-bottom: 14px;
+    }
+
+    .return-problems {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--white);
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 900;
+      padding: 8px 11px;
+    }
+
+    .solution-choice {
+      text-align: right;
+    }
+
+    .solution-choice small {
+      display: block;
+      color: var(--faint);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .solution-choice strong {
+      display: block;
+      margin-top: 2px;
+      color: #111D25;
+      font-size: 14px;
+      font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+    }
+
+    .solution-card h3 {
+      font-size: 23px;
+    }
+
+    .solution-card p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 13.5px;
+      line-height: 1.38;
+    }
+
+    .solution-actions {
+      margin-top: 14px;
+    }
+
+    .screen.solution-active .action-panel {
+      display: none;
+    }
+
     .nearby-card {
       margin-top: 14px;
       padding: 14px;
@@ -1241,6 +1322,20 @@
                   <b class="check">●</b>
                 </button>
               </div>
+              <article class="solution-card" id="solution-card">
+                <div class="solution-top">
+                  <button class="return-problems" type="button" id="return-problems">← Return</button>
+                  <div class="solution-choice"><small>You chose</small><strong id="solution-choice">I can’t hear clearly</strong></div>
+                </div>
+                <span class="micro-label" id="solution-kicker">Speech clarity</span>
+                <h3 id="solution-title">Make speech clearer</h3>
+                <p id="solution-copy">Merry will check nearby speech, background noise, and your current clarity profile before applying anything.</p>
+                <div class="action-panel-items" id="solution-items"></div>
+                <div class="solution-actions">
+                  <button class="primary-action" type="button" id="solution-primary">Apply safer clarity setting</button>
+                  <button class="secondary-action" type="button" id="solution-secondary">Ask someone instead</button>
+                </div>
+              </article>
             </section>
 
             <article class="action-panel" id="action-panel" data-note="nearby">
@@ -1662,6 +1757,16 @@
     const choiceLabel = document.getElementById("choice-label");
     const changeChoice = document.getElementById("change-choice");
     const inlineChoices = document.getElementById("inline-choices");
+    const nowScreen = document.querySelector('[data-screen="now"]');
+    const helpSurface = document.querySelector(".help-surface");
+    const returnProblems = document.getElementById("return-problems");
+    const solutionChoice = document.getElementById("solution-choice");
+    const solutionKicker = document.getElementById("solution-kicker");
+    const solutionTitle = document.getElementById("solution-title");
+    const solutionCopy = document.getElementById("solution-copy");
+    const solutionItems = document.getElementById("solution-items");
+    const solutionPrimary = document.getElementById("solution-primary");
+    const solutionSecondary = document.getElementById("solution-secondary");
 
     function renderAction(problem) {
       selectedProblem = problem;
@@ -1734,6 +1839,65 @@
       control.addEventListener("click", () => renderAction(control.dataset.inlineProblem));
     });
 
+    let solutionDone = false;
+
+    function renderSolution(problem) {
+      solutionDone = false;
+      selectedProblem = problem;
+      const data = actionData[problem] || actionData.clarity;
+      nowScreen.classList.add("solution-active");
+      helpSurface.classList.add("solution-mode");
+      solutionChoice.textContent = data.label || "";
+      solutionKicker.textContent = data.kicker;
+      solutionTitle.textContent = data.title;
+      solutionCopy.textContent = data.copy;
+      solutionPrimary.textContent = data.primary;
+      solutionSecondary.hidden = problem === "support";
+      solutionItems.innerHTML = data.items.map(item => `
+        <div class="action-item"><i>${item[0]}</i><div><strong>${item[1]}</strong><span>${item[2]}</span></div></div>
+      `).join("");
+      document.querySelectorAll("[data-problem]").forEach(node => {
+        node.classList.toggle("selected", node.dataset.problem === problem);
+      });
+      setNote(data.note);
+      helpSurface.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    function returnToProblemList() {
+      solutionDone = false;
+      nowScreen.classList.remove("solution-active");
+      helpSurface.classList.remove("solution-mode");
+      document.querySelectorAll("[data-problem]").forEach(node => {
+        node.classList.remove("selected");
+      });
+      renderAction("stable");
+      document.querySelector('[data-problem="clarity"]').classList.add("selected");
+      setNote("now");
+      helpSurface.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    solutionPrimary.addEventListener("click", () => {
+      if (solutionDone) {
+        returnToProblemList();
+        return;
+      }
+      const data = actionData[selectedProblem] || actionData.stable;
+      if (data.route) {
+        route(data.route);
+        return;
+      }
+      solutionKicker.textContent = "Done";
+      solutionTitle.textContent = data.done;
+      solutionCopy.textContent = "You can keep using this, return to the problem list, or ask Dr. Elena for help.";
+      solutionPrimary.textContent = "Return to problem list";
+      solutionDone = true;
+      solutionSecondary.hidden = false;
+      solutionSecondary.textContent = "Ask someone";
+    });
+
+    solutionSecondary.addEventListener("click", () => renderSolution("support"));
+    returnProblems.addEventListener("click", returnToProblemList);
+
     function route(name) {
       document.querySelectorAll(".screen").forEach(screen => {
         screen.classList.toggle("active", screen.dataset.screen === name);
@@ -1743,7 +1907,7 @@
         button.classList.toggle("active", button.dataset.nav === navKey);
       });
       document.querySelector(".phone-body").scrollTop = 0;
-      if (name === "now") renderAction("stable");
+      if (name === "now") returnToProblemList();
       setNote(name);
     }
 
@@ -1752,7 +1916,7 @@
     });
 
     document.querySelectorAll("[data-problem]").forEach(control => {
-      control.addEventListener("click", () => renderAction(control.dataset.problem));
+      control.addEventListener("click", () => renderSolution(control.dataset.problem));
     });
 
     document.querySelectorAll("[data-note]").forEach(node => {
