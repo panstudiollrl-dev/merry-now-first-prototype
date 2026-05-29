@@ -9,27 +9,25 @@
   <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --brand: #582C83;
-      --brand-deep: #40106B;
       --blue: #0072CE;
+      --purple: #582C83;
       --teal: #00A3AD;
+      --white: #FFFFFF;
+      --ink: #333F48;
       --bg: #F6FAFF;
-      --surface: #FFFFFF;
-      --soft: #EAF5FF;
-      --container: #E3EFFB;
-      --border: #D7E4EF;
-      --text: #111D25;
-      --muted: #4B4450;
-      --faint: #7D7481;
+      --soft-blue: #EAF5FF;
+      --soft-teal: #EAF8F8;
+      --line: #D7E4EF;
+      --muted: rgba(51,63,72,.72);
+      --faint: rgba(51,63,72,.5);
       --ok: #2F9E44;
       --warn: #F2B84B;
-      --error: #BA1A1A;
-      --error-soft: #FFDAD6;
-      --gradient-brand: linear-gradient(135deg, #0072CE 0%, #582C83 100%);
-      --gradient-soft: linear-gradient(135deg, #FFFFFF 0%, #EAF5FF 100%);
-      --gradient-ai: linear-gradient(135deg, #00A3AD 0%, #0072CE 100%);
-      --shadow: 0 18px 45px rgba(17, 29, 37, 0.10);
-      --card-shadow: 0 10px 28px rgba(64, 16, 107, 0.08);
+      --danger: #BA1A1A;
+      --brand-grad: linear-gradient(135deg, #0072CE 0%, #582C83 100%);
+      --soft-grad: linear-gradient(135deg, #FFFFFF 0%, #EAF5FF 100%);
+      --teal-grad: linear-gradient(135deg, #FFFFFF 0%, #EAF8F8 100%);
+      --shadow: 0 20px 48px rgba(51,63,72,.12);
+      --card-shadow: 0 10px 26px rgba(51,63,72,.07);
     }
 
     * { box-sizing: border-box; }
@@ -37,49 +35,54 @@
     body {
       margin: 0;
       min-height: 100vh;
-      background:
-        radial-gradient(circle at 12% 18%, rgba(0, 114, 206, 0.08), transparent 32%),
-        radial-gradient(circle at 88% 8%, rgba(88, 44, 131, 0.09), transparent 28%),
-        var(--bg);
-      color: var(--text);
+      color: var(--ink);
       font-family: "Atkinson Hyperlegible Next", system-ui, sans-serif;
+      background:
+        radial-gradient(circle at 12% 12%, rgba(0,114,206,.09), transparent 30%),
+        radial-gradient(circle at 88% 6%, rgba(0,163,173,.08), transparent 28%),
+        var(--bg);
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+      font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+      letter-spacing: 0;
+    }
+
+    button {
+      font: inherit;
+      cursor: pointer;
     }
 
     .page {
       display: grid;
-      grid-template-columns: minmax(300px, 380px) minmax(390px, 430px) minmax(320px, 420px);
+      grid-template-columns: minmax(280px, 360px) minmax(390px, 420px) minmax(300px, 380px);
       gap: 32px;
-      align-items: start;
-      max-width: 1280px;
+      max-width: 1260px;
       margin: 0 auto;
-      padding: 36px 28px;
+      padding: 36px 24px;
+      align-items: start;
     }
 
     .brief,
-    .logic-panel {
+    .notes {
       position: sticky;
       top: 28px;
     }
 
     .eyebrow {
-      color: var(--brand);
+      color: var(--purple);
       font-size: 13px;
       font-weight: 800;
-      letter-spacing: 0.08em;
+      letter-spacing: .08em;
       text-transform: uppercase;
     }
 
-    h1, h2, h3, h4 {
-      font-family: "Plus Jakarta Sans", system-ui, sans-serif;
-      margin: 0;
-      letter-spacing: 0;
-    }
-
-    h1 {
+    .brief h1 {
       margin-top: 12px;
       font-size: 42px;
       line-height: 1.08;
-      color: var(--text);
+      color: #111D25;
     }
 
     .lead {
@@ -89,93 +92,110 @@
       line-height: 1.55;
     }
 
-    .principles {
+    .flow-list {
       margin-top: 28px;
       display: grid;
-      gap: 12px;
+      gap: 10px;
     }
 
-    .principle {
-      padding: 14px 16px;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      background: rgba(255,255,255,0.72);
-      box-shadow: 0 10px 22px rgba(17, 29, 37, 0.04);
+    .flow-step {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 10px;
+      align-items: start;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,.78);
+      box-shadow: var(--card-shadow);
     }
 
-    .principle strong {
+    .flow-step i {
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      color: var(--white);
+      background: var(--brand-grad);
+      font-style: normal;
+      font-weight: 800;
+      font-size: 12px;
+    }
+
+    .flow-step strong {
       display: block;
-      color: var(--brand);
+      color: var(--purple);
       font-size: 15px;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
 
-    .principle span {
+    .flow-step span {
+      display: block;
       color: var(--muted);
-      font-size: 15px;
-      line-height: 1.45;
+      font-size: 14px;
+      line-height: 1.38;
     }
 
     .phone-shell {
       justify-self: center;
       width: min(100%, 410px);
-      border-radius: 38px;
       padding: 12px;
+      border-radius: 40px;
       background: #111D25;
-      box-shadow: 0 35px 80px rgba(17, 29, 37, 0.22);
+      box-shadow: 0 34px 80px rgba(51,63,72,.24);
     }
 
     .phone {
+      position: relative;
       height: 820px;
       overflow: hidden;
+      border: 1px solid rgba(255,255,255,.48);
       border-radius: 30px;
       background: var(--bg);
-      border: 1px solid rgba(255,255,255,0.35);
-      position: relative;
     }
 
     .phone-header {
       height: 64px;
       display: grid;
-      grid-template-columns: 56px 1fr 56px;
+      grid-template-columns: 54px 1fr 54px;
       align-items: center;
       padding: 0 18px;
-      background: rgba(246, 250, 255, 0.92);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .icon-btn {
-      width: 44px;
-      height: 44px;
-      border-radius: 999px;
-      border: 0;
-      background: transparent;
-      color: var(--brand);
-      font-size: 21px;
-      font-weight: 800;
-      display: grid;
-      place-items: center;
-      cursor: pointer;
-    }
-
-    .icon-btn:hover { background: var(--soft); }
-
-    .icon-btn.is-empty {
-      pointer-events: none;
-      visibility: hidden;
+      background: rgba(255,255,255,.72);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(14px);
     }
 
     .m-mark {
       justify-self: center;
-      width: 28px;
-      height: 28px;
+      width: 30px;
+      height: 30px;
       object-fit: contain;
+    }
+
+    .avatar-btn,
+    .header-icon {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--blue);
+      font-weight: 800;
+    }
+
+    .avatar-btn {
+      justify-self: end;
+      background: var(--soft-blue);
+      color: var(--purple);
     }
 
     .phone-body {
       height: calc(100% - 64px - 76px);
       overflow-y: auto;
-      padding: 24px 20px 28px;
+      padding: 22px 20px 24px;
       scrollbar-width: none;
     }
 
@@ -185,861 +205,643 @@
     .screen.active { display: block; }
 
     .screen-title {
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      align-items: flex-start;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 14px;
+      align-items: start;
       margin-bottom: 18px;
     }
 
     .screen-title h2 {
+      color: #111D25;
       font-size: 28px;
-      line-height: 1.18;
-      color: var(--text);
+      line-height: 1.13;
     }
 
     .screen-title p {
-      margin: 6px 0 0;
+      margin: 7px 0 0;
       color: var(--muted);
-      font-size: 16px;
-      line-height: 1.45;
+      font-size: 15px;
+      line-height: 1.38;
     }
 
     .status-pill {
-      flex: 0 0 auto;
       display: inline-flex;
       align-items: center;
       gap: 6px;
+      min-width: 54px;
+      justify-content: center;
       padding: 8px 11px;
+      border: 1px solid var(--line);
       border-radius: 999px;
-      background: #fff;
-      border: 1px solid var(--border);
+      background: var(--white);
       color: var(--muted);
       font-size: 13px;
       font-weight: 800;
+      box-shadow: 0 8px 18px rgba(51,63,72,.04);
     }
 
     .dot {
       width: 8px;
       height: 8px;
-      border-radius: 999px;
+      border-radius: 50%;
       background: var(--teal);
     }
 
-    .dot.warn { background: var(--error); }
-
-    .card-grid {
-      display: grid;
-      gap: 14px;
-    }
-
-    .problem-surface {
-      display: grid;
-      gap: 14px;
-    }
-
-    .mini-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
-
-    .status-strip {
+    .status-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
       margin-bottom: 14px;
     }
 
-    .status-tile {
-      min-height: 76px;
-      border: 1px solid var(--border);
+    .status-card {
+      min-height: 106px;
+      padding: 13px;
+      border: 1px solid var(--line);
       border-radius: 18px;
-      background: rgba(255,255,255,0.82);
-      padding: 12px 13px;
-      box-shadow: 0 8px 20px rgba(17, 29, 37, 0.04);
+      background: rgba(255,255,255,.86);
+      box-shadow: 0 8px 20px rgba(51,63,72,.05);
     }
 
-    .status-tile small {
+    .micro-label {
       display: block;
+      margin-bottom: 8px;
       color: var(--faint);
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 900;
-      letter-spacing: 0.04em;
+      letter-spacing: .04em;
       text-transform: uppercase;
-      margin-bottom: 7px;
     }
 
-    .status-tile strong {
+    .status-card strong {
       display: block;
-      color: var(--text);
-      font-family: "Plus Jakarta Sans";
+      color: #111D25;
       font-size: 17px;
-      line-height: 1.2;
+      line-height: 1.15;
+      font-family: "Plus Jakarta Sans", system-ui, sans-serif;
     }
 
-    .status-tile span {
-      display: block;
+    .status-card p {
+      margin: 4px 0 0;
       color: var(--muted);
-      font-size: 13px;
+      font-size: 12.5px;
       line-height: 1.3;
-      margin-top: 4px;
     }
 
-    .device-lines {
+    .power-lines {
       display: grid;
-      gap: 8px;
+      gap: 7px;
       margin-top: 9px;
     }
 
-    .device-line {
+    .power-line {
       display: grid;
-      grid-template-columns: 34px 1fr 38px;
+      grid-template-columns: 24px 1fr 34px;
+      gap: 7px;
       align-items: center;
-      gap: 8px;
       color: var(--muted);
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 800;
     }
 
-    .power-bar {
-      height: 9px;
-      border-radius: 999px;
+    .power-track {
+      height: 8px;
       overflow: hidden;
-      background: var(--container);
-      border: 1px solid rgba(215, 228, 239, 0.9);
+      border-radius: 999px;
+      background: var(--soft-blue);
     }
 
-    .power-bar span {
+    .power-track span {
       display: block;
       height: 100%;
-      margin: 0;
       border-radius: inherit;
       background: var(--ok);
     }
 
-    .power-bar.status-warn span { background: var(--warn); }
-    .power-bar.status-danger span { background: var(--error); }
-    .power-bar.status-offline span { width: 8% !important; background: #9DA7B0; }
+    .power-track.warn span { background: var(--warn); }
+    .power-track.danger span { background: var(--danger); }
 
-    .status-color-key {
+    .color-key {
       display: flex;
-      gap: 8px;
+      gap: 7px;
       align-items: center;
-      margin-top: 10px;
+      margin-top: 8px;
       color: var(--faint);
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 800;
     }
 
-    .status-chip {
-      width: 9px;
-      height: 9px;
-      border-radius: 3px;
+    .chip {
       display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 3px;
+      margin-right: 3px;
     }
 
-    .status-chip.ok { background: var(--ok); }
-    .status-chip.warn { background: var(--warn); }
-    .status-chip.danger { background: var(--error); }
+    .chip.ok { background: var(--ok); }
+    .chip.warn { background: var(--warn); }
+    .chip.danger { background: var(--danger); }
 
-    .issue-cloud {
-      position: relative;
-      min-height: 448px;
-      border: 1px solid var(--border);
-      border-radius: 28px;
+    .help-surface {
       padding: 18px;
-      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 28px;
       background:
-        radial-gradient(circle at 18% 20%, rgba(0, 114, 206, 0.13), transparent 34%),
-        radial-gradient(circle at 82% 8%, rgba(88, 44, 131, 0.13), transparent 32%),
-        linear-gradient(135deg, #FFFFFF 0%, #EEF7FF 100%);
+        radial-gradient(circle at 88% 10%, rgba(0,163,173,.10), transparent 32%),
+        linear-gradient(135deg, #FFFFFF 0%, #F7FBFF 58%, #F5F0FA 100%);
       box-shadow: var(--card-shadow);
     }
 
-    .issue-cloud::before {
-      content: "";
-      position: absolute;
-      inset: 82px 26px auto;
-      height: 180px;
-      border-radius: 999px;
-      background: conic-gradient(from 210deg, rgba(0,114,206,0.18), rgba(88,44,131,0.18), rgba(0,163,173,0.16), rgba(0,114,206,0.18));
-      filter: blur(4px);
-      opacity: 0.8;
-    }
-
-    .issue-cloud h3 {
-      position: relative;
+    .help-surface h3 {
+      color: #111D25;
       font-size: 24px;
-      line-height: 1.18;
-      max-width: 260px;
-      color: var(--text);
-      z-index: 1;
+      line-height: 1.1;
     }
 
-    .issue-cloud > p {
-      position: relative;
-      margin: 8px 0 0;
+    .help-surface > p {
+      margin: 8px 0 16px;
       color: var(--muted);
-      font-size: 16px;
-      line-height: 1.42;
-      max-width: 280px;
-      z-index: 1;
+      font-size: 14.5px;
+      line-height: 1.36;
     }
 
-    .issue-options {
+    .option-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .option-card {
+      width: 100%;
+      min-height: 58px;
+      display: grid;
+      grid-template-columns: 38px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--white);
+      text-align: left;
+      box-shadow: 0 8px 18px rgba(51,63,72,.04);
+      transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+    }
+
+    .option-card:hover,
+    .option-card.selected {
+      transform: translateY(-1px);
+      border-color: rgba(0,114,206,.32);
+      box-shadow: 0 12px 24px rgba(0,114,206,.10);
+      background: var(--soft-grad);
+    }
+
+    .option-card.primary {
+      min-height: 84px;
+      grid-template-columns: 44px 1fr 22px;
+      border-color: rgba(0,114,206,.26);
+      background: var(--brand-grad);
+      color: var(--white);
+      box-shadow: 0 16px 30px rgba(88,44,131,.18);
+    }
+
+    .option-card.primary strong,
+    .option-card.primary span {
+      color: var(--white);
+    }
+
+    .option-icon {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      color: var(--blue);
+      background: var(--soft-blue);
+      font-weight: 900;
+    }
+
+    .option-card.primary .option-icon {
+      width: 42px;
+      height: 42px;
+      color: var(--white);
+      background: rgba(255,255,255,.18);
+    }
+
+    .option-card strong {
+      display: block;
+      color: #111D25;
+      font-size: 15px;
+      line-height: 1.14;
+      font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+    }
+
+    .option-card span {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.28;
+    }
+
+    .check {
+      color: var(--white);
+      font-weight: 900;
+    }
+
+    .nearby-card {
+      margin-top: 14px;
+      padding: 14px;
+      border: 1px solid #BDE5E8;
+      border-radius: 22px;
+      background:
+        radial-gradient(circle at 88% 20%, rgba(0,163,173,.12), transparent 32%),
+        var(--soft-grad);
+      box-shadow: 0 10px 22px rgba(51,63,72,.06);
+    }
+
+    .nearby-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .nearby-card .micro-label {
+      margin: 0;
+      color: var(--teal);
+    }
+
+    .state {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--ok);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .nearby-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .ambient {
       position: relative;
-      z-index: 2;
+      height: 66px;
+      margin-top: 12px;
+      overflow: hidden;
+      border-radius: 18px;
+      border: 1px solid rgba(0,163,173,.12);
+      background:
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,.98) 0 16%, transparent 17%),
+        radial-gradient(circle at 50% 50%, rgba(0,163,173,.15) 0 34%, transparent 35%),
+        linear-gradient(135deg, rgba(0,114,206,.08), rgba(0,163,173,.10));
+    }
+
+    .ambient-pill {
+      position: absolute;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.9);
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 900;
+      box-shadow: 0 6px 14px rgba(51,63,72,.08);
+    }
+
+    .ambient-pill.speech { left: 20px; top: 17px; }
+    .ambient-pill.noise { right: 22px; bottom: 14px; }
+
+    .ambient-you {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 34px;
+      height: 34px;
+      transform: translate(-50%, -50%);
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--teal);
+      color: var(--white);
+      font-size: 11px;
+      font-weight: 900;
+      box-shadow: 0 8px 18px rgba(0,163,173,.24);
+    }
+
+    .primary-action,
+    .secondary-action {
+      width: 100%;
+      min-height: 52px;
+      border-radius: 999px;
+      font-weight: 800;
+    }
+
+    .primary-action {
+      margin-top: 12px;
+      border: 0;
+      background: var(--brand-grad);
+      color: var(--white);
+      box-shadow: 0 16px 32px rgba(88,44,131,.22);
+    }
+
+    .secondary-action {
+      margin-top: 10px;
+      border: 1px solid var(--line);
+      background: var(--white);
+      color: var(--blue);
+    }
+
+    .support-card,
+    .package-card,
+    .care-card,
+    .more-row {
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(255,255,255,.88);
+      box-shadow: var(--card-shadow);
+    }
+
+    .support-card { padding: 16px; }
+
+    .support-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      color: var(--blue);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .03em;
+      text-transform: uppercase;
+    }
+
+    .support-card h3 {
+      color: #111D25;
+      font-size: 21px;
+      line-height: 1.16;
+    }
+
+    .support-card p {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.38;
+    }
+
+    .support-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .support-mini {
+      padding: 12px;
+      border-radius: 14px;
+      background: var(--soft-blue);
+      color: var(--ink);
+      min-height: 76px;
+      font-size: 12px;
+      line-height: 1.25;
+    }
+
+    .support-mini:first-child {
+      grid-column: span 2;
+      text-align: center;
+    }
+
+    .map-card {
+      margin-top: 14px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: var(--white);
+      box-shadow: var(--card-shadow);
+    }
+
+    .map-visual {
+      height: 78px;
+      margin-top: 10px;
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,.7), transparent 34%),
+        linear-gradient(135deg, rgba(51,63,72,.18), rgba(51,63,72,.34));
+      opacity: .55;
+    }
+
+    .package-stack {
+      display: grid;
       gap: 12px;
       margin-top: 18px;
     }
 
-    .issue-option {
-      min-height: 134px;
-      border: 1px solid rgba(215, 228, 239, 0.96);
-      border-radius: 22px;
-      background: rgba(255,255,255,0.92);
-      box-shadow: 0 12px 28px rgba(17, 29, 37, 0.08);
-      padding: 15px;
-      text-align: left;
-      cursor: pointer;
-      transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, background 180ms ease;
-    }
-
-    .issue-option:hover,
-    .issue-option.is-selected {
-      transform: translateY(-2px);
-      border-color: rgba(88,44,131,0.38);
-      box-shadow: 0 16px 34px rgba(64,16,107,0.14);
-      background: linear-gradient(135deg, rgba(255,255,255,0.98), rgba(234,245,255,0.98));
-    }
-
-    .issue-option.is-selected {
-      outline: 3px solid rgba(0,163,173,0.18);
-    }
-
-    .issue-option strong {
-      display: block;
-      color: var(--text);
-      font-family: "Plus Jakarta Sans";
-      font-size: 18px;
-      line-height: 1.18;
-      margin-top: 12px;
-    }
-
-    .issue-option span:last-child {
-      display: block;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.35;
-      margin-top: 6px;
-    }
-
-    .soundscape-card {
-      position: relative;
-      z-index: 2;
-      margin-top: 14px;
-      border: 1px solid rgba(0,163,173,0.22);
-      border-radius: 22px;
+    .package-card {
       padding: 16px;
-      background:
-        radial-gradient(circle at 88% 16%, rgba(0,163,173,0.16), transparent 30%),
-        linear-gradient(135deg, rgba(255,255,255,0.96), rgba(234,245,255,0.92));
-      box-shadow: 0 10px 24px rgba(17,29,37,0.06);
     }
 
-    .soundscape-card small {
-      display: block;
-      color: var(--teal);
-      font-size: 12px;
-      font-weight: 900;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-
-    .soundscape-card strong {
-      display: block;
-      font-family: "Plus Jakarta Sans";
-      font-size: 18px;
-      line-height: 1.25;
-      color: var(--text);
-    }
-
-    .soundscape-card p {
-      margin: 7px 0 0;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.42;
-    }
-
-    .ambient-capsule {
-      position: relative;
-      height: 74px;
-      margin-top: 14px;
-      border-radius: 999px;
-      background:
-        radial-gradient(circle at 50% 50%, rgba(255,255,255,0.96) 0 18%, transparent 19%),
-        radial-gradient(circle at 50% 50%, rgba(0,163,173,0.17) 0 34%, transparent 35%),
-        linear-gradient(135deg, rgba(0,114,206,0.10), rgba(88,44,131,0.12));
-      border: 1px solid rgba(0,163,173,0.18);
-      overflow: hidden;
-    }
-
-    .ambient-capsule::before,
-    .ambient-capsule::after {
-      content: "";
-      position: absolute;
-      border-radius: 999px;
-      pointer-events: none;
-    }
-
-    .ambient-capsule::before {
-      inset: 14px 78px;
-      border: 1px solid rgba(88,44,131,0.13);
-    }
-
-    .ambient-capsule::after {
-      width: 70px;
-      height: 70px;
-      right: 18px;
-      top: 2px;
-      background: radial-gradient(circle, rgba(0,163,173,0.18), transparent 64%);
-      filter: blur(1px);
-    }
-
-    .ambient-user {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      width: 34px;
-      height: 34px;
-      transform: translate(-50%, -50%);
-      border-radius: 999px;
-      background: #fff;
-      box-shadow: 0 8px 20px rgba(17,29,37,0.12);
-      display: grid;
-      place-items: center;
-      color: var(--brand);
-      font: 900 13px/1 "Plus Jakarta Sans";
-      z-index: 2;
-    }
-
-    .ambient-source {
-      position: absolute;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 5px 8px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.82);
-      color: var(--muted);
-      font-size: 11px;
-      font-weight: 900;
-      box-shadow: 0 6px 14px rgba(17,29,37,0.08);
-      z-index: 1;
-    }
-
-    .ambient-source::before {
-      content: "";
-      width: 7px;
-      height: 7px;
-      border-radius: 999px;
-      background: var(--teal);
-    }
-
-    .ambient-source.speech {
-      left: 18px;
-      top: 13px;
-    }
-
-    .ambient-source.noise {
-      right: 22px;
-      bottom: 12px;
-    }
-
-    .ambient-source.noise::before {
-      background: var(--brand);
-      opacity: 0.55;
-    }
-
-    .issue-card {
-      position: absolute;
-      z-index: 2;
-      border: 1px solid rgba(215, 228, 239, 0.96);
-      border-radius: 20px;
-      background: rgba(255,255,255,0.92);
-      box-shadow: 0 14px 30px rgba(17, 29, 37, 0.11);
-      padding: 14px;
-      text-align: left;
-      cursor: pointer;
-      transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
-    }
-
-    .issue-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 18px 36px rgba(64,16,107,0.16);
-      border-color: rgba(88,44,131,0.34);
-    }
-
-    .issue-card.primary {
-      left: 18px;
-      right: 18px;
-      top: 112px;
-      display: grid;
-      grid-template-columns: 42px 1fr 24px;
-      align-items: center;
-      gap: 12px;
-      background: linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(234,245,255,0.98) 100%);
-    }
-
-    .issue-card.connect { left: 18px; top: 216px; width: calc(50% - 24px); min-height: 112px; }
-    .issue-card.noise { right: 18px; top: 216px; width: calc(50% - 24px); min-height: 112px; }
-    .issue-card.battery { left: 18px; top: 342px; width: calc(50% - 24px); min-height: 88px; }
-    .issue-card.care { right: 18px; top: 342px; width: calc(50% - 24px); min-height: 88px; }
-
-    .issue-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 15px;
-      display: grid;
-      place-items: center;
-      background: var(--gradient-brand);
-      color: #fff;
-      font-weight: 900;
-      font-size: 19px;
-    }
-
-    .issue-card.connect .issue-icon { background: linear-gradient(135deg, #0072CE 0%, #00A3AD 100%); }
-    .issue-card.noise .issue-icon { background: linear-gradient(135deg, #582C83 0%, #40106B 100%); }
-    .issue-card.battery .issue-icon { background: linear-gradient(135deg, #BA1A1A 0%, #582C83 100%); }
-    .issue-card.care .issue-icon { background: linear-gradient(135deg, #00A3AD 0%, #0072CE 100%); }
-
-    .issue-card strong {
-      display: block;
-      color: var(--text);
-      font-family: "Plus Jakarta Sans";
-      font-size: 18px;
-      line-height: 1.15;
-    }
-
-    .issue-card span {
-      display: block;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.3;
-      margin-top: 5px;
-    }
-
-    .issue-card.primary strong { font-size: 20px; }
-
-    .issue-arrow {
-      color: var(--brand);
-      font-size: 22px;
-      font-weight: 900;
-    }
-
-    .quick-note {
+    .package-card h3 {
       display: flex;
       align-items: center;
       gap: 10px;
-      border-radius: 18px;
-      padding: 13px 15px;
-      background: rgba(255,255,255,0.78);
-      border: 1px solid var(--border);
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.35;
+      color: var(--blue);
+      font-size: 15px;
     }
 
-    .quick-note strong { color: var(--text); }
-
-    .ring-stage {
-      position: relative;
-      z-index: 2;
-      height: 150px;
-      margin-top: 10px;
-      border-radius: 28px;
-      perspective: 900px;
-      touch-action: pan-y;
-      user-select: none;
-      pointer-events: none;
-    }
-
-    .ring-stage::before {
-      content: "";
-      position: absolute;
-      left: 50%;
-      top: 58%;
-      width: 248px;
-      height: 76px;
-      transform: translate(-50%, -50%);
-      border-radius: 999px;
-      background: radial-gradient(ellipse, rgba(64,16,107,0.18) 0%, rgba(0,114,206,0.08) 52%, transparent 72%);
-      filter: blur(5px);
-    }
-
-    .ring-card {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      width: 156px;
-      min-height: 92px;
-      border: 1px solid rgba(215, 228, 239, 0.96);
-      border-radius: 24px;
-      background: rgba(255,255,255,0.94);
-      box-shadow: 0 18px 38px rgba(17, 29, 37, 0.14);
-      padding: 16px;
-      text-align: left;
-      cursor: default;
-      transform-style: preserve-3d;
-      transition: transform 320ms cubic-bezier(.2,.8,.2,1), opacity 320ms ease, filter 320ms ease, border-color 180ms ease;
-    }
-
-    .ring-card::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      pointer-events: none;
-      background: linear-gradient(135deg, rgba(0,114,206,0.16), transparent 28%, rgba(88,44,131,0.12));
-      opacity: 0.7;
-      mix-blend-mode: multiply;
-    }
-
-    .ring-card.is-active {
-      border-color: rgba(88,44,131,0.34);
-      box-shadow: 0 22px 48px rgba(64, 16, 107, 0.22);
-    }
-
-    .ring-card > * {
-      position: relative;
-      z-index: 1;
-    }
-
-    .ring-card .issue-icon {
-      margin-bottom: 8px;
+    .package-icon {
       width: 32px;
       height: 32px;
+      display: inline-grid;
+      place-items: center;
       border-radius: 12px;
-      font-size: 15px;
+      color: var(--blue);
+      background: var(--soft-blue);
     }
 
-    .ring-card strong {
-      display: block;
-      color: var(--text);
-      font-family: "Plus Jakarta Sans";
-      font-size: 15px;
-      line-height: 1.16;
-    }
-
-    .ring-card span:last-child {
-      display: block;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.35;
-      margin-top: 7px;
-    }
-
-    .ring-hint {
-      position: relative;
-      z-index: 2;
-      text-align: center;
-      color: var(--faint);
-      font-size: 13px;
-      font-weight: 800;
-      margin: -6px 0 12px;
-    }
-
-    .processing-ring {
-      display: none;
-      margin: 4px 0 12px;
-    }
-
-    .tracking-card.active .processing-ring {
-      display: block;
-    }
-
-    .confirm-problem {
-      position: relative;
-      z-index: 2;
-      width: 100%;
-      min-height: 56px;
-      border: 0;
-      border-radius: 999px;
-      background: var(--gradient-brand);
-      color: #fff;
-      font: 800 16px/1 "Atkinson Hyperlegible Next";
-      cursor: pointer;
-      box-shadow: 0 16px 34px rgba(88,44,131,0.24);
-    }
-
-    .tracking-card {
-      display: none;
-      position: relative;
-      z-index: 2;
-      margin-top: 14px;
-      padding: 16px;
-      border: 1px solid rgba(0,163,173,0.24);
-      border-radius: 22px;
-      background: linear-gradient(135deg, rgba(255,255,255,0.94), rgba(234,245,255,0.94));
-    }
-
-    .tracking-card.active {
-      display: block;
-    }
-
-    .tracking-card strong {
-      display: block;
-      font-family: "Plus Jakarta Sans";
-      font-size: 18px;
-      color: var(--text);
-      margin-bottom: 12px;
-    }
-
-    .track-step {
-      display: grid;
-      grid-template-columns: 22px 1fr;
-      gap: 10px;
-      align-items: start;
+    .package-card p {
+      margin: 12px 0 0;
       color: var(--muted);
       font-size: 14px;
-      line-height: 1.35;
-    }
-
-    .track-step + .track-step {
-      margin-top: 10px;
-    }
-
-    .track-step i {
-      width: 18px;
-      height: 18px;
-      border-radius: 999px;
-      background: var(--container);
-      border: 2px solid #fff;
-      box-shadow: 0 0 0 1px var(--border);
-      margin-top: 1px;
-    }
-
-    .track-step.done i {
-      background: var(--gradient-ai);
-    }
-
-    .track-step.current i {
-      background: var(--gradient-brand);
-      animation: pulse-dot 1.2s ease-in-out infinite;
-    }
-
-    @keyframes pulse-dot {
-      0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.2); opacity: .72; }
-    }
-
-    .card {
-      position: relative;
-      border: 1px solid var(--border);
-      border-radius: 22px;
-      background: var(--surface);
-      box-shadow: var(--card-shadow);
-      padding: 18px;
-      cursor: default;
-      overflow: hidden;
-      transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
-    }
-
-    .card:hover,
-    .card:focus-within {
-      transform: translateY(-2px);
-      box-shadow: 0 16px 34px rgba(64, 16, 107, 0.14);
-      border-color: rgba(88,44,131,0.28);
-    }
-
-    .card.hero {
-      min-height: 190px;
-      display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      align-items: center;
-      gap: 14px;
-      background:
-        radial-gradient(circle at 82% 24%, rgba(0,163,173,0.16), transparent 34%),
-        var(--gradient-soft);
-    }
-
-    .card.issue {
-      background: linear-gradient(135deg, #fff 0%, #fff5f3 100%);
-      border-color: rgba(186, 26, 26, 0.22);
-    }
-
-    .card h3 {
-      font-size: 21px;
-      line-height: 1.22;
-      color: var(--text);
-    }
-
-    .card p {
-      margin: 8px 0 0;
-      color: var(--muted);
-      font-size: 16px;
       line-height: 1.45;
     }
 
-    .card small {
-      display: inline-block;
-      color: var(--faint);
-      font-size: 13px;
-      font-weight: 800;
-      letter-spacing: 0.02em;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-
-    .visual {
-      min-height: 118px;
-      border-radius: 20px;
-      background:
-        radial-gradient(circle at 50% 50%, rgba(255,255,255,0.82) 0 18%, transparent 19%),
-        conic-gradient(from 230deg, rgba(0,114,206,0.22), rgba(88,44,131,0.28), rgba(0,163,173,0.22), rgba(255,255,255,0.12), rgba(0,114,206,0.22));
+    .mini-bars {
       display: grid;
-      place-items: center;
-      position: relative;
-    }
-
-    .visual::before,
-    .visual::after {
-      content: "";
-      position: absolute;
-      border-radius: 999px;
-      border: 1px solid rgba(88,44,131,0.15);
-      inset: 24px;
-    }
-
-    .visual::after { inset: 42px; }
-
-    .visual .center-dot {
-      width: 42px;
-      height: 42px;
-      border-radius: 999px;
-      background: #fff;
-      box-shadow: 0 10px 24px rgba(17,29,37,0.12);
-      display: grid;
-      place-items: center;
-      color: var(--brand);
-      font-weight: 900;
-      z-index: 1;
-    }
-
-    .device-mini {
-      display: grid;
+      grid-template-columns: 1fr 1fr 34px;
       gap: 8px;
-    }
-
-    .battery-row {
-      display: flex;
-      justify-content: space-between;
+      margin-top: 12px;
       align-items: center;
-      gap: 8px;
-      color: var(--muted);
-      font-size: 15px;
-      font-weight: 700;
     }
 
-    .battery {
-      width: 72px;
-      height: 10px;
+    .bar {
+      height: 8px;
       border-radius: 999px;
+      background: var(--soft-blue);
       overflow: hidden;
-      background: var(--container);
     }
 
-    .battery span {
+    .bar span {
       display: block;
       height: 100%;
+      width: 86%;
       border-radius: inherit;
-      background: var(--gradient-brand);
+      background: var(--blue);
     }
 
-    .primary-action {
-      min-height: 74px;
-      border: 0;
-      border-radius: 22px;
-      background: var(--gradient-brand);
-      color: #fff;
-      box-shadow: 0 16px 34px rgba(88,44,131,0.24);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      padding: 18px 20px;
-      width: 100%;
-      cursor: pointer;
-      text-align: left;
-    }
-
-    .primary-action strong {
-      display: block;
-      font-family: "Plus Jakarta Sans";
-      font-size: 20px;
-      line-height: 1.2;
-    }
-
-    .primary-action span {
-      display: block;
-      opacity: 0.88;
-      font-size: 15px;
-      margin-top: 4px;
-    }
-
-    .secondary-actions {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      margin-top: 14px;
-    }
-
-    .action-card {
-      min-height: 112px;
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      background: #fff;
-      padding: 15px;
-      text-align: left;
-      cursor: pointer;
-      transition: transform 160ms ease, border-color 160ms ease;
-    }
-
-    .action-card:hover {
-      transform: translateY(-2px);
-      border-color: rgba(88,44,131,0.32);
-    }
-
-    .action-card .symbol {
-      width: 34px;
-      height: 34px;
-      border-radius: 12px;
+    .done-orb {
+      width: 92px;
+      height: 92px;
       display: grid;
       place-items: center;
-      background: var(--soft);
-      color: var(--brand);
+      margin: 18px auto 24px;
+      border-radius: 50%;
+      color: var(--white);
+      background: var(--brand-grad);
+      font-size: 34px;
       font-weight: 900;
-      margin-bottom: 12px;
+      box-shadow: 0 18px 36px rgba(0,114,206,.18);
     }
 
-    .action-card strong {
-      display: block;
-      color: var(--text);
-      font-family: "Plus Jakarta Sans";
-      font-size: 17px;
-      line-height: 1.22;
+    .sent-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 24px;
     }
 
-    .action-card span {
+    .sent-row {
+      min-height: 62px;
+      display: grid;
+      grid-template-columns: 40px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--white);
+      box-shadow: var(--card-shadow);
+    }
+
+    .sent-row i {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border-radius: 13px;
+      color: var(--blue);
+      background: var(--soft-blue);
+      font-style: normal;
+      font-weight: 900;
+    }
+
+    .sent-row strong {
       display: block;
-      color: var(--muted);
+      color: #111D25;
       font-size: 14px;
-      line-height: 1.35;
-      margin-top: 6px;
+    }
+
+    .sent-row span {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 11.5px;
+    }
+
+    .sent-ok {
+      color: var(--teal);
+      font-weight: 900;
+      font-size: 12px;
+    }
+
+    .care-card {
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+
+    .doctor-row {
+      display: grid;
+      grid-template-columns: 54px 1fr auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .doctor-avatar {
+      width: 54px;
+      height: 54px;
+      display: grid;
+      place-items: center;
+      border-radius: 18px;
+      color: var(--blue);
+      background: var(--soft-blue);
+      font-weight: 900;
+    }
+
+    .message {
+      margin-top: 12px;
+      padding: 14px;
+      border-radius: 18px;
+      background: var(--soft-blue);
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.42;
+    }
+
+    .care-package-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .care-package-list div {
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: var(--soft-grad);
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .more-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .more-row {
+      min-height: 60px;
+      display: grid;
+      grid-template-columns: 40px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px;
+      color: var(--ink);
+    }
+
+    .more-row i {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border-radius: 13px;
+      color: var(--blue);
+      background: var(--soft-blue);
+      font-style: normal;
+      font-weight: 900;
+    }
+
+    .more-row strong {
+      display: block;
+      font-size: 14px;
+    }
+
+    .more-row span {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 11px;
     }
 
     .nav {
@@ -1049,8 +851,8 @@
       align-items: center;
       gap: 10px;
       padding: 10px 16px 12px;
-      background: rgba(255,255,255,0.94);
-      border-top: 1px solid var(--border);
+      border-top: 1px solid var(--line);
+      background: rgba(255,255,255,.94);
     }
 
     .nav button {
@@ -1058,1032 +860,393 @@
       border: 0;
       border-radius: 999px;
       background: transparent;
-      color: var(--faint);
-      font: 800 13px/1 "Atkinson Hyperlegible Next";
-      cursor: pointer;
+      color: var(--muted);
+      font-weight: 800;
+      font-size: 12px;
     }
 
     .nav button.active {
-      background: var(--gradient-brand);
-      color: #fff;
-      box-shadow: 0 12px 22px rgba(88,44,131,0.20);
+      color: var(--white);
+      background: var(--brand-grad);
+      box-shadow: 0 12px 22px rgba(88,44,131,.2);
     }
 
-    .care-profile {
-      display: grid;
-      grid-template-columns: 60px 1fr;
-      gap: 14px;
-      align-items: center;
-    }
-
-    .avatar {
-      width: 60px;
-      height: 60px;
-      border-radius: 20px;
-      background: var(--gradient-brand);
-      color: #fff;
-      display: grid;
-      place-items: center;
-      font: 800 20px/1 "Plus Jakarta Sans";
-    }
-
-    .message {
-      padding: 15px;
-      border-radius: 18px;
-      background: var(--soft);
-      color: var(--muted);
-      font-size: 15px;
-      line-height: 1.45;
-      margin-top: 14px;
-    }
-
-    .care-package {
-      display: grid;
-      gap: 10px;
-      margin-top: 14px;
-    }
-
-    .package-row {
-      display: grid;
-      grid-template-columns: 34px 1fr;
-      gap: 10px;
-      align-items: center;
-      min-height: 58px;
-      padding: 12px;
-      border: 1px solid var(--border);
-      border-radius: 17px;
-      background: rgba(255,255,255,0.82);
-    }
-
-    .package-row i {
-      width: 34px;
-      height: 34px;
-      border-radius: 12px;
-      display: grid;
-      place-items: center;
-      font-style: normal;
-      color: #fff;
-      background: var(--gradient-ai);
-      font-weight: 900;
-    }
-
-    .package-row strong {
-      display: block;
-      font-family: "Plus Jakarta Sans";
-      font-size: 14px;
-      color: var(--text);
-    }
-
-    .package-row span {
-      display: block;
-      margin-top: 2px;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.25;
-    }
-
-    .more-list {
-      display: grid;
-      gap: 10px;
-    }
-
-    .list-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      min-height: 58px;
-      padding: 0 16px;
-      border-radius: 18px;
-      background: #fff;
-      border: 1px solid var(--border);
-      color: var(--text);
-      font-weight: 800;
-    }
-
-    .logic-panel {
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.84);
-      border-radius: 26px;
+    .notes {
+      min-height: 390px;
       padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: rgba(255,255,255,.82);
       box-shadow: var(--card-shadow);
-      min-height: 450px;
     }
 
-    .logic-panel h2 {
-      font-size: 26px;
-      color: var(--brand);
-      line-height: 1.2;
-    }
-
-    .logic-panel .logic-kicker {
-      margin-bottom: 10px;
+    .notes small {
       color: var(--faint);
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 900;
-      letter-spacing: 0.08em;
+      letter-spacing: .08em;
       text-transform: uppercase;
     }
 
-    .logic-panel p {
-      color: var(--muted);
-      font-size: 17px;
-      line-height: 1.58;
-      margin: 14px 0 0;
+    .notes h2 {
+      margin-top: 10px;
+      color: var(--purple);
+      font-size: 25px;
+      line-height: 1.18;
     }
 
-    .logic-panel ul {
-      margin: 18px 0 0;
-      padding-left: 20px;
+    .notes p {
+      margin: 14px 0 0;
       color: var(--muted);
       font-size: 16px;
       line-height: 1.55;
     }
 
-    .logic-panel li + li { margin-top: 8px; }
-
-    .flow-overlay {
-      display: none;
-      position: absolute;
-      inset: 0;
-      z-index: 5;
-      background: rgba(246,250,255,0.97);
-      padding: 22px;
-    }
-
-    .flow-overlay.active { display: grid; align-content: center; }
-
-    .flow-card {
-      border-radius: 26px;
-      background: #fff;
-      border: 1px solid var(--border);
-      padding: 24px;
-      box-shadow: var(--shadow);
-      text-align: center;
-    }
-
-    .flow-orb {
-      width: 116px;
-      height: 116px;
-      margin: 0 auto 18px;
-      border-radius: 999px;
-      background:
-        radial-gradient(circle, rgba(255,255,255,0.95) 0 28%, transparent 29%),
-        var(--gradient-ai);
-      display: grid;
-      place-items: center;
-      color: #fff;
-      font-size: 34px;
-      font-weight: 900;
-    }
-
-    .flow-card h3 {
-      font-size: 25px;
-      color: var(--text);
-    }
-
-    .flow-card p {
-      margin: 10px auto 20px;
+    .notes ul {
+      margin: 18px 0 0;
+      padding-left: 20px;
       color: var(--muted);
-      font-size: 17px;
-      line-height: 1.5;
-      max-width: 280px;
+      font-size: 15px;
+      line-height: 1.55;
     }
 
-    .close-flow {
-      width: 100%;
-      height: 52px;
-      border-radius: 999px;
-      border: 0;
-      background: var(--gradient-brand);
-      color: #fff;
-      font-weight: 800;
-      cursor: pointer;
-    }
+    .notes li + li { margin-top: 8px; }
 
-    .flow-actions {
-      display: grid;
-      gap: 10px;
-      margin-top: 18px;
-    }
-
-    .flow-secondary {
-      width: 100%;
-      height: 48px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: #fff;
-      color: var(--brand);
-      font-weight: 800;
-      cursor: pointer;
-    }
-
-    @media (max-width: 1100px) {
+    @media (max-width: 1080px) {
       .page {
         grid-template-columns: 1fr;
         max-width: 720px;
       }
 
       .brief,
-      .logic-panel {
+      .notes {
         position: static;
       }
     }
 
     @media (max-width: 480px) {
-      .page { padding: 16px; }
-      .phone-shell { padding: 0; border-radius: 0; box-shadow: none; background: transparent; }
-      .phone { height: 100vh; border-radius: 0; border: 0; }
+      .page { padding: 0; }
+      .brief,
+      .notes { display: none; }
+      .phone-shell {
+        width: 100%;
+        padding: 0;
+        border-radius: 0;
+        box-shadow: none;
+        background: transparent;
+      }
+      .phone {
+        height: 100vh;
+        border: 0;
+        border-radius: 0;
+      }
     }
   </style>
 </head>
 <body>
   <main class="page">
     <section class="brief">
-      <div class="eyebrow">Exploration C - Now First</div>
-      <h1>給不想操作 app 的人</h1>
-      <p class="lead">假設使用者只在聽不清楚、連不上、聲音不舒服、需要真人協助時才打開 app。第一頁不展示功能，而是直接提供救援入口。</p>
-
-      <div class="principles">
-        <div class="principle">
-          <strong>第一眼：是否正常</strong>
-          <span>先回答左右耳是否連線、電量是否足夠，不要求使用者理解設定。</span>
-        </div>
-        <div class="principle">
-          <strong>最大按鈕：聽不清楚</strong>
-          <span>把最常見、最焦慮的情境放成主行動，而不是藏在 Compass 或 EQ。</span>
-        </div>
-        <div class="principle">
-          <strong>狀態驅動，不是功能驅動</strong>
-          <span>斷線時先修連線；低電量時先提醒充電；正常時才提供清晰度協助。</span>
-        </div>
-      </div>
-
-      <div class="principles">
-        <div class="principle">
-          <strong>互動方式</strong>
-          <span>第一層改成攤開的大求助卡。使用者先看見問題、點選、再確認；圓環只保留在處理狀態中，作為安心的系統運作感。</span>
-        </div>
+      <div class="eyebrow">Merry Hearing - Now First</div>
+      <h1>把 app 做成聽覺求助入口</h1>
+      <p class="lead">這版互動網頁對齊 Stitch 的畫面：Now 是當下求助，Ask someone 會打包情境，Care 是長期照護關係，More 收納低頻工具。</p>
+      <div class="flow-list">
+        <div class="flow-step"><i>1</i><div><strong>Now - Default</strong><span>使用者先看到裝置狀態、常見問題入口與 Nearby sound。</span></div></div>
+        <div class="flow-step"><i>2</i><div><strong>Now - Ask Someone</strong><span>點選真人求助後，說明會打包哪些上下文。</span></div></div>
+        <div class="flow-step"><i>3</i><div><strong>Care Package</strong><span>送出前確認 Sound、Device、Safe settings。</span></div></div>
+        <div class="flow-step"><i>4</i><div><strong>Sent Confirmation</strong><span>送出完成後回到 Now，讓使用者安心等待。</span></div></div>
       </div>
     </section>
 
-    <section class="phone-shell" aria-label="Merry Hearing prototype phone">
+    <section class="phone-shell" aria-label="Merry Hearing interactive prototype">
       <div class="phone">
         <header class="phone-header">
-          <button class="icon-btn is-empty" aria-hidden="true" tabindex="-1"></button>
+          <button class="header-icon" type="button" data-route="now" aria-label="Back to Now">⌁</button>
           <img class="m-mark" src="brand-assets/merry-official-logo-assets/merry-mark-symbol-300.png" alt="Merry M mark">
-          <button class="icon-btn" data-insight="profile">JD</button>
+          <button class="avatar-btn" type="button" data-note="profile">JD</button>
         </header>
 
         <div class="phone-body">
           <section class="screen active" data-screen="now">
             <div class="screen-title">
               <div>
-                <h2 id="now-title">How can Merry help?</h2>
-                <p id="now-subtitle">Choose what feels wrong right now.</p>
+                <h2>How can Merry help?</h2>
+                <p>Choose what feels wrong right now.</p>
               </div>
-              <div class="status-pill" data-insight="status"><span class="dot" id="status-dot"></span><span id="status-label">OK</span></div>
+              <div class="status-pill"><span class="dot"></span>OK</div>
             </div>
 
-            <div class="problem-surface">
-              <div class="status-strip">
-                <article class="status-tile" data-insight="device">
-                  <small>Devices</small>
-                  <strong id="device-status-title">Both connected</strong>
-                  <span id="device-status-copy">Left 85% · Right 92%</span>
-                  <div class="device-lines" aria-label="Battery and connection status">
-                    <div class="device-line">
-                      <span>Left</span>
-                      <div class="power-bar" id="left-power"><span style="width: 85%"></span></div>
-                      <span id="left-power-label">85%</span>
-                    </div>
-                    <div class="device-line">
-                      <span>Right</span>
-                      <div class="power-bar" id="right-power"><span style="width: 92%"></span></div>
-                      <span id="right-power-label">92%</span>
-                    </div>
-                  </div>
-                  <div class="status-color-key" aria-label="Status color key">
-                    <span><span class="status-chip ok"></span> good</span>
-                    <span><span class="status-chip warn"></span> low</span>
-                    <span><span class="status-chip danger"></span> urgent</span>
-                  </div>
-                </article>
-                <article class="status-tile" data-insight="care-mini">
-                  <small>Care</small>
-                  <strong>Available</strong>
-                  <span>Dr. Elena can help</span>
-                </article>
+            <div class="status-grid">
+              <article class="status-card" data-note="device">
+                <span class="micro-label">Devices</span>
+                <strong>Both connected</strong>
+                <p>Left 85% · Right 92%</p>
+                <div class="power-lines">
+                  <div class="power-line"><span>L</span><div class="power-track"><span style="width:85%"></span></div><span>85%</span></div>
+                  <div class="power-line"><span>R</span><div class="power-track"><span style="width:92%"></span></div><span>92%</span></div>
+                </div>
+                <div class="color-key"><span><i class="chip ok"></i>ok</span><span><i class="chip warn"></i>low</span><span><i class="chip danger"></i>urgent</span></div>
+              </article>
+              <article class="status-card" data-route="care" data-note="care-mini">
+                <span class="micro-label">Care</span>
+                <strong>Available</strong>
+                <p>Dr. Elena can help</p>
+              </article>
+            </div>
+
+            <section class="help-surface" data-note="problem">
+              <h3>What do you need help with?</h3>
+              <p>Tap the problem that feels closest. Merry will ask before it starts.</p>
+              <div class="option-list">
+                <button class="option-card primary selected" type="button" data-route="clarity" data-note="clarity">
+                  <span class="option-icon">↗</span>
+                  <span><strong>I can’t hear clearly</strong><span>Speech feels unclear or distant.</span></span>
+                  <b class="check">●</b>
+                </button>
+                <button class="option-card" type="button" data-note="connect">
+                  <span class="option-icon">↻</span>
+                  <span><strong>Won’t connect</strong><span>Fix one side or both devices.</span></span>
+                </button>
+                <button class="option-card" type="button" data-note="noise">
+                  <span class="option-icon">≈</span>
+                  <span><strong>Noise or hiss</strong><span>Scratchy, noisy, or too sharp.</span></span>
+                </button>
+                <button class="option-card" type="button" data-route="support" data-note="ask">
+                  <span class="option-icon">+</span>
+                  <span><strong>Ask someone</strong><span>Package sound and settings.</span></span>
+                </button>
               </div>
+            </section>
 
-              <section class="issue-cloud" data-insight="issue-surface">
-                <h3>What do you need help with?</h3>
-                <p>Tap the problem that feels closest. Merry will ask before it starts.</p>
+            <article class="nearby-card" data-note="nearby">
+              <div class="nearby-top"><span class="micro-label">Nearby sound</span><span class="state"><span class="dot"></span>Stable</span></div>
+              <p>Merry is watching nearby speech and noise, but nothing needs your attention right now.</p>
+              <div class="ambient" aria-label="Nearby sound map">
+                <span class="ambient-pill speech">speech</span>
+                <span class="ambient-you">You</span>
+                <span class="ambient-pill noise">noise</span>
+              </div>
+            </article>
 
-                <div class="issue-options" aria-label="Problem options">
-                  <button class="issue-option is-selected" data-insight="primary" data-problem="unclear">
-                    <span class="issue-icon">↗</span>
-                    <strong>I can’t hear clearly</strong>
-                    <span>Speech feels unclear or distant.</span>
-                  </button>
+            <button class="primary-action" type="button" data-route="clarity">Confirm: I can’t hear clearly</button>
+          </section>
 
-                  <button class="issue-option" data-insight="reconnect" data-problem="disconnected">
-                    <span class="issue-icon">↻</span>
-                    <strong>Won’t connect</strong>
-                    <span>Fix one side or both devices.</span>
-                  </button>
-
-                  <button class="issue-option" data-insight="noise" data-problem="noise">
-                    <span class="issue-icon">≈</span>
-                    <strong>Noise or hiss</strong>
-                    <span>Scratchy, noisy, or too sharp.</span>
-                  </button>
-
-                  <button class="issue-option" data-insight="care-request" data-problem="care">
-                    <span class="issue-icon">+</span>
-                    <strong>Ask someone</strong>
-                    <span>Package sound and settings for your audiologist.</span>
-                  </button>
-                </div>
-
-                <div class="soundscape-card" data-insight="soundscape">
-                  <small>Nearby sound</small>
-                  <strong id="soundscape-title">Around you feels stable.</strong>
-                  <p id="soundscape-copy">Merry is watching nearby speech and noise, but nothing needs your attention right now.</p>
-                  <div class="ambient-capsule" aria-label="Simple nearby sound status">
-                    <span class="ambient-source speech">speech</span>
-                    <span class="ambient-user">You</span>
-                    <span class="ambient-source noise">noise</span>
-                  </div>
-                </div>
-
-                <button class="confirm-problem" id="confirm-problem" data-insight="confirm">Confirm: I can’t hear clearly</button>
-
-                <div class="tracking-card" id="tracking-card" data-insight="tracking">
-                  <strong id="tracking-title">Checking your sound</strong>
-                  <div class="processing-ring" aria-hidden="true">
-                    <div class="ring-stage" id="issue-ring" data-insight="issue-ring" aria-label="Processing carousel">
-                      <div class="ring-card" data-problem="unclear">
-                        <span class="issue-icon">↗</span>
-                        <strong>Speech</strong>
-                        <span>Checking clarity.</span>
-                      </div>
-
-                      <div class="ring-card" data-problem="disconnected">
-                        <span class="issue-icon">↻</span>
-                        <strong>Device</strong>
-                        <span>Checking connection.</span>
-                      </div>
-
-                      <div class="ring-card" data-problem="noise">
-                        <span class="issue-icon">≈</span>
-                        <strong>Noise</strong>
-                        <span>Checking harshness.</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="track-step done"><i></i><span id="track-step-1">Issue selected</span></div>
-                  <div class="track-step current"><i></i><span id="track-step-2">Checking device and sound environment</span></div>
-                  <div class="track-step"><i></i><span id="track-step-3">Next: apply a safer AI recommendation</span></div>
-                </div>
-              </section>
-
-              <div class="quick-note" data-insight="today">
-                <span class="dot"></span>
-                <span><strong id="hero-title">Everything is ready.</strong> <span id="hero-copy">Merry can help if speech feels unclear.</span></span>
+          <section class="screen" data-screen="support">
+            <div class="screen-title">
+              <div>
+                <h2>Support</h2>
+                <p>Professional help with current context.</p>
               </div>
             </div>
+
+            <article class="support-card">
+              <div class="support-heading"><span>Ask someone</span><span>Professional help</span></div>
+              <h3>Ask someone</h3>
+              <p>Package sound and settings for your audiologist to review remotely.</p>
+              <div class="support-grid">
+                <div class="support-mini"><strong>Nearby sound</strong><br>Current sound can be shared. Merry can send recent speech and noise context.</div>
+                <div class="support-mini"><strong>Device status</strong><br>Battery color and connection.</div>
+                <div class="support-mini"><strong>Safe setting</strong><br>Current clarity parameters.</div>
+              </div>
+              <button class="primary-action" type="button" data-route="package">Send care package to Dr. Elena →</button>
+            </article>
+
+            <article class="map-card">
+              <span class="micro-label">Environment Map</span>
+              <div class="map-visual"></div>
+              <p style="font-size:12px;text-align:center;color:var(--muted);margin:10px 0 0;">Analyzing sound levels for clarity optimization...</p>
+            </article>
+          </section>
+
+          <section class="screen" data-screen="package">
+            <div class="screen-title">
+              <div>
+                <h2>Care Package - Ready to Send</h2>
+                <p>Merry bundled the current sound environment, device status, battery colors, and safe setting parameters for Dr. Elena.</p>
+              </div>
+            </div>
+
+            <div class="package-stack">
+              <article class="package-card">
+                <h3><span class="package-icon">♪</span>Sound environment</h3>
+                <p>Front speech, nearby noise, harshness snapshot.</p>
+                <div class="mini-bars"><span class="bar"><span></span></span><span class="bar"><span style="width:68%"></span></span><span></span></div>
+              </article>
+              <article class="package-card">
+                <h3><span class="package-icon">⌁</span>Device status</h3>
+                <p>Both connected · Left 85% · Right 92% · green.</p>
+                <div class="mini-bars"><span>L</span><span class="bar"><span style="width:85%"></span></span><span>85%</span></div>
+                <div class="mini-bars"><span>R</span><span class="bar"><span style="width:92%"></span></span><span>92%</span></div>
+              </article>
+              <article class="package-card">
+                <h3><span class="package-icon">✓</span>Safe settings</h3>
+                <p>Current clarity profile and comfort limits.</p>
+              </article>
+            </div>
+
+            <button class="primary-action" type="button" data-route="sent">Send to Dr. Elena</button>
+            <button class="secondary-action" type="button" data-route="now">Back to Now</button>
+          </section>
+
+          <section class="screen" data-screen="sent">
+            <div class="done-orb">✓</div>
+            <div class="screen-title" style="display:block;text-align:center;">
+              <h2>Care Package - Sent Confirmation</h2>
+              <p>Dr. Elena received the current listening situation and can review it without asking you to explain technical settings.</p>
+            </div>
+            <div class="sent-list">
+              <div class="sent-row"><i>♪</i><div><strong>Audio Snapshot</strong><span>3.2MB · High Fidelity</span></div><b class="sent-ok">Sent</b></div>
+              <div class="sent-row"><i>≋</i><div><strong>Technical Log</strong><span>Firmware v4.2.1</span></div><b class="sent-ok">Sent</b></div>
+              <div class="sent-row"><i>⌁</i><div><strong>Environment</strong><span>Current sound context</span></div><b class="sent-ok">Sent</b></div>
+            </div>
+            <button class="primary-action" type="button" data-route="now">Back to Now →</button>
           </section>
 
           <section class="screen" data-screen="care">
-            <div class="screen-title">
-              <div>
-                <h2>Care</h2>
-                <p>真人協助，而不是要使用者自己調機。</p>
+            <div class="screen-title" style="display:block;">
+              <h2>Care Tab</h2>
+              <p>Human support, without asking the user to tune devices alone.</p>
+            </div>
+            <article class="care-card">
+              <div class="doctor-row">
+                <div class="doctor-avatar">ER</div>
+                <div><strong>Dr. Elena Rodriguez</strong><p style="margin:3px 0 0;color:var(--teal);font-size:12px;">Available today</p></div>
+                <span>□</span>
               </div>
-            </div>
-            <div class="card-grid">
-              <article class="card" data-insight="care-person">
-                <div class="care-profile">
-                  <div class="avatar">ER</div>
-                  <div>
-                    <small>Your audiologist</small>
-                    <h3>Dr. Elena Rodriguez</h3>
-                    <p>Available today</p>
-                  </div>
-                </div>
-              </article>
-              <article class="card" data-insight="message">
-                <small>Latest message</small>
-                <h3>Sharp sounds were softened.</h3>
-                <div class="message">Try it for a day or two. If speech still feels unclear, send me the listening situation.</div>
-              </article>
-              <button class="primary-action" data-insight="care-request">
-                <div>
-                  <strong>Ask my audiologist</strong>
-                  <span>Send current sound, device status, and safe settings for review.</span>
-                </div>
-                <strong aria-hidden="true">→</strong>
-              </button>
-              <article class="card" data-insight="care-package">
-                <small>What gets sent</small>
-                <h3>Care package</h3>
-                <p>No raw medical photo or confusing dashboard. Merry summarizes what Dr. Elena needs to help.</p>
-                <div class="care-package">
-                  <div class="package-row"><i>♪</i><div><strong>Current sound environment</strong><span>Speech direction, nearby noise, and harshness snapshot.</span></div></div>
-                  <div class="package-row"><i>⚙</i><div><strong>Device and battery status</strong><span>Connection, left/right battery colors, and last sync time.</span></div></div>
-                  <div class="package-row"><i>✓</i><div><strong>Safe setting parameters</strong><span>Current AI recommendation and comfort limits.</span></div></div>
-                </div>
-              </article>
-            </div>
+            </article>
+            <article class="care-card">
+              <span class="micro-label" style="color:var(--blue);">Latest from Elena</span>
+              <div class="message">Sharp sounds were softened. Try it for a day or two. If speech still feels unclear, send me the listening situation.</div>
+            </article>
+            <article class="care-card">
+              <span class="micro-label">Care package</span>
+              <div class="care-package-list">
+                <div>Sound environment</div>
+                <div>Device / battery status</div>
+                <div>Safe setting parameters</div>
+              </div>
+            </article>
+            <button class="primary-action" type="button" data-route="package">▷ Ask my audiologist</button>
           </section>
 
           <section class="screen" data-screen="more">
-            <div class="screen-title">
-              <div>
-                <h2>More</h2>
-                <p>把不常用但必要的功能收在這裡。</p>
-              </div>
+            <div class="screen-title" style="display:block;">
+              <h2>More Tab</h2>
+              <p>Less frequent but necessary tools live here.</p>
             </div>
             <div class="more-list">
-              <div class="list-row" data-insight="more-device"><span>Device details</span><span>→</span></div>
-              <div class="list-row" data-insight="more-preferences"><span>Saved preferences</span><span>→</span></div>
-              <div class="list-row" data-insight="more-history"><span>Activity history</span><span>→</span></div>
-              <div class="list-row" data-insight="more-advanced"><span>Advanced sound</span><span>→</span></div>
-              <div class="list-row" data-insight="more-settings"><span>Settings</span><span>→</span></div>
+              <div class="more-row"><i>⌁</i><div><strong>Device details</strong><span>Manage your hearing hardware</span></div><b>›</b></div>
+              <div class="more-row"><i>□</i><div><strong>Saved preferences</strong><span>Your custom sound profiles</span></div><b>›</b></div>
+              <div class="more-row"><i>↺</i><div><strong>Activity history</strong><span>Daily usage statistics</span></div><b>›</b></div>
+              <div class="more-row"><i>≋</i><div><strong>Advanced sound</strong><span>Deep-level frequency tuning</span></div><b>›</b></div>
+              <div class="more-row"><i>⚙</i><div><strong>Settings</strong><span>Account and app configuration</span></div><b>›</b></div>
             </div>
           </section>
         </div>
 
-        <nav class="nav" aria-label="Prototype navigation">
-          <button class="active" data-target="now">Now</button>
-          <button data-target="care">Care</button>
-          <button data-target="more">More</button>
+        <nav class="nav" aria-label="Bottom navigation">
+          <button class="active" type="button" data-route="now" data-nav="now">Now</button>
+          <button type="button" data-route="care" data-nav="care">Care</button>
+          <button type="button" data-route="more" data-nav="more">More</button>
         </nav>
-
-        <div class="flow-overlay" id="flow">
-          <div class="flow-card">
-            <div class="flow-orb" id="flow-orb">AI</div>
-            <h3 id="flow-title">Checking your sound</h3>
-            <p id="flow-copy">AI checks speech, noise, and comfort first. Manual controls stay hidden unless needed.</p>
-            <div class="care-package" id="flow-package" hidden>
-              <div class="package-row"><i>♪</i><div><strong>Sound environment</strong><span id="flow-sound">Stable room, front speech, light background noise.</span></div></div>
-              <div class="package-row"><i>●</i><div><strong>Device status</strong><span id="flow-device">Both connected · Left 85% · Right 92%</span></div></div>
-              <div class="package-row"><i>✓</i><div><strong>Safe settings</strong><span id="flow-settings">Current clarity profile and comfort limits.</span></div></div>
-            </div>
-            <div class="flow-actions">
-              <button class="close-flow" id="send-care" hidden>Send to Dr. Elena</button>
-              <button class="flow-secondary" id="close-flow">Back to Now</button>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
 
-    <aside class="logic-panel" aria-live="polite">
-      <div class="logic-kicker" id="logic-kicker">Design logic</div>
-      <h2 id="logic-title">Now-first prototype</h2>
-      <p id="logic-copy">把 app 當成「聽覺救援入口」，而不是助聽器控制台。滑鼠移到手機畫面上的區塊，可以看到每個決策背後的理由。</p>
-      <ul id="logic-list">
-        <li>預設只顯示最常見、最需要立即處理的問題。</li>
-        <li>把技術藏在 AI 和 Care 後面，避免使用者感覺自己要調醫療設備。</li>
-        <li>詳細資料與進階控制都放到 More 或流程後段。</li>
+    <aside class="notes" aria-live="polite">
+      <small id="note-kicker">Flow</small>
+      <h2 id="note-title">Now-first prototype</h2>
+      <p id="note-copy">操作路徑對齊 Stitch：Now 裡選 Ask someone，進入 care package 送出流程；Care 與 More 是底部導覽的平行分頁。</p>
+      <ul id="note-list">
+        <li>Now 是當下求助，不是控制台。</li>
+        <li>Care package 讓真人求助帶著上下文。</li>
+        <li>More 收納低頻工具，不干擾第一層。</li>
       </ul>
     </aside>
   </main>
 
   <script>
-    const insights = {
-      header: {
-        kicker: "Shell",
-        title: "Minimal brand presence",
-        copy: "主 header 不放 Merry Hearing 文字，避免每頁重複品牌。用 M mark 提供識別，讓畫面更像真實 app，而不是簡報頁。",
-        list: ["中心品牌符號保留識別。", "頁面任務交給內容區說明。", "減少長者第一眼的閱讀負擔。"]
+    const notes = {
+      now: {
+        kicker: "Now",
+        title: "Now - Default",
+        copy: "使用者打開 app 先看到裝置是否正常，以及四個常見求助入口。Nearby sound 是安心提示，不是要操作的 Sound Compass。",
+        list: ["最大行動是 I can’t hear clearly。", "Ask someone 會進入真人求助流程。", "紫色只作為 CTA 與 selected accent。"]
       },
-      profile: {
-        kicker: "Account",
-        title: "Account is secondary",
-        copy: "個人設定不是主要任務，因此只保留小入口。使用者打開 app 時，最需要的是解決當下聽覺問題。",
-        list: ["避免把 settings 當成主入口。", "需要支援時再進 More。", "右側維持一致性。"]
+      support: {
+        kicker: "Now state",
+        title: "Now - Ask Someone",
+        copy: "這仍然是 Now 的狀態，不是新的底部 tab。它說明會把當下聲音、裝置與設定上下文打包給聽檢師。",
+        list: ["先解釋會送什麼。", "避免只送空訊息。", "下一步才進 Ready to Send。"]
       },
-      status: {
-        kicker: "First answer",
-        title: "先回答：現在正常嗎？",
-        copy: "對不愛操作 app 的使用者來說，第一眼不是看功能，而是確認助聽器有沒有正常工作。",
-        list: ["正常時簡短顯示 OK。", "斷線或低電量時立刻改變主行動。", "狀態驅動比功能分類更貼近真實情境。"]
+      package: {
+        kicker: "Confirm",
+        title: "Care Package - Ready to Send",
+        copy: "送出前確認三種資料：Sound environment、Device status、Safe settings。使用者可以送出，也可以回 Now。",
+        list: ["建立信任與可預期性。", "資料摘要使用日常語言。", "避免暴露複雜醫療參數。"]
       },
-      today: {
-        kicker: "Readiness",
-        title: "狀態摘要退到背景",
-        copy: "正常狀態不需要佔據畫面。它只要讓使用者安心，真正的主角是「我現在遇到什麼問題」。",
-        list: ["正常時安靜顯示。", "有異常時才提高優先級。", "避免首頁變成固定 dashboard。"]
+      sent: {
+        kicker: "Done",
+        title: "Care Package - Sent Confirmation",
+        copy: "送出成功狀態。重點是平靜、確定，讓使用者知道 Dr. Elena 已收到上下文。",
+        list: ["顯示已送出的項目。", "主 CTA 回到 Now。", "不做警報式視覺。"]
       },
-      "issue-surface": {
-        kicker: "Problem-first",
-        title: "把問題攤開，降低慌張感",
-        copy: "長者在焦慮時不應該先學操作。四張大卡直接對應常見困擾，點選後還要再確認，避免誤觸。",
-        list: ["第一層只放高頻求助情境。", "用日常語言，不用功能名稱。", "點選不等於立刻調整，保留安全感。"]
+      care: {
+        kicker: "Tab",
+        title: "Care Tab",
+        copy: "Care 是長期照護關係：聽檢師、最新訊息、Care package 摘要與再次求助。",
+        list: ["不是 Ask someone 流程的中間頁。", "用 initials avatar，不用假照片。", "保留真人後援感。"]
       },
-      "issue-ring": {
-        kicker: "Processing",
-        title: "圓環變成處理中的安心動畫",
-        copy: "圓環不再要求使用者操作，而是放到確認後的處理狀態中。它保留物件感，但不造成找不到選項的壓力。",
-        list: ["主要選擇改成攤開大卡。", "圓環只表達系統正在檢查。", "美感保留，操作負擔降低。"]
-      },
-      confirm: {
-        kicker: "Confirmation",
-        title: "確認後才開始處理",
-        copy: "長者可能害怕按錯。多一個清楚確認步驟，能讓他知道接下來系統會開始檢查、調整或轉交照護。",
-        list: ["先選問題，再確認。", "確認後顯示狀態追蹤。", "把不可見的 AI 工作變成可理解進度。"]
-      },
-      tracking: {
-        kicker: "Follow-through",
-        title: "處理中要讓人看得見",
-        copy: "按下確認後，畫面不能只跳掉。它要告訴使用者現在正在檢查什麼、下一步會做什麼。",
-        list: ["Issue selected。", "Checking devices and sound environment。", "Next: AI recommendation or care review。"]
-      },
-      soundscape: {
-        kicker: "Hidden Compass",
-        title: "把聲音羅盤包裝成周圍聲音卡",
-        copy: "使用者不需要理解 Compass。這張卡用自然語言說明附近聲音狀態，例如前方有人聲、左側較吵、系統正在幫忙處理。",
-        list: ["保留聲景地圖技術。", "不要把它做成獨立功能負擔。", "用安心提示取代雷達介面。"]
+      more: {
+        kicker: "Tab",
+        title: "More Tab",
+        copy: "低頻但必要的工具都在 More，避免 Now 首頁變成工程控制台。",
+        list: ["Device details、preferences、history。", "Advanced sound 不放首頁。", "Settings 放最後。"]
       },
       device: {
-        kicker: "Device status",
-        title: "裝置資訊只保留關鍵",
-        copy: "電量與連線是長者會在意的基礎資訊，但不應變成整個首頁的 dashboard。",
-        list: ["左右耳狀態一眼可掃。", "有問題才浮出完整修復流程。", "Pairing、firmware 放到 More。"]
+        kicker: "Status",
+        title: "Device status with color",
+        copy: "狀態不只靠百分比，也用綠黃紅色條讓長者快速掃讀。",
+        list: ["綠色表示正常。", "黃色表示需要注意。", "紅色表示急迫。"]
       },
-      "care-mini": {
-        kicker: "Care reassurance",
-        title: "讓人知道還有真人可協助",
-        copy: "Care 的存在降低使用者對 AI 調整的焦慮。不是客服，而是照護後援。",
-        list: ["不需要一堆醫師照片。", "只表達有人能接手。", "AI 不夠時自然轉給聽力師。"]
-      },
-      primary: {
-        kicker: "Primary action",
-        title: "最大按鈕對應最大痛點",
-        copy: "「聽不清楚」是比 Sound Compass 或 EQ 更真實的入口。系統接手判斷要不要看聲音方向、調整 AI 或轉給聽力師。",
-        list: ["從痛點進入，而不是從功能進入。", "AI 先處理，不要求手動調整。", "後續才解釋聲音方向與調整結果。"]
-      },
-      reconnect: {
-        kicker: "Secondary action",
-        title: "斷線是高頻焦慮情境",
-        copy: "連不上時，使用者不想找設定。這裡直接提供修復入口，且在斷線狀態會升級成主行動。",
-        list: ["狀態改變時，入口優先級也改變。", "比 Device tab 更直接。", "降低求助成本。"]
-      },
-      comfort: {
-        kicker: "Plain language",
-        title: "用感受取代 EQ",
-        copy: "「太尖、太吵、太小聲」比 Bass/Middle/Treble 更接近長者的語言。進階控制存在，但不放第一層。",
-        list: ["先讓使用者說感覺。", "AI 翻譯成調整。", "Advanced Sound 只給需要的人。"]
-      },
-      noise: {
-        kicker: "Common complaint",
-        title: "沙沙聲與刺耳感要有入口",
-        copy: "很多聽覺問題不是單純聽不清楚，而是有雜音、沙沙聲、尖銳或太吵。這些應該用日常語言直接出現在第一層。",
-        list: ["不要逼使用者選 Noise Reduction。", "先描述感受，再讓系統診斷。", "可通往 AI 調整或 Care Request。"]
-      },
-      "battery-problem": {
-        kicker: "Detected issue",
-        title: "低電量也應是手機裡的求助入口",
-        copy: "如果使用者打開 app 是因為聽不到，原因可能不是聲音設定，而是電量或充電問題。這種狀態應該直接在手機主畫面浮出。",
-        list: ["不要讓使用者去設定裡找電量。", "低電量時主行動改成充電協助。", "把問題翻成下一步，而不是只顯示百分比。"]
-      },
-      "care-person": {
-        kicker: "Human support",
-        title: "Care 是關係，不是功能清單",
-        copy: "Care 的第一眼要讓使用者知道誰在照顧他，而不是列出一堆 service buttons。",
-        list: ["用 avatar 代替大型 stock photo。", "保留人味，但不疲勞。", "強調可取得的協助。"]
-      },
-      message: {
-        kicker: "Continuity",
-        title: "訊息讓調整有延續感",
-        copy: "長者不一定記得昨天調了什麼。最新訊息用照護語氣解釋變化，建立信任。",
-        list: ["把 clinical action 翻成日常語言。", "保留回覆與求助入口。", "避免 technical log。"]
-      },
-      "care-request": {
-        kicker: "Escalation",
-        title: "AI 不夠時，轉真人",
-        copy: "這條路徑承認 AI 不是萬能，也讓使用者知道可以直接把當下情境打包給聽力師，而不是自己亂調。",
-        list: ["打包目前聲音環境與裝置狀態。", "帶上安全設定參數，讓聽力師理解前因後果。", "使用者只需確認送出，不必整理技術資料。"]
-      },
-      "care-package": {
-        kicker: "Care package",
-        title: "真人求助要帶著上下文",
-        copy: "按下求助時，不只是送一則空訊息。Merry 會整理聲音環境、左右耳連線與電量顏色、目前 AI 建議與安全限制，讓聽檢師能直接判斷。",
-        list: ["聲音：speech / noise / harshness snapshot。", "裝置：連線、左右耳電量、同步狀態。", "設定：目前清晰度、舒適度與 AI 建議。"]
-      },
-      "more-device": {
-        kicker: "More",
-        title: "Device details 不消失，只降級",
-        copy: "Pairing、firmware、find device 仍然必要，但它們不該佔據第一層注意力。",
-        list: ["功能保留。", "主畫面只露出異常。", "工具性資訊收在 More。"]
-      },
-      "more-preferences": {
-        kicker: "More",
-        title: "偏好是學習結果，不是主任務",
-        copy: "Saved preferences 可保留，但不要讓長者一開始就面對 presets 管理。",
-        list: ["AI 先推薦。", "使用者喜歡再保存。", "用情境命名，不用工程參數。"]
-      },
-      "more-history": {
-        kicker: "More",
-        title: "Activity history 是追溯，不是每日入口",
-        copy: "紀錄有價值，但多數使用者不會主動看 log。需要信任或照護時再看即可。",
-        list: ["摘要留在 Now/Care。", "完整紀錄放後面。", "避免首頁變成系統報表。"]
-      },
-      "more-advanced": {
-        kicker: "Advanced",
-        title: "進階聲音控制留給需要的人",
-        copy: "EQ 與左右平衡可存在，但一定要有 Reset to AI Recommended，避免使用者害怕弄壞。",
-        list: ["不是刪功能，而是分層。", "避免第一眼像控制面板。", "保護 AI-first 的產品定位。"]
-      },
-      "more-settings": {
-        kicker: "Settings",
-        title: "設定不是照護體驗",
-        copy: "設定放在最後，代表這個 app 不是讓人管理系統，而是讓人在需要時得到幫助。",
-        list: ["減少入口干擾。", "保留完整性。", "讓主流程更單純。"]
+      nearby: {
+        kicker: "Ambient",
+        title: "Nearby sound",
+        copy: "這張卡使用白、淡藍與 teal，而不是大片紫色。它是環境提示，不是讀數據的儀表板。",
+        list: ["中心是 You。", "speech/noise 是環境膠囊。", "不使用 bar chart。"]
       }
     };
 
-    const states = {
-      ready: {
-        title: "How can Merry help?",
-        subtitle: "Choose what feels wrong right now.",
-        status: "OK",
-        warn: false,
-        heroTitle: "Everything is ready.",
-        heroCopy: "Merry can help if speech feels unclear.",
-        primaryTitle: "I can’t hear clearly",
-        primaryCopy: "AI will try a clearer setting.",
-        battery: "Right 92%",
-        batteryWidth: "92%",
-        leftPower: 85,
-        rightPower: 92,
-        leftStatus: "ok",
-        rightStatus: "ok",
-        deviceTitle: "Both connected",
-        deviceCopy: "Left 85% · Right 92%",
-        soundscapeTitle: "Around you feels stable.",
-        soundscapeCopy: "Merry is watching nearby speech and noise, but nothing needs your attention right now.",
-        issue: false
-      },
-      unclear: {
-        title: "Let’s make it clearer",
-        subtitle: "AI can check speech and noise around you.",
-        status: "Help",
-        warn: false,
-        heroTitle: "Speech can be clearer.",
-        heroCopy: "AI will focus on conversation first.",
-        primaryTitle: "I can’t hear clearly",
-        primaryCopy: "Start a simple AI adjustment.",
-        battery: "Right 92%",
-        batteryWidth: "92%",
-        leftPower: 85,
-        rightPower: 92,
-        leftStatus: "ok",
-        rightStatus: "ok",
-        deviceTitle: "Both connected",
-        deviceCopy: "Left 85% · Right 92%",
-        soundscapeTitle: "Front speech is important.",
-        soundscapeCopy: "Merry sees speech in front and background noise nearby. It will protect the speech first.",
-        issue: false
-      },
-      disconnected: {
-        title: "Connection needs help",
-        subtitle: "Right aid is disconnected.",
-        status: "Fix",
-        warn: true,
-        heroTitle: "Connection needs attention.",
-        heroCopy: "Reconnect first before sound adjustment.",
-        primaryTitle: "Reconnect right aid",
-        primaryCopy: "Guide me through a simple fix.",
-        battery: "Right offline",
-        batteryWidth: "0%",
-        leftPower: 85,
-        rightPower: 0,
-        leftStatus: "ok",
-        rightStatus: "offline",
-        deviceTitle: "Right offline",
-        deviceCopy: "Left still connected",
-        soundscapeTitle: "Sound check is paused.",
-        soundscapeCopy: "Merry needs the right hearing aid connected before it can read your surroundings accurately.",
-        issue: true
-      },
-      battery: {
-        title: "Battery needs attention",
-        subtitle: "Right aid is running low.",
-        status: "Low",
-        warn: true,
-        heroTitle: "Charge before going out.",
-        heroCopy: "Right aid may not last through the day.",
-        primaryTitle: "Show charging help",
-        primaryCopy: "See case status and charging steps.",
-        battery: "Right 12%",
-        batteryWidth: "12%",
-        leftPower: 85,
-        rightPower: 12,
-        leftStatus: "ok",
-        rightStatus: "danger",
-        deviceTitle: "Right 12%",
-        deviceCopy: "Charge soon",
-        soundscapeTitle: "Your area is calm enough.",
-        soundscapeCopy: "The main issue looks like battery, not the surrounding sound. Merry will guide charging first.",
-        issue: true
-      },
-      noise: {
-        title: "Sound feels noisy",
-        subtitle: "Scratchy, sharp, or too much background noise.",
-        status: "Tune",
-        warn: false,
-        heroTitle: "Let’s soften the sound.",
-        heroCopy: "AI can reduce harsh noise first.",
-        primaryTitle: "Noise or hiss",
-        primaryCopy: "Check comfort and reduce harshness.",
-        battery: "Right 92%",
-        batteryWidth: "92%",
-        leftPower: 85,
-        rightPower: 62,
-        leftStatus: "ok",
-        rightStatus: "warn",
-        deviceTitle: "Both connected",
-        deviceCopy: "Left 85% · Right 62%",
-        soundscapeTitle: "Nearby sound is busy.",
-        soundscapeCopy: "Merry notices sharper noise around you and will soften it without hiding speech.",
-        issue: false
-      },
-      care: {
-        title: "Ask for human help",
-        subtitle: "Send this situation to your audiologist.",
-        status: "Care",
-        warn: false,
-        heroTitle: "Care can review this.",
-        heroCopy: "Merry will prepare the sound situation for your audiologist.",
-        primaryTitle: "Ask my audiologist",
-        primaryCopy: "Send current sound situation for review.",
-        battery: "Right 92%",
-        batteryWidth: "92%",
-        leftPower: 85,
-        rightPower: 92,
-        leftStatus: "ok",
-        rightStatus: "ok",
-        deviceTitle: "Both connected",
-        deviceCopy: "Left 85% · Right 92%",
-        soundscapeTitle: "Current sound can be shared.",
-        soundscapeCopy: "Merry can send recent speech and noise context to your audiologist for review.",
-        issue: false
-      }
-    };
+    const noteKicker = document.getElementById("note-kicker");
+    const noteTitle = document.getElementById("note-title");
+    const noteCopy = document.getElementById("note-copy");
+    const noteList = document.getElementById("note-list");
 
-    const logicKicker = document.getElementById("logic-kicker");
-    const logicTitle = document.getElementById("logic-title");
-    const logicCopy = document.getElementById("logic-copy");
-    const logicList = document.getElementById("logic-list");
-
-    function setInsight(key) {
-      const item = insights[key];
-      if (!item) return;
-      logicKicker.textContent = item.kicker;
-      logicTitle.textContent = item.title;
-      logicCopy.textContent = item.copy;
-      logicList.innerHTML = item.list.map(text => `<li>${text}</li>`).join("");
+    function setNote(key) {
+      const note = notes[key] || notes.now;
+      noteKicker.textContent = note.kicker;
+      noteTitle.textContent = note.title;
+      noteCopy.textContent = note.copy;
+      noteList.innerHTML = note.list.map(item => `<li>${item}</li>`).join("");
     }
 
-    document.querySelectorAll("[data-insight]").forEach(el => {
-      el.addEventListener("mouseenter", () => setInsight(el.dataset.insight));
-      el.addEventListener("focus", () => setInsight(el.dataset.insight));
-      el.addEventListener("click", () => setInsight(el.dataset.insight));
-    });
-
-    const problemCopy = {
-      unclear: {
-        confirm: "Confirm: I can’t hear clearly",
-        trackingTitle: "Making speech clearer",
-        step2: "Checking speech direction and background noise",
-        step3: "Next: apply a safer clarity setting",
-        flowTitle: "Checking your sound",
-        flowCopy: "AI is checking speech, noise, and recent settings before changing anything."
-      },
-      disconnected: {
-        confirm: "Confirm: Won’t connect",
-        trackingTitle: "Checking connection",
-        step2: "Looking for the right hearing aid",
-        step3: "Next: guide a simple reconnect",
-        flowTitle: "Checking connection",
-        flowCopy: "Merry will check Bluetooth and each side before asking you to do anything."
-      },
-      noise: {
-        confirm: "Confirm: Noise or hiss",
-        trackingTitle: "Softening harsh sound",
-        step2: "Checking hiss, sharpness, and background noise",
-        step3: "Next: try a more comfortable sound profile",
-        flowTitle: "Checking noise comfort",
-        flowCopy: "AI will try to reduce harshness without making speech harder to hear."
-      },
-      battery: {
-        confirm: "Confirm: Battery low",
-        trackingTitle: "Checking battery",
-        step2: "Checking hearing aids and charging case",
-        step3: "Next: show charging help",
-        flowTitle: "Checking battery",
-        flowCopy: "Merry will show what needs charging and what can keep working."
-      },
-      care: {
-        confirm: "Send care package to Dr. Elena",
-        trackingTitle: "Preparing care package",
-        step2: "Bundling sound, device status, and safe settings",
-        step3: "Next: send to Dr. Elena for review",
-        flowTitle: "Care package ready",
-        flowCopy: "Merry has bundled the current sound environment, device status, battery colors, and safe setting parameters for Dr. Elena."
-      }
-    };
-
-    let selectedProblem = "unclear";
-    let ringIndex = 0;
-    const ringCards = Array.from(document.querySelectorAll(".ring-card"));
-    const issueOptions = Array.from(document.querySelectorAll(".issue-option"));
-    const radiusX = 92;
-    const radiusZ = 118;
-
-    function setSelectedProblem(name, insightKey = "primary") {
-      selectedProblem = name;
-      issueOptions.forEach(option => {
-        option.classList.toggle("is-selected", option.dataset.problem === name);
+    function route(name) {
+      document.querySelectorAll(".screen").forEach(screen => {
+        screen.classList.toggle("active", screen.dataset.screen === name);
       });
-      const copy = problemCopy[selectedProblem];
-      document.getElementById("confirm-problem").textContent = copy.confirm;
-      document.getElementById("tracking-card").classList.remove("active");
-      applyState(name, insightKey);
-    }
-
-    function applyState(name, insightKey = "status") {
-      const state = states[name] || states.ready;
-      document.getElementById("now-title").textContent = state.title;
-      document.getElementById("now-subtitle").textContent = state.subtitle;
-      document.getElementById("status-label").textContent = state.status;
-      document.getElementById("status-dot").classList.toggle("warn", state.warn);
-      document.getElementById("hero-title").textContent = state.heroTitle;
-      document.getElementById("hero-copy").textContent = state.heroCopy;
-      document.getElementById("device-status-title").textContent = state.deviceTitle;
-      document.getElementById("device-status-copy").textContent = state.deviceCopy;
-      updatePower("left", state.leftPower ?? 85, state.leftStatus || "ok");
-      updatePower("right", state.rightPower ?? 92, state.rightStatus || "ok");
-      document.getElementById("soundscape-title").textContent = state.soundscapeTitle;
-      document.getElementById("soundscape-copy").textContent = state.soundscapeCopy;
-      document.querySelector(".issue-cloud").classList.toggle("issue", state.issue);
-      setInsight(insightKey);
-    }
-
-    function updatePower(side, value, status) {
-      const bar = document.getElementById(`${side}-power`);
-      const fill = bar.querySelector("span");
-      const label = document.getElementById(`${side}-power-label`);
-      bar.classList.remove("status-warn", "status-danger", "status-offline");
-      if (status === "warn") bar.classList.add("status-warn");
-      if (status === "danger") bar.classList.add("status-danger");
-      if (status === "offline") bar.classList.add("status-offline");
-      fill.style.width = `${Math.max(0, Math.min(100, value))}%`;
-      label.textContent = status === "offline" ? "Off" : `${value}%`;
-    }
-
-    function openCarePackage(mode = "ready") {
-      const state = states[selectedProblem] || states.ready;
-      document.getElementById("flow").classList.add("active");
-      document.getElementById("flow-package").hidden = false;
-      document.getElementById("send-care").hidden = false;
-      document.getElementById("flow-orb").textContent = mode === "sent" ? "✓" : "Care";
-      document.getElementById("flow-title").textContent = mode === "sent" ? "Sent to Dr. Elena" : "Care package ready";
-      document.getElementById("flow-copy").textContent = mode === "sent"
-        ? "Dr. Elena received the current listening situation and can review it without asking you to explain technical settings."
-        : problemCopy.care.flowCopy;
-      document.getElementById("flow-sound").textContent = state.soundscapeTitle.replace(".", "") + " · recent speech and noise snapshot.";
-      document.getElementById("flow-device").textContent = state.deviceCopy + " · color-coded battery and connection status.";
-      document.getElementById("flow-settings").textContent = "Current clarity profile, comfort limit, and last AI recommendation.";
-      document.getElementById("send-care").textContent = mode === "sent" ? "Sent" : "Send to Dr. Elena";
-      document.getElementById("send-care").disabled = mode === "sent";
-      setInsight("care-package");
-    }
-
-    function openAiFlow(copy) {
-      document.getElementById("flow").classList.add("active");
-      document.getElementById("flow-package").hidden = true;
-      document.getElementById("send-care").hidden = true;
-      document.getElementById("flow-orb").textContent = "AI";
-      document.getElementById("flow-title").textContent = copy.flowTitle;
-      document.getElementById("flow-copy").textContent = copy.flowCopy;
-    }
-
-    function updateRing() {
-      ringCards.forEach((card, i) => {
-        const total = ringCards.length;
-        let offset = i - ringIndex;
-        if (offset > total / 2) offset -= total;
-        if (offset < -total / 2) offset += total;
-        const angle = offset * 56;
-        const rad = angle * Math.PI / 180;
-        const x = Math.sin(rad) * radiusX;
-        const z = Math.cos(rad) * radiusZ;
-        const y = Math.abs(offset) * 8;
-        const scale = 0.84 + Math.max(0, z / radiusZ) * 0.16;
-        const opacity = Math.max(0.28, 0.98 - Math.abs(offset) * 0.18);
-        card.style.transform = `translate(-50%, -50%) translateX(${x}px) translateY(${y}px) translateZ(${z}px) rotateY(${-angle * 0.22}deg) scale(${scale})`;
-        card.style.zIndex = String(20 - Math.abs(offset));
-        card.style.opacity = opacity;
-        card.style.filter = Math.abs(offset) > 1 ? "blur(0.5px)" : "none";
-        card.classList.toggle("is-active", i === ringIndex);
+      const navKey = name === "care" ? "care" : name === "more" ? "more" : "now";
+      document.querySelectorAll(".nav button").forEach(button => {
+        button.classList.toggle("active", button.dataset.nav === navKey);
       });
-      const active = ringCards[ringIndex];
-      if (active) active.classList.add("is-active");
+      setNote(name);
     }
 
-    function rotateRing(delta) {
-      ringIndex = (ringIndex + delta + ringCards.length) % ringCards.length;
-      updateRing();
-    }
-
-    issueOptions.forEach(option => {
-      option.addEventListener("click", () => {
-        setSelectedProblem(option.dataset.problem, option.dataset.insight);
-      });
+    document.querySelectorAll("[data-route]").forEach(control => {
+      control.addEventListener("click", () => route(control.dataset.route));
     });
 
-    ringCards.forEach((card, i) => {
-      card.addEventListener("click", (event) => {
-        event.stopPropagation();
-        ringIndex = i;
-        updateRing();
-      });
+    document.querySelectorAll("[data-note]").forEach(node => {
+      node.addEventListener("mouseenter", () => setNote(node.dataset.note));
+      node.addEventListener("focus", () => setNote(node.dataset.note));
     });
-
-    const ringStage = document.getElementById("issue-ring");
-    let wheelAccum = 0;
-    let wheelLock = false;
-    ringStage.addEventListener("wheel", (event) => {
-      event.preventDefault();
-      wheelAccum += Math.abs(event.deltaY) > Math.abs(event.deltaX) ? event.deltaY : event.deltaX;
-      if (wheelLock || Math.abs(wheelAccum) < 90) return;
-      rotateRing(wheelAccum > 0 ? 1 : -1);
-      wheelAccum = 0;
-      wheelLock = true;
-      window.setTimeout(() => {
-        wheelLock = false;
-      }, 260);
-    }, { passive: false });
-
-    let dragStartX = null;
-    ringStage.addEventListener("pointerdown", (event) => {
-      dragStartX = event.clientX;
-      ringStage.setPointerCapture(event.pointerId);
-    });
-    ringStage.addEventListener("pointerup", (event) => {
-      if (dragStartX === null) return;
-      const dx = event.clientX - dragStartX;
-      if (Math.abs(dx) > 54) rotateRing(dx < 0 ? 1 : -1);
-      dragStartX = null;
-    });
-
-    document.getElementById("confirm-problem").addEventListener("click", () => {
-      const copy = problemCopy[selectedProblem];
-      if (selectedProblem === "care") {
-        openCarePackage("ready");
-        return;
-      }
-      const ringMap = { unclear: 0, disconnected: 1, noise: 2, battery: 1, care: 0 };
-      ringIndex = ringMap[selectedProblem] ?? 0;
-      updateRing();
-      document.getElementById("tracking-card").classList.add("active");
-      document.getElementById("tracking-title").textContent = copy.trackingTitle;
-      document.getElementById("track-step-1").textContent = "Issue selected";
-      document.getElementById("track-step-2").textContent = copy.step2;
-      document.getElementById("track-step-3").textContent = copy.step3;
-      setInsight("tracking");
-    });
-
-    document.querySelectorAll(".nav button").forEach(button => {
-      button.addEventListener("click", () => {
-        document.querySelectorAll(".nav button").forEach(b => b.classList.remove("active"));
-        button.classList.add("active");
-        document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-        document.querySelector(`[data-screen="${button.dataset.target}"]`).classList.add("active");
-      });
-    });
-
-    document.querySelectorAll(".primary-action").forEach(button => {
-      button.addEventListener("click", () => {
-        selectedProblem = "care";
-        applyState("care", "care-package");
-        openCarePackage("ready");
-      });
-    });
-
-    document.getElementById("close-flow").addEventListener("click", () => {
-      document.getElementById("flow").classList.remove("active");
-    });
-
-    document.getElementById("send-care").addEventListener("click", () => {
-      openCarePackage("sent");
-    });
-
-    updateRing();
   </script>
 </body>
 </html>
