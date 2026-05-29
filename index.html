@@ -711,29 +711,22 @@
       z-index: 2;
       top: 50%;
       display: grid;
-      align-items: center;
+      justify-items: center;
       gap: 4px;
-      width: 58px;
+      width: 46px;
       transform: translateY(-50%);
       color: var(--muted);
       font-size: 10px;
       font-weight: 900;
-      pointer-events: auto;
-      touch-action: none;
+      pointer-events: none;
     }
 
     .dial-aid.left {
-      left: -2px;
-      grid-template-columns: 18px 34px;
-      justify-items: start;
-      cursor: ns-resize;
+      left: 0;
     }
 
     .dial-aid.right {
-      right: -2px;
-      grid-template-columns: 34px 18px;
-      justify-items: end;
-      cursor: ns-resize;
+      right: 0;
     }
 
     .dial-aid .aid-icon {
@@ -766,12 +759,6 @@
       background: rgba(255,255,255,.82);
       box-shadow: 0 10px 20px rgba(51,63,72,.06);
       text-align: center;
-      cursor: ns-resize;
-      touch-action: none;
-    }
-
-    .total-volume-card.dragging {
-      background: var(--soft-grad);
     }
 
     .total-volume-card .total-meter {
@@ -824,7 +811,11 @@
     }
 
     .dual-ear-inputs {
-      display: none;
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
     }
 
     .ear-touch {
@@ -833,8 +824,7 @@
       touch-action: none;
     }
 
-    .ear-touch.dragging,
-    .dial-aid.dragging {
+    .ear-touch.dragging {
       background: rgba(0,163,173,.07);
     }
 
@@ -848,42 +838,6 @@
       pointer-events: none;
     }
 
-    .ear-meter {
-      position: relative;
-      width: 16px;
-      height: 70px;
-      overflow: hidden;
-      border: 1px solid rgba(215,228,239,.9);
-      border-radius: 999px;
-      background: rgba(255,255,255,.82);
-      box-shadow: inset 0 0 0 2px rgba(234,245,255,.55);
-    }
-
-    .ear-meter span {
-      position: absolute;
-      left: 2px;
-      right: 2px;
-      bottom: 2px;
-      height: calc(var(--level) * 1%);
-      min-height: 8px;
-      border-radius: 999px;
-      background: linear-gradient(0deg, var(--blue), var(--teal));
-    }
-
-    .ear-meter b {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%) rotate(-90deg);
-      color: #111D25;
-      font-size: 9px;
-      line-height: 1;
-      font-family: "Plus Jakarta Sans", system-ui, sans-serif;
-    }
-
-    .dial-aid.right .ear-meter b {
-      transform: translate(-50%, -50%) rotate(90deg);
-    }
 
     .slider::-webkit-slider-runnable-track {
       height: 10px;
@@ -1933,27 +1887,15 @@
                 <div class="master-volume">
                   <div class="arc-control">
                     <div class="link-ring" id="link-ring"><span id="aid-link">linked</span></div>
-                    <div class="dial-aid left" data-ear-control="left" aria-label="Left ear volume control">
-                      <div class="ear-meter" id="left-meter">
-                        <span id="left-meter-fill"></span>
-                        <b id="left-volume-value-chip">62</b>
-                      </div>
-                      <div class="aid-stack">
-                        <span class="aid-icon"></span>
-                        <span>Left</span>
-                        <div class="battery"><span style="width:85%"></span></div>
-                      </div>
+                    <div class="dial-aid left">
+                      <span class="aid-icon"></span>
+                      <span>Left</span>
+                      <div class="battery"><span style="width:85%"></span></div>
                     </div>
-                    <div class="dial-aid right" data-ear-control="right" aria-label="Right ear volume control">
-                      <div class="aid-stack">
-                        <span class="aid-icon"></span>
-                        <span>Right</span>
-                        <div class="battery" id="right-battery"><span id="right-battery-fill" style="width:92%"></span></div>
-                      </div>
-                      <div class="ear-meter" id="right-meter">
-                        <span id="right-meter-fill"></span>
-                        <b id="right-volume-value-chip">62</b>
-                      </div>
+                    <div class="dial-aid right">
+                      <span class="aid-icon"></span>
+                      <span>Right</span>
+                      <div class="battery" id="right-battery"><span id="right-battery-fill" style="width:92%"></span></div>
                     </div>
                     <div class="arc-dial" id="arc-dial"></div>
                     <div class="arc-readout">
@@ -1971,7 +1913,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="total-volume-card" id="total-volume-control" aria-label="Total volume control">
+                <div class="total-volume-card">
                   <small>Total</small>
                   <div class="total-meter"><span id="total-meter-fill"></span></div>
                   <strong id="total-volume-value">62</strong>
@@ -2623,14 +2565,7 @@
 
     const leftVolume = document.getElementById("left-volume");
     const rightVolume = document.getElementById("right-volume");
-    const totalVolumeControl = document.getElementById("total-volume-control");
     const totalVolumeValue = document.getElementById("total-volume-value");
-    const leftVolumeValueChip = document.getElementById("left-volume-value-chip");
-    const rightVolumeValueChip = document.getElementById("right-volume-value-chip");
-    const leftMeter = document.getElementById("left-meter");
-    const rightMeter = document.getElementById("right-meter");
-    const leftMeterFill = document.getElementById("left-meter-fill");
-    const rightMeterFill = document.getElementById("right-meter-fill");
     const totalMeterFill = document.getElementById("total-meter-fill");
     const arcDial = document.getElementById("arc-dial");
     const connectionDemo = document.getElementById("connection-demo");
@@ -2639,24 +2574,15 @@
     const linkRing = document.getElementById("link-ring");
     const rightBattery = document.getElementById("right-battery");
     const rightBatteryFill = document.getElementById("right-battery-fill");
-    let totalVolume = 62;
 
-    function updateEarReadouts() {
+    function updateVolumeReadouts() {
       const left = Number(leftVolume.value);
       const right = Number(rightVolume.value);
-      leftVolumeValueChip.textContent = left;
-      rightVolumeValueChip.textContent = right;
-      leftMeter.style.setProperty("--level", left);
-      rightMeter.style.setProperty("--level", right);
-      leftMeterFill.style.height = `${left}%`;
-      rightMeterFill.style.height = `${right}%`;
+      const total = Math.round((left + right) / 2);
+      totalVolumeValue.textContent = total;
+      totalMeterFill.style.height = `${total}%`;
       arcDial.style.setProperty("--left-deg", left * 1.8);
-      arcDial.style.setProperty("--right-deg", right * 1.8);
-    }
-
-    function updateTotalReadout() {
-      totalVolumeValue.textContent = totalVolume;
-      totalMeterFill.style.height = `${totalVolume}%`;
+      arcDial.style.setProperty("--right-deg", (100 - right) * 1.8);
     }
 
     let connectionIssue = false;
@@ -2677,7 +2603,7 @@
     }
 
     [leftVolume, rightVolume].forEach(slider => {
-      slider.addEventListener("input", updateEarReadouts);
+      slider.addEventListener("input", updateVolumeReadouts);
     });
 
     function valueFromPointer(event) {
@@ -2688,12 +2614,7 @@
 
     function setEarVolumeFromPointer(event, slider) {
       slider.value = valueFromPointer(event);
-      updateEarReadouts();
-    }
-
-    function setTotalVolumeFromPointer(event) {
-      totalVolume = valueFromPointer(event);
-      updateTotalReadout();
+      updateVolumeReadouts();
     }
 
     document.querySelectorAll(".ear-touch").forEach(zone => {
@@ -2713,41 +2634,9 @@
       zone.addEventListener("pointercancel", () => zone.classList.remove("dragging"));
     });
 
-    document.querySelectorAll("[data-ear-control]").forEach(zone => {
-      const slider = zone.dataset.earControl === "left" ? leftVolume : rightVolume;
-      zone.addEventListener("pointerdown", event => {
-        zone.classList.add("dragging");
-        zone.setPointerCapture(event.pointerId);
-        setEarVolumeFromPointer(event, slider);
-      });
-      zone.addEventListener("pointermove", event => {
-        if (zone.classList.contains("dragging")) setEarVolumeFromPointer(event, slider);
-      });
-      zone.addEventListener("pointerup", event => {
-        zone.classList.remove("dragging");
-        if (zone.hasPointerCapture(event.pointerId)) zone.releasePointerCapture(event.pointerId);
-      });
-      zone.addEventListener("pointercancel", () => zone.classList.remove("dragging"));
-    });
-
-    totalVolumeControl.addEventListener("pointerdown", event => {
-      totalVolumeControl.classList.add("dragging");
-      totalVolumeControl.setPointerCapture(event.pointerId);
-      setTotalVolumeFromPointer(event);
-    });
-    totalVolumeControl.addEventListener("pointermove", event => {
-      if (totalVolumeControl.classList.contains("dragging")) setTotalVolumeFromPointer(event);
-    });
-    totalVolumeControl.addEventListener("pointerup", event => {
-      totalVolumeControl.classList.remove("dragging");
-      if (totalVolumeControl.hasPointerCapture(event.pointerId)) totalVolumeControl.releasePointerCapture(event.pointerId);
-    });
-    totalVolumeControl.addEventListener("pointercancel", () => totalVolumeControl.classList.remove("dragging"));
-
     connectionDemo.addEventListener("click", renderConnectionState);
 
-    updateEarReadouts();
-    updateTotalReadout();
+    updateVolumeReadouts();
   </script>
 </body>
 </html>
