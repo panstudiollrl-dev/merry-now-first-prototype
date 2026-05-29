@@ -902,7 +902,7 @@
     .nav {
       height: 76px;
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       align-items: center;
       gap: 10px;
       padding: 10px 16px 12px;
@@ -924,6 +924,82 @@
       color: var(--white);
       background: var(--brand-grad);
       box-shadow: 0 12px 22px rgba(88,44,131,.2);
+    }
+
+    .action-panel {
+      margin-top: 14px;
+      padding: 16px;
+      border: 1px solid #BDE5E8;
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at 90% 18%, rgba(0,163,173,.14), transparent 30%),
+        var(--soft-grad);
+      box-shadow: 0 14px 30px rgba(51,63,72,.08);
+    }
+
+    .action-panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .action-panel h3 {
+      color: #111D25;
+      font-size: 22px;
+      line-height: 1.15;
+    }
+
+    .action-panel p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 13.5px;
+      line-height: 1.38;
+    }
+
+    .action-panel-items {
+      display: grid;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .action-item {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      gap: 10px;
+      align-items: center;
+      min-height: 54px;
+      padding: 10px;
+      border: 1px solid rgba(215,228,239,.8);
+      border-radius: 16px;
+      background: rgba(255,255,255,.72);
+    }
+
+    .action-item i {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      color: var(--blue);
+      background: var(--soft-blue);
+      font-style: normal;
+      font-weight: 900;
+    }
+
+    .action-item strong {
+      display: block;
+      color: #111D25;
+      font-size: 13.5px;
+    }
+
+    .action-item span {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 11.5px;
+      line-height: 1.25;
     }
 
     .notes {
@@ -1003,12 +1079,12 @@
     <section class="brief">
       <div class="eyebrow">Merry Hearing - Now First</div>
       <h1>把 app 做成聽覺求助入口</h1>
-      <p class="lead">這版互動網頁對齊 Stitch 的畫面：Now 是當下求助，Ask someone 會打包情境，Care 是長期照護關係，More 收納低頻工具。</p>
+      <p class="lead">這版互動網頁把所有求助都留在 Now：點問題卡後，下方常駐大卡直接顯示處置措施、真人求助或送出 package。Care 不再是獨立 tab。</p>
       <div class="flow-list">
         <div class="flow-step"><i>1</i><div><strong>Now - Default</strong><span>使用者先看到裝置狀態、常見問題入口與 Nearby sound。</span></div></div>
-        <div class="flow-step"><i>2</i><div><strong>Problem cards</strong><span>每張卡片直接進對應處置頁，不再多一個 confirm。</span></div></div>
-        <div class="flow-step"><i>3</i><div><strong>Back to Now</strong><span>每個處置頁都可返回首頁，避免誤按造成壓力。</span></div></div>
-        <div class="flow-step"><i>4</i><div><strong>Care Package</strong><span>真人求助才進打包與送出流程。</span></div></div>
+        <div class="flow-step"><i>2</i><div><strong>Problem cards</strong><span>點卡片不跳離 Now，而是更新下方處置卡。</span></div></div>
+        <div class="flow-step"><i>3</i><div><strong>Persistent action card</strong><span>同一張大卡顯示建議處置、套用、求助或送出。</span></div></div>
+        <div class="flow-step"><i>4</i><div><strong>Care as action</strong><span>真人協助是 Now 裡的求助能力，不再需要獨立 Care tab。</span></div></div>
       </div>
     </section>
 
@@ -1041,7 +1117,7 @@
                 </div>
                 <div class="color-key"><span><i class="chip ok"></i>ok</span><span><i class="chip warn"></i>low</span><span><i class="chip danger"></i>urgent</span></div>
               </article>
-              <article class="status-card" data-route="care" data-note="care-mini">
+              <article class="status-card" data-problem="support" data-note="care-mini">
                 <span class="micro-label">Care</span>
                 <strong>Available</strong>
                 <p>Dr. Elena can help</p>
@@ -1052,34 +1128,41 @@
               <h3>What do you need help with?</h3>
               <p>Tap the problem that feels closest. You can always go back.</p>
               <div class="option-list">
-                <button class="option-card primary selected" type="button" data-route="clarity" data-note="clarity">
+                <button class="option-card primary selected" type="button" data-problem="clarity" data-note="clarity">
                   <span class="option-icon">↗</span>
                   <span><strong>I can’t hear clearly</strong><span>Speech feels unclear or distant.</span></span>
                   <b class="check">●</b>
                 </button>
-                <button class="option-card" type="button" data-route="reconnect" data-note="connect">
+                <button class="option-card" type="button" data-problem="reconnect" data-note="connect">
                   <span class="option-icon">↻</span>
                   <span><strong>Won’t connect</strong><span>Fix one side or both devices.</span></span>
                 </button>
-                <button class="option-card" type="button" data-route="noise" data-note="noise">
+                <button class="option-card" type="button" data-problem="noise" data-note="noise">
                   <span class="option-icon">≈</span>
                   <span><strong>Noise or hiss</strong><span>Scratchy, noisy, or too sharp.</span></span>
                 </button>
-                <button class="option-card" type="button" data-route="support" data-note="ask">
+                <button class="option-card" type="button" data-problem="support" data-note="ask">
                   <span class="option-icon">+</span>
                   <span><strong>Ask someone</strong><span>Package sound and settings.</span></span>
                 </button>
               </div>
             </section>
 
-            <article class="nearby-card" data-note="nearby">
-              <div class="nearby-top"><span class="micro-label">Nearby sound</span><span class="state"><span class="dot"></span>Stable</span></div>
-              <p>Merry is watching nearby speech and noise, but nothing needs your attention right now.</p>
-              <div class="ambient" aria-label="Nearby sound map">
+            <article class="action-panel" id="action-panel" data-note="nearby">
+              <div class="action-panel-head">
+                <span class="micro-label" id="action-kicker">Nearby sound</span>
+                <span class="state" id="action-state"><span class="dot"></span>Stable</span>
+              </div>
+              <h3 id="action-title">Around you feels stable.</h3>
+              <p id="action-copy">Merry is watching nearby speech and noise, but nothing needs your attention right now.</p>
+              <div class="ambient" id="ambient-map" aria-label="Nearby sound map">
                 <span class="ambient-pill speech">speech</span>
                 <span class="ambient-you">You</span>
                 <span class="ambient-pill noise">noise</span>
               </div>
+              <div class="action-panel-items" id="action-items" hidden></div>
+              <button class="primary-action" type="button" id="action-primary">Choose a problem above</button>
+              <button class="secondary-action" type="button" id="action-reset" hidden>Back to stable view</button>
             </article>
           </section>
 
@@ -1280,7 +1363,6 @@
 
         <nav class="nav" aria-label="Bottom navigation">
           <button class="active" type="button" data-route="now" data-nav="now">Now</button>
-          <button type="button" data-route="care" data-nav="care">Care</button>
           <button type="button" data-route="more" data-nav="more">More</button>
         </nav>
       </div>
@@ -1289,11 +1371,11 @@
     <aside class="notes" aria-live="polite">
       <small id="note-kicker">Flow</small>
       <h2 id="note-title">Now-first prototype</h2>
-      <p id="note-copy">操作路徑對齊 Stitch：Now 裡選 Ask someone，進入 care package 送出流程；Care 與 More 是底部導覽的平行分頁。</p>
+      <p id="note-copy">操作路徑收斂在 Now：點任一問題卡，下方常駐 action card 直接更新處置措施。More 保留低頻工具。</p>
       <ul id="note-list">
         <li>Now 是當下求助，不是控制台。</li>
-        <li>Care package 讓真人求助帶著上下文。</li>
-        <li>More 收納低頻工具，不干擾第一層。</li>
+        <li>真人協助是 action，不再需要獨立 Care tab。</li>
+        <li>More 收納低頻工具。</li>
       </ul>
     </aside>
   </main>
@@ -1303,8 +1385,8 @@
       now: {
         kicker: "Now",
         title: "Now - Default",
-        copy: "使用者打開 app 先看到裝置是否正常，以及四個常見求助入口。點卡片就直接進處置頁，不需要再按一次確認。",
-        list: ["每張問題卡都是入口。", "所有處置頁都能 Back to Now。", "Nearby sound 是安心提示，不是操作功能。"]
+        copy: "使用者打開 app 先看到裝置是否正常，以及四個常見求助入口。點卡片後不跳頁，直接更新下方常駐處置卡。",
+        list: ["每張問題卡都會更新 action card。", "沒有二次 Confirm。", "真人協助是 Now 裡的 action。"]
       },
       clarity: {
         kicker: "Treatment",
@@ -1327,8 +1409,8 @@
       support: {
         kicker: "Now state",
         title: "Ask someone",
-        copy: "直接進入真人求助頁。這仍然是 Now flow，不是 Care tab；它說明會把當下聲音、裝置與設定上下文打包給聽檢師。",
-        list: ["先解釋會送什麼。", "可以 Back to Now。", "下一步才進 Ready to Send。"]
+        copy: "真人求助直接在 Now 下方處置卡中呈現。它會說明送出的聲音、裝置與設定上下文。",
+        list: ["Care 不再需要獨立 tab。", "按鈕直接進 Ready to Send。", "也可回到 stable view。"]
       },
       package: {
         kicker: "Confirm",
@@ -1381,6 +1463,135 @@
       noteList.innerHTML = note.list.map(item => `<li>${item}</li>`).join("");
     }
 
+    const actionData = {
+      stable: {
+        note: "nearby",
+        kicker: "Nearby sound",
+        state: "Stable",
+        title: "Around you feels stable.",
+        copy: "Merry is watching nearby speech and noise, but nothing needs your attention right now.",
+        primary: "Choose a problem above",
+        route: null,
+        ambient: true,
+        items: []
+      },
+      clarity: {
+        note: "clarity",
+        kicker: "Speech clarity",
+        state: "Ready",
+        title: "Make speech clearer",
+        copy: "Merry will check nearby speech, background noise, and your current clarity profile before applying anything.",
+        primary: "Apply safer clarity setting",
+        done: "Clarity setting applied",
+        ambient: false,
+        items: [
+          ["♪", "Speech direction", "Front speech looks important."],
+          ["≋", "Background noise", "Stable enough for a safer clarity adjustment."],
+          ["✓", "Recommended action", "Try a gentle clarity setting without advanced controls."]
+        ]
+      },
+      reconnect: {
+        note: "reconnect",
+        kicker: "Connection help",
+        state: "Fix",
+        title: "Reconnect devices",
+        copy: "Merry will check each side first, then guide one simple step at a time.",
+        primary: "Start guided reconnect",
+        done: "Guided reconnect started",
+        ambient: false,
+        items: [
+          ["L", "Left hearing aid", "Connected · Battery 85% · ready."],
+          ["R", "Right hearing aid", "Searching for connection nearby."],
+          ["⌁", "Next step", "Open and close the charging case."]
+        ]
+      },
+      noise: {
+        note: "noise",
+        kicker: "Noise comfort",
+        state: "Tune",
+        title: "Soften noise or hiss",
+        copy: "Merry will reduce sharpness without hiding speech, then keep the setting within safe comfort limits.",
+        primary: "Try softer sound",
+        done: "Softer sound profile applied",
+        ambient: false,
+        items: [
+          ["≋", "Harshness check", "Sharper nearby sound is detected."],
+          ["♪", "Speech protection", "Conversation remains the priority."],
+          ["✓", "Recommended action", "Try a softer comfort profile."]
+        ]
+      },
+      support: {
+        note: "support",
+        kicker: "Human support",
+        state: "Care",
+        title: "Ask someone",
+        copy: "Merry can package sound and settings for your audiologist to review remotely.",
+        primary: "Send care package to Dr. Elena",
+        route: "package",
+        ambient: false,
+        items: [
+          ["♪", "Nearby sound", "Recent speech and noise context."],
+          ["●", "Device status", "Connection and battery color state."],
+          ["✓", "Safe settings", "Current clarity and comfort parameters."]
+        ]
+      }
+    };
+
+    let selectedProblem = "stable";
+    const actionKicker = document.getElementById("action-kicker");
+    const actionState = document.getElementById("action-state");
+    const actionTitle = document.getElementById("action-title");
+    const actionCopy = document.getElementById("action-copy");
+    const actionItems = document.getElementById("action-items");
+    const ambientMap = document.getElementById("ambient-map");
+    const actionPrimary = document.getElementById("action-primary");
+    const actionReset = document.getElementById("action-reset");
+
+    function renderAction(problem) {
+      selectedProblem = problem;
+      const data = actionData[problem] || actionData.stable;
+      actionKicker.textContent = data.kicker;
+      actionState.innerHTML = `<span class="dot"></span>${data.state}`;
+      actionTitle.textContent = data.title;
+      actionCopy.textContent = data.copy;
+      actionPrimary.textContent = data.primary;
+      actionPrimary.disabled = !data.route && problem === "stable";
+      actionReset.hidden = problem === "stable";
+      ambientMap.hidden = !data.ambient;
+      actionItems.hidden = data.ambient;
+      actionItems.innerHTML = data.items.map(item => `
+        <div class="action-item"><i>${item[0]}</i><div><strong>${item[1]}</strong><span>${item[2]}</span></div></div>
+      `).join("");
+      document.querySelectorAll("[data-problem]").forEach(node => {
+        node.classList.toggle("selected", node.dataset.problem === problem);
+      });
+      setNote(data.note);
+      document.getElementById("action-panel").scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    actionPrimary.addEventListener("click", () => {
+      if (selectedProblem === "stable-after-done") {
+        renderAction("stable");
+        return;
+      }
+      const data = actionData[selectedProblem] || actionData.stable;
+      if (data.route) {
+        route(data.route);
+        return;
+      }
+      if (selectedProblem !== "stable") {
+        actionState.innerHTML = `<span class="dot"></span>Done`;
+        actionTitle.textContent = data.done;
+        actionCopy.textContent = "You can stay here, choose another problem, or return to the stable view.";
+        actionPrimary.textContent = "Back to stable view";
+        selectedProblem = "stable-after-done";
+      } else if (selectedProblem === "stable-after-done") {
+        renderAction("stable");
+      }
+    });
+
+    actionReset.addEventListener("click", () => renderAction("stable"));
+
     function route(name) {
       document.querySelectorAll(".screen").forEach(screen => {
         screen.classList.toggle("active", screen.dataset.screen === name);
@@ -1390,11 +1601,16 @@
         button.classList.toggle("active", button.dataset.nav === navKey);
       });
       document.querySelector(".phone-body").scrollTop = 0;
+      if (name === "now") renderAction("stable");
       setNote(name);
     }
 
     document.querySelectorAll("[data-route]").forEach(control => {
       control.addEventListener("click", () => route(control.dataset.route));
+    });
+
+    document.querySelectorAll("[data-problem]").forEach(control => {
+      control.addEventListener("click", () => renderAction(control.dataset.problem));
     });
 
     document.querySelectorAll("[data-note]").forEach(node => {
