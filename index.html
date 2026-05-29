@@ -703,33 +703,6 @@
       font-weight: 800;
     }
 
-    .ear-zone {
-      position: absolute;
-      z-index: 1;
-      top: 76px;
-      display: grid;
-      gap: 3px;
-      min-width: 34px;
-      color: var(--muted);
-      font-size: 10px;
-      font-weight: 900;
-      text-align: center;
-      pointer-events: none;
-    }
-
-    .ear-zone strong {
-      color: #111D25;
-      font-size: 12px;
-      font-family: "Plus Jakarta Sans", system-ui, sans-serif;
-    }
-
-    .ear-zone span {
-      display: none;
-    }
-
-    .ear-zone.left { left: 50px; }
-    .ear-zone.right { right: 50px; }
-
     .dial-aid {
       position: absolute;
       z-index: 2;
@@ -1875,8 +1848,6 @@
                       <div class="battery" id="right-battery"><span id="right-battery-fill" style="width:92%"></span></div>
                     </div>
                     <div class="arc-dial" id="arc-dial"></div>
-                    <div class="ear-zone left"><strong>Left</strong><span id="left-volume-value">62</span></div>
-                    <div class="ear-zone right"><strong>Right</strong><span id="right-volume-value">62</span></div>
                     <div class="arc-readout">
                       <small>Total</small>
                       <strong id="total-volume-value">62</strong>
@@ -2543,8 +2514,6 @@
     const leftVolume = document.getElementById("left-volume");
     const rightVolume = document.getElementById("right-volume");
     const totalVolumeValue = document.getElementById("total-volume-value");
-    const leftVolumeValue = document.getElementById("left-volume-value");
-    const rightVolumeValue = document.getElementById("right-volume-value");
     const leftVolumeValueChip = document.getElementById("left-volume-value-chip");
     const rightVolumeValueChip = document.getElementById("right-volume-value-chip");
     const arcDial = document.getElementById("arc-dial");
@@ -2560,8 +2529,6 @@
       const right = Number(rightVolume.value);
       const total = Math.round((left + right) / 2);
       totalVolumeValue.textContent = total;
-      leftVolumeValue.textContent = left;
-      rightVolumeValue.textContent = right;
       leftVolumeValueChip.textContent = left;
       rightVolumeValueChip.textContent = right;
       arcDial.style.setProperty("--left-deg", left * 1.8);
