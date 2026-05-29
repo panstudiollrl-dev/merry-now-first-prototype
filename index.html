@@ -528,8 +528,10 @@
     }
 
     .volume-orbit {
-      display: flex;
-      justify-content: center;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 86px;
+      gap: 10px;
+      align-items: center;
       margin-bottom: 2px;
     }
 
@@ -567,8 +569,8 @@
 
     .master-volume {
       position: relative;
-      width: 260px;
-      min-height: 224px;
+      width: 100%;
+      min-height: 216px;
       padding: 10px;
       border: 1px solid rgba(0,114,206,.16);
       border-radius: 28px;
@@ -581,19 +583,20 @@
 
     .arc-control {
       position: relative;
-      width: 240px;
+      width: 220px;
       height: 204px;
       display: grid;
       place-items: center;
       border-radius: 50%;
+      margin: 0 auto;
     }
 
     .arc-dial {
       position: absolute;
       left: 50%;
       top: 50%;
-      width: 154px;
-      height: 154px;
+      width: 146px;
+      height: 146px;
       transform: translate(-50%, -50%);
       border-radius: 50%;
       background:
@@ -614,8 +617,8 @@
       position: absolute;
       left: 50%;
       top: 50%;
-      width: 204px;
-      height: 204px;
+      width: 194px;
+      height: 194px;
       transform: translate(-50%, -50%);
       border-radius: 50%;
       pointer-events: none;
@@ -692,7 +695,7 @@
 
     .arc-readout strong {
       color: var(--purple);
-      font-size: 36px;
+      font-size: 20px;
       line-height: .95;
       font-family: "Plus Jakarta Sans", system-ui, sans-serif;
     }
@@ -718,8 +721,8 @@
       pointer-events: none;
     }
 
-    .dial-aid.left { left: 1px; }
-    .dial-aid.right { right: 1px; }
+    .dial-aid.left { left: 0; }
+    .dial-aid.right { right: 0; }
 
     .dial-aid .aid-icon {
       width: 28px;
@@ -741,6 +744,42 @@
       grid-template-columns: 1fr 1fr;
       gap: 8px;
       z-index: 2;
+    }
+
+    .total-volume-card {
+      min-height: 148px;
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      gap: 4px;
+      padding: 12px 8px;
+      border: 1px solid rgba(215,228,239,.9);
+      border-radius: 22px;
+      background: rgba(255,255,255,.82);
+      box-shadow: 0 10px 20px rgba(51,63,72,.06);
+      text-align: center;
+    }
+
+    .total-volume-card small {
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .total-volume-card strong {
+      color: var(--purple);
+      font-size: 34px;
+      line-height: .95;
+      font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+    }
+
+    .total-volume-card span {
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 800;
+      line-height: 1.2;
     }
 
     .ear-value-row span {
@@ -787,6 +826,7 @@
       left: 50%;
       top: 50%;
       opacity: .001;
+      pointer-events: none;
     }
 
     .slider::-webkit-slider-runnable-track {
@@ -1849,23 +1889,28 @@
                     </div>
                     <div class="arc-dial" id="arc-dial"></div>
                     <div class="arc-readout">
-                      <small>Total</small>
-                      <strong id="total-volume-value">62</strong>
-                      <span>comfort level</span>
+                      <small>Both ears</small>
+                      <strong>Sound</strong>
+                      <span>comfort</span>
                     </div>
                     <div class="dual-ear-inputs">
-                      <label class="ear-touch left" aria-label="Left ear volume area">
+                      <div class="ear-touch left" aria-label="Left ear volume area">
                         <input class="slider" id="left-volume" type="range" min="0" max="100" value="62" aria-label="Left ear volume">
-                      </label>
-                      <label class="ear-touch right" aria-label="Right ear volume area">
+                      </div>
+                      <div class="ear-touch right" aria-label="Right ear volume area">
                         <input class="slider" id="right-volume" type="range" min="0" max="100" value="62" aria-label="Right ear volume">
-                      </label>
+                      </div>
                     </div>
                     <div class="ear-value-row">
                       <span>Left <b id="left-volume-value-chip">62</b></span>
                       <span>Right <b id="right-volume-value-chip">62</b></span>
                     </div>
                   </div>
+                </div>
+                <div class="total-volume-card">
+                  <small>Total</small>
+                  <strong id="total-volume-value">62</strong>
+                  <span>volume</span>
                 </div>
               </div>
             </section>
