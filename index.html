@@ -658,6 +658,43 @@
       margin-top: 18px;
     }
 
+    .treatment-hero {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      background:
+        radial-gradient(circle at 86% 12%, rgba(0,163,173,.13), transparent 30%),
+        var(--soft-grad);
+      box-shadow: var(--card-shadow);
+    }
+
+    .treatment-orb {
+      width: 76px;
+      height: 76px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 16px;
+      border-radius: 24px;
+      color: var(--white);
+      background: var(--brand-grad);
+      font-size: 28px;
+      font-weight: 900;
+      box-shadow: 0 16px 32px rgba(0,114,206,.18);
+    }
+
+    .treatment-hero h3 {
+      color: #111D25;
+      font-size: 24px;
+      line-height: 1.14;
+    }
+
+    .treatment-hero p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.42;
+    }
+
     .package-card {
       padding: 16px;
     }
@@ -969,9 +1006,9 @@
       <p class="lead">這版互動網頁對齊 Stitch 的畫面：Now 是當下求助，Ask someone 會打包情境，Care 是長期照護關係，More 收納低頻工具。</p>
       <div class="flow-list">
         <div class="flow-step"><i>1</i><div><strong>Now - Default</strong><span>使用者先看到裝置狀態、常見問題入口與 Nearby sound。</span></div></div>
-        <div class="flow-step"><i>2</i><div><strong>Now - Ask Someone</strong><span>點選真人求助後，說明會打包哪些上下文。</span></div></div>
-        <div class="flow-step"><i>3</i><div><strong>Care Package</strong><span>送出前確認 Sound、Device、Safe settings。</span></div></div>
-        <div class="flow-step"><i>4</i><div><strong>Sent Confirmation</strong><span>送出完成後回到 Now，讓使用者安心等待。</span></div></div>
+        <div class="flow-step"><i>2</i><div><strong>Problem cards</strong><span>每張卡片直接進對應處置頁，不再多一個 confirm。</span></div></div>
+        <div class="flow-step"><i>3</i><div><strong>Back to Now</strong><span>每個處置頁都可返回首頁，避免誤按造成壓力。</span></div></div>
+        <div class="flow-step"><i>4</i><div><strong>Care Package</strong><span>真人求助才進打包與送出流程。</span></div></div>
       </div>
     </section>
 
@@ -1013,18 +1050,18 @@
 
             <section class="help-surface" data-note="problem">
               <h3>What do you need help with?</h3>
-              <p>Tap the problem that feels closest. Merry will ask before it starts.</p>
+              <p>Tap the problem that feels closest. You can always go back.</p>
               <div class="option-list">
                 <button class="option-card primary selected" type="button" data-route="clarity" data-note="clarity">
                   <span class="option-icon">↗</span>
                   <span><strong>I can’t hear clearly</strong><span>Speech feels unclear or distant.</span></span>
                   <b class="check">●</b>
                 </button>
-                <button class="option-card" type="button" data-note="connect">
+                <button class="option-card" type="button" data-route="reconnect" data-note="connect">
                   <span class="option-icon">↻</span>
                   <span><strong>Won’t connect</strong><span>Fix one side or both devices.</span></span>
                 </button>
-                <button class="option-card" type="button" data-note="noise">
+                <button class="option-card" type="button" data-route="noise" data-note="noise">
                   <span class="option-icon">≈</span>
                   <span><strong>Noise or hiss</strong><span>Scratchy, noisy, or too sharp.</span></span>
                 </button>
@@ -1044,11 +1081,88 @@
                 <span class="ambient-pill noise">noise</span>
               </div>
             </article>
+          </section>
 
-            <button class="primary-action" type="button" data-route="clarity">Confirm: I can’t hear clearly</button>
+          <section class="screen" data-screen="clarity">
+            <div class="flow-note"><span class="dot"></span><span><strong>Now flow</strong> · Speech clarity help. You can go back anytime.</span></div>
+            <div class="treatment-hero">
+              <div class="treatment-orb">↗</div>
+              <h3>Make speech clearer</h3>
+              <p>Merry will check nearby speech, background noise, and your current clarity profile before applying anything.</p>
+            </div>
+            <div class="package-stack">
+              <article class="package-card">
+                <h3><span class="package-icon">♪</span>Speech direction</h3>
+                <p>Front speech looks important. Merry will protect the nearby voice first.</p>
+              </article>
+              <article class="package-card">
+                <h3><span class="package-icon">≋</span>Background noise</h3>
+                <p>Noise is stable enough for a safer clarity adjustment.</p>
+              </article>
+              <article class="package-card">
+                <h3><span class="package-icon">✓</span>Recommended action</h3>
+                <p>Try a gentle clarity setting without changing advanced controls.</p>
+              </article>
+            </div>
+            <button class="primary-action" type="button" data-route="now">Apply safer clarity setting</button>
+            <button class="secondary-action" type="button" data-route="now">Back to Now</button>
+            <button class="secondary-action" type="button" data-route="support">Ask someone instead</button>
+          </section>
+
+          <section class="screen" data-screen="reconnect">
+            <div class="flow-note"><span class="dot"></span><span><strong>Now flow</strong> · Connection help. You can go back anytime.</span></div>
+            <div class="treatment-hero">
+              <div class="treatment-orb">↻</div>
+              <h3>Reconnect devices</h3>
+              <p>Merry will check each side first, then guide one simple step at a time.</p>
+            </div>
+            <div class="package-stack">
+              <article class="package-card">
+                <h3><span class="package-icon">L</span>Left hearing aid</h3>
+                <p>Connected · Battery 85% · ready.</p>
+              </article>
+              <article class="package-card">
+                <h3><span class="package-icon">R</span>Right hearing aid</h3>
+                <p>Searching for connection. Keep the device nearby.</p>
+              </article>
+              <article class="package-card">
+                <h3><span class="package-icon">⌁</span>Next step</h3>
+                <p>Open and close the charging case, then wait for the right aid to appear.</p>
+              </article>
+            </div>
+            <button class="primary-action" type="button" data-route="now">Start guided reconnect</button>
+            <button class="secondary-action" type="button" data-route="now">Back to Now</button>
+            <button class="secondary-action" type="button" data-route="support">Ask someone instead</button>
+          </section>
+
+          <section class="screen" data-screen="noise">
+            <div class="flow-note"><span class="dot"></span><span><strong>Now flow</strong> · Noise comfort help. You can go back anytime.</span></div>
+            <div class="treatment-hero">
+              <div class="treatment-orb">≈</div>
+              <h3>Soften noise or hiss</h3>
+              <p>Merry will reduce sharpness without hiding speech, then keep the setting within safe comfort limits.</p>
+            </div>
+            <div class="package-stack">
+              <article class="package-card">
+                <h3><span class="package-icon">≋</span>Harshness check</h3>
+                <p>Sharper nearby sound is detected on the right side.</p>
+              </article>
+              <article class="package-card">
+                <h3><span class="package-icon">♪</span>Speech protection</h3>
+                <p>Conversation remains the priority while noise is softened.</p>
+              </article>
+              <article class="package-card">
+                <h3><span class="package-icon">✓</span>Recommended action</h3>
+                <p>Try a softer comfort profile for this environment.</p>
+              </article>
+            </div>
+            <button class="primary-action" type="button" data-route="now">Try softer sound</button>
+            <button class="secondary-action" type="button" data-route="now">Back to Now</button>
+            <button class="secondary-action" type="button" data-route="support">Ask someone instead</button>
           </section>
 
           <section class="screen" data-screen="support">
+            <div class="flow-note"><span class="dot"></span><span><strong>Now flow</strong> · Human support. You can go back anytime.</span></div>
             <div class="screen-title">
               <div>
                 <h2>Support</h2>
@@ -1066,6 +1180,7 @@
                 <div class="support-mini"><strong>Safe setting</strong><br>Current clarity parameters.</div>
               </div>
               <button class="primary-action" type="button" data-route="package">Send care package to Dr. Elena →</button>
+              <button class="secondary-action" type="button" data-route="now">Back to Now</button>
             </article>
 
             <article class="map-card">
@@ -1188,14 +1303,32 @@
       now: {
         kicker: "Now",
         title: "Now - Default",
-        copy: "使用者打開 app 先看到裝置是否正常，以及四個常見求助入口。Nearby sound 是安心提示，不是要操作的 Sound Compass。",
-        list: ["最大行動是 I can’t hear clearly。", "Ask someone 會進入真人求助流程。", "紫色只作為 CTA 與 selected accent。"]
+        copy: "使用者打開 app 先看到裝置是否正常，以及四個常見求助入口。點卡片就直接進處置頁，不需要再按一次確認。",
+        list: ["每張問題卡都是入口。", "所有處置頁都能 Back to Now。", "Nearby sound 是安心提示，不是操作功能。"]
+      },
+      clarity: {
+        kicker: "Treatment",
+        title: "I can’t hear clearly",
+        copy: "直接進入清晰度協助頁。Merry 先檢查人聲方向、背景噪音與目前設定，再提供安全的清晰度處置。",
+        list: ["不再需要 Confirm 按鈕。", "主要處置是 Apply safer clarity setting。", "誤按可 Back to Now。"]
+      },
+      reconnect: {
+        kicker: "Treatment",
+        title: "Won’t connect",
+        copy: "直接進入連線修復頁。使用者不需要去 More 或設定裡找 pairing，畫面用一步一步方式修復。",
+        list: ["先顯示左右耳狀態。", "主行動是 Start guided reconnect。", "也可改走 Ask someone。"]
+      },
+      noise: {
+        kicker: "Treatment",
+        title: "Noise or hiss",
+        copy: "直接進入噪音舒適度處置頁。Merry 會降低刺耳感，同時保護人聲不要被一起壓掉。",
+        list: ["用感受語言，不用 EQ 術語。", "主行動是 Try softer sound。", "也可改走 Ask someone。"]
       },
       support: {
         kicker: "Now state",
-        title: "Now - Ask Someone",
-        copy: "這仍然是 Now 的狀態，不是新的底部 tab。它說明會把當下聲音、裝置與設定上下文打包給聽檢師。",
-        list: ["先解釋會送什麼。", "避免只送空訊息。", "下一步才進 Ready to Send。"]
+        title: "Ask someone",
+        copy: "直接進入真人求助頁。這仍然是 Now flow，不是 Care tab；它說明會把當下聲音、裝置與設定上下文打包給聽檢師。",
+        list: ["先解釋會送什麼。", "可以 Back to Now。", "下一步才進 Ready to Send。"]
       },
       package: {
         kicker: "Confirm",
@@ -1256,6 +1389,7 @@
       document.querySelectorAll(".nav button").forEach(button => {
         button.classList.toggle("active", button.dataset.nav === navKey);
       });
+      document.querySelector(".phone-body").scrollTop = 0;
       setNote(name);
     }
 
