@@ -376,7 +376,7 @@
       width: 100%;
       min-height: 58px;
       display: grid;
-      grid-template-columns: 38px 1fr auto;
+      grid-template-columns: 38px 1fr 22px;
       gap: 12px;
       align-items: center;
       padding: 10px 12px;
@@ -388,8 +388,7 @@
       transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
     }
 
-    .option-card:hover,
-    .option-card.selected {
+    .option-card:hover {
       transform: translateY(-1px);
       border-color: rgba(0,114,206,.32);
       box-shadow: 0 12px 24px rgba(0,114,206,.10);
@@ -400,13 +399,20 @@
       min-height: 84px;
       grid-template-columns: 44px 1fr 22px;
       border-color: rgba(0,114,206,.26);
+      background: rgba(255,255,255,.92);
+      box-shadow: 0 12px 24px rgba(51,63,72,.07);
+    }
+
+    .option-card.selected {
+      transform: translateY(-1px);
+      border-color: rgba(0,114,206,.28);
       background: var(--brand-grad);
       color: var(--white);
       box-shadow: 0 16px 30px rgba(88,44,131,.18);
     }
 
-    .option-card.primary strong,
-    .option-card.primary span {
+    .option-card.selected strong,
+    .option-card.selected span {
       color: var(--white);
     }
 
@@ -424,6 +430,9 @@
     .option-card.primary .option-icon {
       width: 42px;
       height: 42px;
+    }
+
+    .option-card.selected .option-icon {
       color: var(--white);
       background: rgba(255,255,255,.18);
     }
@@ -445,8 +454,13 @@
     }
 
     .check {
-      color: var(--white);
+      color: transparent;
       font-weight: 900;
+      text-align: center;
+    }
+
+    .option-card.selected .check {
+      color: var(--white);
     }
 
     .nearby-card {
@@ -1136,14 +1150,17 @@
                 <button class="option-card" type="button" data-problem="reconnect" data-note="connect">
                   <span class="option-icon">↻</span>
                   <span><strong>Won’t connect</strong><span>Fix one side or both devices.</span></span>
+                  <b class="check">●</b>
                 </button>
                 <button class="option-card" type="button" data-problem="noise" data-note="noise">
                   <span class="option-icon">≈</span>
                   <span><strong>Noise or hiss</strong><span>Scratchy, noisy, or too sharp.</span></span>
+                  <b class="check">●</b>
                 </button>
                 <button class="option-card" type="button" data-problem="support" data-note="ask">
                   <span class="option-icon">+</span>
                   <span><strong>Ask someone</strong><span>Package sound and settings.</span></span>
+                  <b class="check">●</b>
                 </button>
               </div>
             </section>
