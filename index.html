@@ -605,9 +605,9 @@
           var(--teal) calc(var(--left-deg) * 1deg),
           rgba(215,228,239,.9) calc(var(--left-deg) * 1deg),
           rgba(215,228,239,.9) 180deg,
-          var(--purple) 180deg,
-          var(--teal) calc(180deg + (var(--right-deg) * 1deg)),
-          rgba(215,228,239,.9) calc(180deg + (var(--right-deg) * 1deg)),
+          rgba(215,228,239,.9) calc(360deg - (var(--right-deg) * 1deg)),
+          var(--purple) calc(360deg - (var(--right-deg) * 1deg)),
+          var(--teal) 360deg,
           rgba(215,228,239,.9) 360deg);
       -webkit-mask: radial-gradient(circle, transparent 0 61%, #000 62%);
       mask: radial-gradient(circle, transparent 0 61%, #000 62%);
@@ -759,6 +759,12 @@
       background: rgba(255,255,255,.82);
       box-shadow: 0 10px 20px rgba(51,63,72,.06);
       text-align: center;
+      cursor: ns-resize;
+      touch-action: none;
+    }
+
+    .total-volume-card.dragging {
+      background: var(--soft-grad);
     }
 
     .total-volume-card .total-meter {
@@ -1913,7 +1919,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="total-volume-card">
+                <div class="total-volume-card" id="total-volume-control" aria-label="Total volume control">
                   <small>Total</small>
                   <div class="total-meter"><span id="total-meter-fill"></span></div>
                   <strong id="total-volume-value">62</strong>
@@ -2565,6 +2571,7 @@
 
     const leftVolume = document.getElementById("left-volume");
     const rightVolume = document.getElementById("right-volume");
+    const totalVolumeControl = document.getElementById("total-volume-control");
     const totalVolumeValue = document.getElementById("total-volume-value");
     const totalMeterFill = document.getElementById("total-meter-fill");
     const arcDial = document.getElementById("arc-dial");
@@ -2574,15 +2581,18 @@
     const linkRing = document.getElementById("link-ring");
     const rightBattery = document.getElementById("right-battery");
     const rightBatteryFill = document.getElementById("right-battery-fill");
+    let totalVolume = 62;
 
     function updateVolumeReadouts() {
       const left = Number(leftVolume.value);
       const right = Number(rightVolume.value);
-      const total = Math.round((left + right) / 2);
-      totalVolumeValue.textContent = total;
-      totalMeterFill.style.height = `${total}%`;
       arcDial.style.setProperty("--left-deg", left * 1.8);
-      arcDial.style.setProperty("--right-deg", (100 - right) * 1.8);
+      arcDial.style.setProperty("--right-deg", right * 1.8);
+    }
+
+    function updateTotalReadout() {
+      totalVolumeValue.textContent = totalVolume;
+      totalMeterFill.style.height = `${totalVolume}%`;
     }
 
     let connectionIssue = false;
@@ -2617,6 +2627,11 @@
       updateVolumeReadouts();
     }
 
+    function setTotalVolumeFromPointer(event) {
+      totalVolume = valueFromPointer(event);
+      updateTotalReadout();
+    }
+
     document.querySelectorAll(".ear-touch").forEach(zone => {
       const slider = zone.querySelector("input");
       zone.addEventListener("pointerdown", event => {
@@ -2634,9 +2649,24 @@
       zone.addEventListener("pointercancel", () => zone.classList.remove("dragging"));
     });
 
+    totalVolumeControl.addEventListener("pointerdown", event => {
+      totalVolumeControl.classList.add("dragging");
+      totalVolumeControl.setPointerCapture(event.pointerId);
+      setTotalVolumeFromPointer(event);
+    });
+    totalVolumeControl.addEventListener("pointermove", event => {
+      if (totalVolumeControl.classList.contains("dragging")) setTotalVolumeFromPointer(event);
+    });
+    totalVolumeControl.addEventListener("pointerup", event => {
+      totalVolumeControl.classList.remove("dragging");
+      if (totalVolumeControl.hasPointerCapture(event.pointerId)) totalVolumeControl.releasePointerCapture(event.pointerId);
+    });
+    totalVolumeControl.addEventListener("pointercancel", () => totalVolumeControl.classList.remove("dragging"));
+
     connectionDemo.addEventListener("click", renderConnectionState);
 
     updateVolumeReadouts();
+    updateTotalReadout();
   </script>
 </body>
 </html>
