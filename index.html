@@ -475,7 +475,7 @@
 
     .sound-console {
       margin: 0 0 14px;
-      padding: 15px;
+      padding: 13px;
       border: 1px solid rgba(0,163,173,.18);
       border-radius: 24px;
       background:
@@ -489,7 +489,7 @@
       grid-template-columns: 1fr auto;
       gap: 12px;
       align-items: start;
-      margin-bottom: 14px;
+      margin-bottom: 8px;
     }
 
     .sound-console h3 {
@@ -499,10 +499,10 @@
     }
 
     .sound-console p {
-      margin: 4px 0 0;
+      margin: 3px 0 0;
       color: var(--muted);
-      font-size: 12.5px;
-      line-height: 1.34;
+      font-size: 12px;
+      line-height: 1.25;
     }
 
     .auto-badge {
@@ -520,11 +520,9 @@
     }
 
     .volume-orbit {
-      display: grid;
-      grid-template-columns: 74px 1fr 74px;
-      gap: 8px;
-      align-items: end;
-      margin-bottom: 14px;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 2px;
     }
 
     .ear-status {
@@ -561,97 +559,47 @@
 
     .master-volume {
       position: relative;
-      min-height: 118px;
-      padding: 8px;
+      width: 190px;
+      min-height: 214px;
+      padding: 10px;
       border: 1px solid rgba(0,114,206,.16);
-      border-radius: 22px;
+      border-radius: 28px;
       background:
-        radial-gradient(circle at 50% 42%, rgba(255,255,255,.98) 0 22%, transparent 23%),
-        radial-gradient(circle at 50% 42%, rgba(0,163,173,.16) 0 40%, transparent 41%),
-        linear-gradient(135deg, rgba(0,114,206,.12), rgba(88,44,131,.10));
-    }
-
-    .side-volume {
-      min-height: 102px;
-      padding: 8px 6px;
-      border: 1px solid rgba(215,228,239,.86);
-      border-radius: 20px;
-      background: rgba(255,255,255,.74);
-      text-align: center;
-    }
-
-    .side-volume strong {
-      display: block;
-      color: #111D25;
-      font-size: 12px;
-      font-family: "Plus Jakarta Sans", system-ui, sans-serif;
-    }
-
-    .side-volume small {
-      display: block;
-      margin-top: 2px;
-      color: var(--muted);
-      font-size: 10px;
-      font-weight: 800;
-    }
-
-    .mini-arc {
-      --side-volume: 50;
-      position: relative;
-      width: 58px;
-      height: 48px;
-      margin: 6px auto 0;
-      overflow: hidden;
-    }
-
-    .mini-arc::before {
-      content: "";
-      position: absolute;
-      left: 50%;
-      bottom: -29px;
-      width: 78px;
-      height: 78px;
-      transform: translateX(-50%);
-      border-radius: 50%;
-      background:
-        conic-gradient(from 270deg, var(--blue) 0deg, var(--teal) calc(var(--side-volume) * 1.8deg), rgba(215,228,239,.9) calc(var(--side-volume) * 1.8deg), rgba(215,228,239,.9) 180deg, transparent 180deg);
-      -webkit-mask: radial-gradient(circle, transparent 0 54%, #000 55%);
-      mask: radial-gradient(circle, transparent 0 54%, #000 55%);
-    }
-
-    .mini-arc input {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 2px;
-      width: 100%;
-      opacity: .001;
-      z-index: 2;
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,.98) 0 35%, transparent 36%),
+        radial-gradient(circle at 50% 50%, rgba(0,163,173,.13) 0 54%, transparent 55%),
+        linear-gradient(135deg, rgba(0,114,206,.10), rgba(88,44,131,.08));
+      box-shadow: 0 18px 34px rgba(51,63,72,.08);
     }
 
     .arc-control {
       position: relative;
-      height: 124px;
+      width: 170px;
+      height: 170px;
       display: grid;
-      place-items: end center;
-      overflow: hidden;
-      border-radius: 20px;
+      place-items: center;
+      border-radius: 50%;
     }
 
     .arc-dial {
-      --volume: 62;
       position: absolute;
       left: 50%;
-      bottom: -43px;
-      width: 172px;
-      height: 172px;
-      transform: translateX(-50%);
+      top: 50%;
+      width: 150px;
+      height: 150px;
+      transform: translate(-50%, -50%);
       border-radius: 50%;
       background:
-        conic-gradient(from 270deg, var(--blue) 0deg, var(--teal) calc(var(--volume) * 1.8deg), rgba(215,228,239,.88) calc(var(--volume) * 1.8deg), rgba(215,228,239,.88) 180deg, transparent 180deg);
-      -webkit-mask: radial-gradient(circle, transparent 0 55%, #000 56%);
-      mask: radial-gradient(circle, transparent 0 55%, #000 56%);
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.64);
+        conic-gradient(from 180deg,
+          var(--blue) 0deg,
+          var(--teal) calc(var(--left-deg) * 1deg),
+          rgba(215,228,239,.9) calc(var(--left-deg) * 1deg),
+          rgba(215,228,239,.9) 180deg,
+          var(--purple) 180deg,
+          var(--teal) calc(180deg + (var(--right-deg) * 1deg)),
+          rgba(215,228,239,.9) calc(180deg + (var(--right-deg) * 1deg)),
+          rgba(215,228,239,.9) 360deg);
+      -webkit-mask: radial-gradient(circle, transparent 0 61%, #000 62%);
+      mask: radial-gradient(circle, transparent 0 61%, #000 62%);
     }
 
     .arc-dial::after {
@@ -663,7 +611,13 @@
       z-index: 1;
       display: grid;
       justify-items: center;
-      margin-bottom: 9px;
+      place-self: center;
+      width: 104px;
+      height: 104px;
+      align-content: center;
+      border-radius: 50%;
+      background: rgba(255,255,255,.9);
+      box-shadow: 0 12px 26px rgba(51,63,72,.08);
     }
 
     .arc-readout small {
@@ -685,25 +639,53 @@
       font-weight: 800;
     }
 
-    .volume-readout {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 8px;
-      margin-bottom: 9px;
-    }
-
-    .volume-readout strong {
-      color: #111D25;
-      font-size: 14px;
-      font-family: "Plus Jakarta Sans", system-ui, sans-serif;
-    }
-
-    .volume-readout span {
-      color: var(--purple);
-      font-size: 18px;
+    .ear-zone {
+      position: absolute;
+      z-index: 1;
+      top: 71px;
+      display: grid;
+      gap: 3px;
+      min-width: 34px;
+      color: var(--muted);
+      font-size: 10px;
       font-weight: 900;
+      text-align: center;
+      pointer-events: none;
+    }
+
+    .ear-zone strong {
+      color: #111D25;
+      font-size: 12px;
       font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+    }
+
+    .ear-zone span {
+      display: none;
+    }
+
+    .ear-zone.left { left: 18px; }
+    .ear-zone.right { right: 18px; }
+
+    .ear-value-row {
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      bottom: 10px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      z-index: 2;
+    }
+
+    .ear-value-row span {
+      padding: 7px 8px;
+      border: 1px solid rgba(215,228,239,.86);
+      border-radius: 999px;
+      background: rgba(255,255,255,.78);
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 900;
+      text-align: center;
     }
 
     .slider {
@@ -714,14 +696,31 @@
       background: transparent;
     }
 
-    .arc-control .slider {
+    .dual-ear-inputs {
       position: absolute;
-      left: 12px;
-      right: 12px;
-      bottom: 11px;
-      width: calc(100% - 24px);
+      inset: 0;
+      z-index: 3;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .ear-touch {
+      position: relative;
+    }
+
+    .ear-touch .slider {
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      top: 50%;
+      width: calc(100% - 32px);
+      transform: translateY(-50%) rotate(-90deg);
+      transform-origin: center;
       opacity: .001;
-      z-index: 2;
+    }
+
+    .ear-touch.right .slider {
+      transform: translateY(-50%) rotate(90deg);
     }
 
     .slider::-webkit-slider-runnable-track {
@@ -755,33 +754,6 @@
       border-radius: 999px;
       background: var(--teal);
       box-shadow: 0 8px 18px rgba(51,63,72,.20);
-    }
-
-    .ear-mix {
-      display: grid;
-      gap: 8px;
-    }
-
-    .ear-slider {
-      display: grid;
-      grid-template-columns: 42px 1fr 40px;
-      gap: 8px;
-      align-items: center;
-      color: var(--muted);
-      font-size: 11px;
-      font-weight: 900;
-    }
-
-    .ear-slider input::-webkit-slider-runnable-track {
-      height: 8px;
-      background: linear-gradient(90deg, rgba(0,114,206,.22), rgba(0,163,173,.55));
-    }
-
-    .ear-slider input::-webkit-slider-thumb {
-      width: 22px;
-      height: 22px;
-      margin-top: -7px;
-      background: var(--blue);
     }
 
     .ear-balance-row {
@@ -1786,6 +1758,43 @@
               <div class="status-pill"><span class="dot"></span>OK</div>
             </div>
 
+            <section class="sound-console" data-note="sound-control">
+              <div class="sound-console-head">
+                <div>
+                  <span class="micro-label">Merry Sound</span>
+                  <h3>Comfort volume</h3>
+                  <p>Slide the left or right half. Merry keeps both ears comfortable together.</p>
+                </div>
+                <span class="auto-badge"><span class="dot"></span>Connected</span>
+              </div>
+              <div class="volume-orbit">
+                <div class="master-volume">
+                  <div class="arc-control">
+                    <div class="arc-dial" id="arc-dial"></div>
+                    <div class="ear-zone left"><strong>Left</strong><span id="left-volume-value">62</span></div>
+                    <div class="ear-zone right"><strong>Right</strong><span id="right-volume-value">62</span></div>
+                    <div class="arc-readout">
+                      <small>Total</small>
+                      <strong id="total-volume-value">62</strong>
+                      <span>comfort level</span>
+                    </div>
+                    <div class="dual-ear-inputs">
+                      <label class="ear-touch left" aria-label="Left ear volume area">
+                        <input class="slider" id="left-volume" type="range" min="0" max="100" value="62" aria-label="Left ear volume">
+                      </label>
+                      <label class="ear-touch right" aria-label="Right ear volume area">
+                        <input class="slider" id="right-volume" type="range" min="0" max="100" value="62" aria-label="Right ear volume">
+                      </label>
+                    </div>
+                    <div class="ear-value-row">
+                      <span>Left <b id="left-volume-value-chip">62</b></span>
+                      <span>Right <b id="right-volume-value-chip">62</b></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
             <div class="status-grid">
               <article class="status-card" data-note="device" id="device-card">
                 <span class="micro-label">Devices</span>
@@ -1850,44 +1859,6 @@
                   <button class="secondary-action" type="button" id="solution-secondary">Ask someone instead</button>
                 </div>
               </article>
-            </section>
-
-            <section class="sound-console" data-note="sound-control">
-              <div class="sound-console-head">
-                <div>
-                  <span class="micro-label">Merry Sound</span>
-                  <h3>Comfort volume</h3>
-                  <p>Adjust all sound, or gently balance each ear.</p>
-                </div>
-                <span class="auto-badge"><span class="dot"></span>Connected</span>
-              </div>
-              <div class="volume-orbit">
-                <div class="side-volume">
-                  <strong>Left</strong>
-                  <small id="left-volume-value">even</small>
-                  <div class="mini-arc" id="left-arc">
-                    <input class="slider" id="left-volume" type="range" min="0" max="100" value="50" aria-label="Left ear volume">
-                  </div>
-                </div>
-                <div class="master-volume">
-                  <div class="arc-control">
-                    <div class="arc-dial" id="arc-dial"></div>
-                    <div class="arc-readout">
-                      <small>Total</small>
-                      <strong id="total-volume-value">62</strong>
-                      <span>comfort level</span>
-                    </div>
-                    <input class="slider" id="total-volume" type="range" min="0" max="100" value="62" aria-label="Total volume">
-                  </div>
-                </div>
-                <div class="side-volume">
-                  <strong>Right</strong>
-                  <small id="right-volume-value">even</small>
-                  <div class="mini-arc" id="right-arc">
-                    <input class="slider" id="right-volume" type="range" min="0" max="100" value="50" aria-label="Right ear volume">
-                  </div>
-                </div>
-              </div>
             </section>
 
             <article class="action-panel" id="action-panel" data-note="nearby">
@@ -2482,15 +2453,14 @@
       node.addEventListener("focus", () => setNote(node.dataset.note));
     });
 
-    const totalVolume = document.getElementById("total-volume");
     const leftVolume = document.getElementById("left-volume");
     const rightVolume = document.getElementById("right-volume");
     const totalVolumeValue = document.getElementById("total-volume-value");
     const leftVolumeValue = document.getElementById("left-volume-value");
     const rightVolumeValue = document.getElementById("right-volume-value");
+    const leftVolumeValueChip = document.getElementById("left-volume-value-chip");
+    const rightVolumeValueChip = document.getElementById("right-volume-value-chip");
     const arcDial = document.getElementById("arc-dial");
-    const leftArc = document.getElementById("left-arc");
-    const rightArc = document.getElementById("right-arc");
     const connectionDemo = document.getElementById("connection-demo");
     const deviceTitle = document.getElementById("device-title");
     const deviceCopy = document.getElementById("device-copy");
@@ -2502,19 +2472,17 @@
     const rightBatteryFill = document.getElementById("right-battery-fill");
     const rightBatteryText = document.getElementById("right-battery-text");
 
-    function formatEarVolume(value) {
-      const number = Number(value);
-      if (number === 50) return "even";
-      return number > 50 ? `+${number - 50}` : `${number - 50}`;
-    }
-
     function updateVolumeReadouts() {
-      totalVolumeValue.textContent = totalVolume.value;
-      leftVolumeValue.textContent = formatEarVolume(leftVolume.value);
-      rightVolumeValue.textContent = formatEarVolume(rightVolume.value);
-      arcDial.style.setProperty("--volume", totalVolume.value);
-      leftArc.style.setProperty("--side-volume", leftVolume.value);
-      rightArc.style.setProperty("--side-volume", rightVolume.value);
+      const left = Number(leftVolume.value);
+      const right = Number(rightVolume.value);
+      const total = Math.round((left + right) / 2);
+      totalVolumeValue.textContent = total;
+      leftVolumeValue.textContent = left;
+      rightVolumeValue.textContent = right;
+      leftVolumeValueChip.textContent = left;
+      rightVolumeValueChip.textContent = right;
+      arcDial.style.setProperty("--left-deg", left * 1.8);
+      arcDial.style.setProperty("--right-deg", right * 1.8);
     }
 
     let connectionIssue = false;
@@ -2540,7 +2508,7 @@
       renderSolution("reconnect");
     }
 
-    [totalVolume, leftVolume, rightVolume].forEach(slider => {
+    [leftVolume, rightVolume].forEach(slider => {
       slider.addEventListener("input", updateVolumeReadouts);
     });
 
