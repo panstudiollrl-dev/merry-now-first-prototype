@@ -328,6 +328,116 @@
       z-index: 1;
     }
 
+    .issue-options {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .issue-option {
+      min-height: 134px;
+      border: 1px solid rgba(215, 228, 239, 0.96);
+      border-radius: 22px;
+      background: rgba(255,255,255,0.92);
+      box-shadow: 0 12px 28px rgba(17, 29, 37, 0.08);
+      padding: 15px;
+      text-align: left;
+      cursor: pointer;
+      transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, background 180ms ease;
+    }
+
+    .issue-option:hover,
+    .issue-option.is-selected {
+      transform: translateY(-2px);
+      border-color: rgba(88,44,131,0.38);
+      box-shadow: 0 16px 34px rgba(64,16,107,0.14);
+      background: linear-gradient(135deg, rgba(255,255,255,0.98), rgba(234,245,255,0.98));
+    }
+
+    .issue-option.is-selected {
+      outline: 3px solid rgba(0,163,173,0.18);
+    }
+
+    .issue-option strong {
+      display: block;
+      color: var(--text);
+      font-family: "Plus Jakarta Sans";
+      font-size: 18px;
+      line-height: 1.18;
+      margin-top: 12px;
+    }
+
+    .issue-option span:last-child {
+      display: block;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.35;
+      margin-top: 6px;
+    }
+
+    .soundscape-card {
+      position: relative;
+      z-index: 2;
+      margin-top: 14px;
+      border: 1px solid rgba(0,163,173,0.22);
+      border-radius: 22px;
+      padding: 16px;
+      background:
+        radial-gradient(circle at 88% 16%, rgba(0,163,173,0.16), transparent 30%),
+        linear-gradient(135deg, rgba(255,255,255,0.96), rgba(234,245,255,0.92));
+      box-shadow: 0 10px 24px rgba(17,29,37,0.06);
+    }
+
+    .soundscape-card small {
+      display: block;
+      color: var(--teal);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .soundscape-card strong {
+      display: block;
+      font-family: "Plus Jakarta Sans";
+      font-size: 18px;
+      line-height: 1.25;
+      color: var(--text);
+    }
+
+    .soundscape-card p {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.42;
+    }
+
+    .sound-bars {
+      display: flex;
+      gap: 4px;
+      align-items: end;
+      height: 26px;
+      margin-top: 12px;
+    }
+
+    .sound-bars i {
+      display: block;
+      width: 100%;
+      border-radius: 999px;
+      background: var(--gradient-ai);
+      opacity: 0.72;
+    }
+
+    .sound-bars i:nth-child(1) { height: 28%; }
+    .sound-bars i:nth-child(2) { height: 62%; }
+    .sound-bars i:nth-child(3) { height: 44%; }
+    .sound-bars i:nth-child(4) { height: 78%; }
+    .sound-bars i:nth-child(5) { height: 36%; }
+
     .issue-card {
       position: absolute;
       z-index: 2;
@@ -422,12 +532,13 @@
     .ring-stage {
       position: relative;
       z-index: 2;
-      height: 248px;
-      margin-top: 18px;
+      height: 150px;
+      margin-top: 10px;
       border-radius: 28px;
       perspective: 900px;
       touch-action: pan-y;
       user-select: none;
+      pointer-events: none;
     }
 
     .ring-stage::before {
@@ -447,15 +558,15 @@
       position: absolute;
       left: 50%;
       top: 50%;
-      width: 210px;
-      min-height: 126px;
+      width: 156px;
+      min-height: 92px;
       border: 1px solid rgba(215, 228, 239, 0.96);
       border-radius: 24px;
       background: rgba(255,255,255,0.94);
       box-shadow: 0 18px 38px rgba(17, 29, 37, 0.14);
       padding: 16px;
       text-align: left;
-      cursor: pointer;
+      cursor: default;
       transform-style: preserve-3d;
       transition: transform 320ms cubic-bezier(.2,.8,.2,1), opacity 320ms ease, filter 320ms ease, border-color 180ms ease;
     }
@@ -482,21 +593,25 @@
     }
 
     .ring-card .issue-icon {
-      margin-bottom: 12px;
+      margin-bottom: 8px;
+      width: 32px;
+      height: 32px;
+      border-radius: 12px;
+      font-size: 15px;
     }
 
     .ring-card strong {
       display: block;
       color: var(--text);
       font-family: "Plus Jakarta Sans";
-      font-size: 19px;
+      font-size: 15px;
       line-height: 1.16;
     }
 
     .ring-card span:last-child {
       display: block;
       color: var(--muted);
-      font-size: 14px;
+      font-size: 12px;
       line-height: 1.35;
       margin-top: 7px;
     }
@@ -509,6 +624,15 @@
       font-size: 13px;
       font-weight: 800;
       margin: -6px 0 12px;
+    }
+
+    .processing-ring {
+      display: none;
+      margin: 4px 0 12px;
+    }
+
+    .tracking-card.active .processing-ring {
+      display: block;
     }
 
     .confirm-problem {
@@ -1008,7 +1132,7 @@
       <div class="principles">
         <div class="principle">
           <strong>互動方式</strong>
-          <span>現在所有狀態都在手機裡：滑動立體問題圓環，轉到「聽不清楚、連不上、沙沙聲、低電量」後按確認，系統才開始處理。</span>
+          <span>第一層改成攤開的大求助卡。使用者先看見問題、點選、再確認；圓環只保留在處理狀態中，作為安心的系統運作感。</span>
         </div>
       </div>
     </section>
@@ -1047,46 +1171,66 @@
 
               <section class="issue-cloud" data-insight="issue-surface">
                 <h3>What do you need help with?</h3>
-                <p>Slide the ring to your issue, then confirm.</p>
+                <p>Tap the problem that feels closest. Merry will ask before it starts.</p>
 
-                <div class="ring-stage" id="issue-ring" data-insight="issue-ring" aria-label="Issue carousel">
-                <button class="ring-card" data-insight="primary" data-problem="unclear">
-                  <span class="issue-icon">↗</span>
-                  <strong>I can’t hear clearly</strong>
-                  <span>Speech feels unclear or distant.</span>
-                </button>
+                <div class="issue-options" aria-label="Problem options">
+                  <button class="issue-option is-selected" data-insight="primary" data-problem="unclear">
+                    <span class="issue-icon">↗</span>
+                    <strong>I can’t hear clearly</strong>
+                    <span>Speech feels unclear or distant.</span>
+                  </button>
 
-                <button class="ring-card" data-insight="reconnect" data-problem="disconnected">
-                  <span class="issue-icon">↻</span>
-                  <strong>Won’t connect</strong>
-                  <span>Fix one side or both devices.</span>
-                </button>
+                  <button class="issue-option" data-insight="reconnect" data-problem="disconnected">
+                    <span class="issue-icon">↻</span>
+                    <strong>Won’t connect</strong>
+                    <span>Fix one side or both devices.</span>
+                  </button>
 
-                <button class="ring-card" data-insight="noise" data-problem="noise">
-                  <span class="issue-icon">≈</span>
-                  <strong>Noise or hiss</strong>
-                  <span>Scratchy, noisy, or too sharp.</span>
-                </button>
+                  <button class="issue-option" data-insight="noise" data-problem="noise">
+                    <span class="issue-icon">≈</span>
+                    <strong>Noise or hiss</strong>
+                    <span>Scratchy, noisy, or too sharp.</span>
+                  </button>
 
-                <button class="ring-card" data-insight="battery-problem" data-problem="battery">
-                  <span class="issue-icon">!</span>
-                  <strong>Battery low</strong>
-                  <span>Check charging help.</span>
-                </button>
-
-                <button class="ring-card" data-insight="care-request" data-problem="care">
-                  <span class="issue-icon">+</span>
-                  <strong>Ask my audiologist</strong>
-                  <span>Send this situation for review.</span>
-                </button>
+                  <button class="issue-option" data-insight="care-request" data-problem="care">
+                    <span class="issue-icon">+</span>
+                    <strong>Ask someone</strong>
+                    <span>Send this to your audiologist.</span>
+                  </button>
                 </div>
 
-                <div class="ring-hint" id="ring-hint">Swipe or scroll to rotate</div>
+                <div class="soundscape-card" data-insight="soundscape">
+                  <small>Nearby sound</small>
+                  <strong id="soundscape-title">Around you feels stable.</strong>
+                  <p id="soundscape-copy">Merry is watching nearby speech and noise, but nothing needs your attention right now.</p>
+                  <div class="sound-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+                </div>
 
                 <button class="confirm-problem" id="confirm-problem" data-insight="confirm">Confirm: I can’t hear clearly</button>
 
                 <div class="tracking-card" id="tracking-card" data-insight="tracking">
                   <strong id="tracking-title">Checking your sound</strong>
+                  <div class="processing-ring" aria-hidden="true">
+                    <div class="ring-stage" id="issue-ring" data-insight="issue-ring" aria-label="Processing carousel">
+                      <div class="ring-card" data-problem="unclear">
+                        <span class="issue-icon">↗</span>
+                        <strong>Speech</strong>
+                        <span>Checking clarity.</span>
+                      </div>
+
+                      <div class="ring-card" data-problem="disconnected">
+                        <span class="issue-icon">↻</span>
+                        <strong>Device</strong>
+                        <span>Checking connection.</span>
+                      </div>
+
+                      <div class="ring-card" data-problem="noise">
+                        <span class="issue-icon">≈</span>
+                        <strong>Noise</strong>
+                        <span>Checking harshness.</span>
+                      </div>
+                    </div>
+                  </div>
                   <div class="track-step done"><i></i><span id="track-step-1">Issue selected</span></div>
                   <div class="track-step current"><i></i><span id="track-step-2">Checking device and sound environment</span></div>
                   <div class="track-step"><i></i><span id="track-step-3">Next: apply a safer AI recommendation</span></div>
@@ -1207,15 +1351,15 @@
       },
       "issue-surface": {
         kicker: "Problem-first",
-        title: "用圓環選擇當下困擾",
-        copy: "這裡不是功能選單，而是一個單一焦點的求助儀式。使用者滑到自己遇到的狀況，再按確認。",
-        list: ["避免同時攤開太多按鈕。", "每次只聚焦一個困擾。", "選擇後才開始檢查與追蹤。"]
+        title: "把問題攤開，降低慌張感",
+        copy: "長者在焦慮時不應該先學操作。四張大卡直接對應常見困擾，點選後還要再確認，避免誤觸。",
+        list: ["第一層只放高頻求助情境。", "用日常語言，不用功能名稱。", "點選不等於立刻調整，保留安全感。"]
       },
       "issue-ring": {
-        kicker: "Interaction",
-        title: "滑動卡牌，而不是讀清單",
-        copy: "圓環讓問題入口有空間感，也讓使用者用較低負擔的方式找到自己的狀況。這比一串設定清單更接近求助流程。",
-        list: ["支援滾輪、拖曳、點卡切換。", "中央卡代表目前選擇。", "確認前不直接執行，降低誤觸焦慮。"]
+        kicker: "Processing",
+        title: "圓環變成處理中的安心動畫",
+        copy: "圓環不再要求使用者操作，而是放到確認後的處理狀態中。它保留物件感，但不造成找不到選項的壓力。",
+        list: ["主要選擇改成攤開大卡。", "圓環只表達系統正在檢查。", "美感保留，操作負擔降低。"]
       },
       confirm: {
         kicker: "Confirmation",
@@ -1228,6 +1372,12 @@
         title: "處理中要讓人看得見",
         copy: "按下確認後，畫面不能只跳掉。它要告訴使用者現在正在檢查什麼、下一步會做什麼。",
         list: ["Issue selected。", "Checking devices and sound environment。", "Next: AI recommendation or care review。"]
+      },
+      soundscape: {
+        kicker: "Hidden Compass",
+        title: "把聲音羅盤包裝成周圍聲音卡",
+        copy: "使用者不需要理解 Compass。這張卡用自然語言說明附近聲音狀態，例如前方有人聲、左側較吵、系統正在幫忙處理。",
+        list: ["保留聲景地圖技術。", "不要把它做成獨立功能負擔。", "用安心提示取代雷達介面。"]
       },
       device: {
         kicker: "Device status",
@@ -1335,6 +1485,8 @@
         batteryWidth: "92%",
         deviceTitle: "Both connected",
         deviceCopy: "Left 85% · Right 92%",
+        soundscapeTitle: "Around you feels stable.",
+        soundscapeCopy: "Merry is watching nearby speech and noise, but nothing needs your attention right now.",
         issue: false
       },
       unclear: {
@@ -1350,6 +1502,8 @@
         batteryWidth: "92%",
         deviceTitle: "Both connected",
         deviceCopy: "Left 85% · Right 92%",
+        soundscapeTitle: "Front speech is important.",
+        soundscapeCopy: "Merry sees speech in front and background noise nearby. It will protect the speech first.",
         issue: false
       },
       disconnected: {
@@ -1365,6 +1519,8 @@
         batteryWidth: "0%",
         deviceTitle: "Right offline",
         deviceCopy: "Left still connected",
+        soundscapeTitle: "Sound check is paused.",
+        soundscapeCopy: "Merry needs the right hearing aid connected before it can read your surroundings accurately.",
         issue: true
       },
       battery: {
@@ -1380,6 +1536,8 @@
         batteryWidth: "12%",
         deviceTitle: "Right 12%",
         deviceCopy: "Charge soon",
+        soundscapeTitle: "Your area is calm enough.",
+        soundscapeCopy: "The main issue looks like battery, not the surrounding sound. Merry will guide charging first.",
         issue: true
       },
       noise: {
@@ -1395,6 +1553,8 @@
         batteryWidth: "92%",
         deviceTitle: "Both connected",
         deviceCopy: "Left 85% · Right 92%",
+        soundscapeTitle: "Nearby sound is busy.",
+        soundscapeCopy: "Merry notices sharper noise around you and will soften it without hiding speech.",
         issue: false
       },
       care: {
@@ -1410,6 +1570,8 @@
         batteryWidth: "92%",
         deviceTitle: "Both connected",
         deviceCopy: "Left 85% · Right 92%",
+        soundscapeTitle: "Current sound can be shared.",
+        soundscapeCopy: "Merry can send recent speech and noise context to your audiologist for review.",
         issue: false
       }
     };
@@ -1480,8 +1642,20 @@
     let selectedProblem = "unclear";
     let ringIndex = 0;
     const ringCards = Array.from(document.querySelectorAll(".ring-card"));
+    const issueOptions = Array.from(document.querySelectorAll(".issue-option"));
     const radiusX = 92;
     const radiusZ = 118;
+
+    function setSelectedProblem(name, insightKey = "primary") {
+      selectedProblem = name;
+      issueOptions.forEach(option => {
+        option.classList.toggle("is-selected", option.dataset.problem === name);
+      });
+      const copy = problemCopy[selectedProblem];
+      document.getElementById("confirm-problem").textContent = copy.confirm;
+      document.getElementById("tracking-card").classList.remove("active");
+      applyState(name, insightKey);
+    }
 
     function applyState(name, insightKey = "status") {
       const state = states[name] || states.ready;
@@ -1493,6 +1667,8 @@
       document.getElementById("hero-copy").textContent = state.heroCopy;
       document.getElementById("device-status-title").textContent = state.deviceTitle;
       document.getElementById("device-status-copy").textContent = state.deviceCopy;
+      document.getElementById("soundscape-title").textContent = state.soundscapeTitle;
+      document.getElementById("soundscape-copy").textContent = state.soundscapeCopy;
       document.querySelector(".issue-cloud").classList.toggle("issue", state.issue);
       setInsight(insightKey);
     }
@@ -1517,17 +1693,19 @@
         card.classList.toggle("is-active", i === ringIndex);
       });
       const active = ringCards[ringIndex];
-      selectedProblem = active.dataset.problem;
-      const copy = problemCopy[selectedProblem];
-      document.getElementById("confirm-problem").textContent = copy.confirm;
-      document.getElementById("tracking-card").classList.remove("active");
-      applyState(selectedProblem, active.dataset.insight);
+      if (active) active.classList.add("is-active");
     }
 
     function rotateRing(delta) {
       ringIndex = (ringIndex + delta + ringCards.length) % ringCards.length;
       updateRing();
     }
+
+    issueOptions.forEach(option => {
+      option.addEventListener("click", () => {
+        setSelectedProblem(option.dataset.problem, option.dataset.insight);
+      });
+    });
 
     ringCards.forEach((card, i) => {
       card.addEventListener("click", (event) => {
@@ -1566,6 +1744,9 @@
 
     document.getElementById("confirm-problem").addEventListener("click", () => {
       const copy = problemCopy[selectedProblem];
+      const ringMap = { unclear: 0, disconnected: 1, noise: 2, battery: 1, care: 0 };
+      ringIndex = ringMap[selectedProblem] ?? 0;
+      updateRing();
       document.getElementById("tracking-card").classList.add("active");
       document.getElementById("tracking-title").textContent = copy.trackingTitle;
       document.getElementById("track-step-1").textContent = "Issue selected";
