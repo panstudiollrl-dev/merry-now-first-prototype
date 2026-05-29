@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Merry Hearing - Now First Prototype</title>
+  <link rel="icon" href="data:,">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
@@ -305,22 +306,259 @@
       font-weight: 800;
     }
 
-    .power-track {
-      height: 8px;
-      overflow: hidden;
-      border-radius: 999px;
-      background: var(--soft-blue);
+    .battery {
+      position: relative;
+      height: 14px;
+      padding: 2px;
+      border: 1.5px solid rgba(51,63,72,.26);
+      border-radius: 5px;
+      background: var(--white);
     }
 
-    .power-track span {
+    .battery::after {
+      content: "";
+      position: absolute;
+      right: -4px;
+      top: 4px;
+      width: 3px;
+      height: 5px;
+      border-radius: 0 2px 2px 0;
+      background: rgba(51,63,72,.26);
+    }
+
+    .battery span {
       display: block;
       height: 100%;
-      border-radius: inherit;
+      border-radius: 3px;
+      background: linear-gradient(90deg, #2F9E44, #57C46B);
+    }
+
+    .battery.warn span { background: linear-gradient(90deg, #F2B84B, #FFD56E); }
+    .battery.danger span { background: linear-gradient(90deg, #BA1A1A, #EC6A6A); }
+
+    .connection-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 9px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(215,228,239,.72);
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .connection-row span {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .signal {
+      position: relative;
+      width: 20px;
+      height: 14px;
+      display: inline-flex;
+      align-items: end;
+      gap: 2px;
+    }
+
+    .signal i {
+      width: 4px;
+      border-radius: 999px;
       background: var(--ok);
     }
 
-    .power-track.warn span { background: var(--warn); }
-    .power-track.danger span { background: var(--danger); }
+    .signal i:nth-child(1) { height: 5px; opacity: .55; }
+    .signal i:nth-child(2) { height: 9px; opacity: .78; }
+    .signal i:nth-child(3) { height: 13px; }
+
+    .sound-console {
+      margin: 0 0 14px;
+      padding: 15px;
+      border: 1px solid rgba(0,163,173,.18);
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at 86% 10%, rgba(0,163,173,.14), transparent 32%),
+        linear-gradient(135deg, rgba(255,255,255,.96), rgba(234,245,255,.9) 56%, rgba(234,248,248,.88));
+      box-shadow: var(--card-shadow);
+    }
+
+    .sound-console-head {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: start;
+      margin-bottom: 14px;
+    }
+
+    .sound-console h3 {
+      color: #111D25;
+      font-size: 19px;
+      line-height: 1.12;
+    }
+
+    .sound-console p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 12.5px;
+      line-height: 1.34;
+    }
+
+    .auto-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(0,163,173,.18);
+      background: rgba(255,255,255,.78);
+      color: var(--teal);
+      font-size: 11px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .volume-orbit {
+      display: grid;
+      grid-template-columns: 58px 1fr 58px;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .ear-status {
+      min-height: 76px;
+      padding: 10px 8px;
+      border: 1px solid rgba(215,228,239,.86);
+      border-radius: 18px;
+      background: rgba(255,255,255,.72);
+      text-align: center;
+    }
+
+    .ear-status strong {
+      display: block;
+      color: #111D25;
+      font-size: 13px;
+      font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+    }
+
+    .ear-status small {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      margin-top: 5px;
+      color: var(--ok);
+      font-size: 10px;
+      font-weight: 900;
+    }
+
+    .ear-status .battery {
+      width: 36px;
+      margin: 8px auto 0;
+    }
+
+    .master-volume {
+      min-height: 104px;
+      padding: 12px 13px;
+      border: 1px solid rgba(0,114,206,.16);
+      border-radius: 22px;
+      background:
+        radial-gradient(circle at 50% 42%, rgba(255,255,255,.98) 0 22%, transparent 23%),
+        radial-gradient(circle at 50% 42%, rgba(0,163,173,.16) 0 40%, transparent 41%),
+        linear-gradient(135deg, rgba(0,114,206,.12), rgba(88,44,131,.10));
+    }
+
+    .volume-readout {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 9px;
+    }
+
+    .volume-readout strong {
+      color: #111D25;
+      font-size: 14px;
+      font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+    }
+
+    .volume-readout span {
+      color: var(--purple);
+      font-size: 18px;
+      font-weight: 900;
+      font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+    }
+
+    .slider {
+      width: 100%;
+      height: 34px;
+      margin: 0;
+      appearance: none;
+      background: transparent;
+    }
+
+    .slider::-webkit-slider-runnable-track {
+      height: 10px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--blue), var(--teal) 58%, var(--purple));
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.5);
+    }
+
+    .slider::-webkit-slider-thumb {
+      appearance: none;
+      width: 28px;
+      height: 28px;
+      margin-top: -9px;
+      border: 4px solid var(--white);
+      border-radius: 999px;
+      background: var(--teal);
+      box-shadow: 0 8px 18px rgba(51,63,72,.20);
+    }
+
+    .slider::-moz-range-track {
+      height: 10px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--blue), var(--teal) 58%, var(--purple));
+    }
+
+    .slider::-moz-range-thumb {
+      width: 22px;
+      height: 22px;
+      border: 4px solid var(--white);
+      border-radius: 999px;
+      background: var(--teal);
+      box-shadow: 0 8px 18px rgba(51,63,72,.20);
+    }
+
+    .ear-mix {
+      display: grid;
+      gap: 8px;
+    }
+
+    .ear-slider {
+      display: grid;
+      grid-template-columns: 42px 1fr 40px;
+      gap: 8px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .ear-slider input::-webkit-slider-runnable-track {
+      height: 8px;
+      background: linear-gradient(90deg, rgba(0,114,206,.22), rgba(0,163,173,.55));
+    }
+
+    .ear-slider input::-webkit-slider-thumb {
+      width: 22px;
+      height: 22px;
+      margin-top: -7px;
+      background: var(--blue);
+    }
 
     .color-key {
       display: flex;
@@ -1285,9 +1523,10 @@
                 <strong>Both connected</strong>
                 <p>Left 85% · Right 92%</p>
                 <div class="power-lines">
-                  <div class="power-line"><span>L</span><div class="power-track"><span style="width:85%"></span></div><span>85%</span></div>
-                  <div class="power-line"><span>R</span><div class="power-track"><span style="width:92%"></span></div><span>92%</span></div>
+                  <div class="power-line"><span>L</span><div class="battery"><span style="width:85%"></span></div><span>85%</span></div>
+                  <div class="power-line"><span>R</span><div class="battery"><span style="width:92%"></span></div><span>92%</span></div>
                 </div>
+                <div class="connection-row"><span><span class="signal"><i></i><i></i><i></i></span>Connected</span><span>Both ears</span></div>
                 <div class="color-key"><span><i class="chip ok"></i>ok</span><span><i class="chip warn"></i>low</span><span><i class="chip danger"></i>urgent</span></div>
               </article>
               <article class="status-card" data-problem="support" data-note="care-mini">
@@ -1336,6 +1575,45 @@
                   <button class="secondary-action" type="button" id="solution-secondary">Ask someone instead</button>
                 </div>
               </article>
+            </section>
+
+            <section class="sound-console" data-note="sound-control">
+              <div class="sound-console-head">
+                <div>
+                  <span class="micro-label">Merry Sound</span>
+                  <h3>Comfort volume</h3>
+                  <p>Adjust all sound, or gently balance each ear.</p>
+                </div>
+                <span class="auto-badge"><span class="dot"></span>Connected</span>
+              </div>
+              <div class="volume-orbit">
+                <div class="ear-status">
+                  <strong>Left</strong>
+                  <small><span class="dot"></span>online</small>
+                  <div class="battery"><span style="width:85%"></span></div>
+                </div>
+                <div class="master-volume">
+                  <div class="volume-readout"><strong>Total</strong><span id="total-volume-value">62</span></div>
+                  <input class="slider" id="total-volume" type="range" min="0" max="100" value="62" aria-label="Total volume">
+                </div>
+                <div class="ear-status">
+                  <strong>Right</strong>
+                  <small><span class="dot"></span>online</small>
+                  <div class="battery"><span style="width:92%"></span></div>
+                </div>
+              </div>
+              <div class="ear-mix">
+                <label class="ear-slider">
+                  <span>Left</span>
+                  <input class="slider" id="left-volume" type="range" min="-12" max="12" value="0" aria-label="Left ear balance">
+                  <span id="left-volume-value">even</span>
+                </label>
+                <label class="ear-slider">
+                  <span>Right</span>
+                  <input class="slider" id="right-volume" type="range" min="-12" max="12" value="0" aria-label="Right ear balance">
+                  <span id="right-volume-value">even</span>
+                </label>
+              </div>
             </section>
 
             <article class="action-panel" id="action-panel" data-note="nearby">
@@ -1642,8 +1920,14 @@
       device: {
         kicker: "Status",
         title: "Device status with color",
-        copy: "狀態不只靠百分比，也用綠黃紅色條讓長者快速掃讀。",
-        list: ["綠色表示正常。", "黃色表示需要注意。", "紅色表示急迫。"]
+        copy: "狀態不只靠百分比，也用電池形狀、綠黃紅與連線訊號讓長者快速掃讀。",
+        list: ["電池形狀比單純 bar 更直覺。", "Connected 放在一開始主動辨識。", "異常時再引導進 Won’t connect。"]
+      },
+      "sound-control": {
+        kicker: "Sound",
+        title: "Comfort volume",
+        copy: "音量控制不做成工程面板，而是像一個柔和的聽覺舒適盤：Total 是主控制，左右耳是微調。",
+        list: ["Total 調整整體音量。", "Left / Right 只做平衡微調。", "保留連線與電池狀態作為操作信心。"]
       },
       nearby: {
         kicker: "Ambient",
@@ -1923,6 +2207,31 @@
       node.addEventListener("mouseenter", () => setNote(node.dataset.note));
       node.addEventListener("focus", () => setNote(node.dataset.note));
     });
+
+    const totalVolume = document.getElementById("total-volume");
+    const leftVolume = document.getElementById("left-volume");
+    const rightVolume = document.getElementById("right-volume");
+    const totalVolumeValue = document.getElementById("total-volume-value");
+    const leftVolumeValue = document.getElementById("left-volume-value");
+    const rightVolumeValue = document.getElementById("right-volume-value");
+
+    function formatBalance(value) {
+      const number = Number(value);
+      if (number === 0) return "even";
+      return number > 0 ? `+${number}` : `${number}`;
+    }
+
+    function updateVolumeReadouts() {
+      totalVolumeValue.textContent = totalVolume.value;
+      leftVolumeValue.textContent = formatBalance(leftVolume.value);
+      rightVolumeValue.textContent = formatBalance(rightVolume.value);
+    }
+
+    [totalVolume, leftVolume, rightVolume].forEach(slider => {
+      slider.addEventListener("input", updateVolumeReadouts);
+    });
+
+    updateVolumeReadouts();
   </script>
 </body>
 </html>
