@@ -959,6 +959,84 @@
       margin-bottom: 12px;
     }
 
+    .choice-summary {
+      display: none;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 14px;
+      padding: 10px 12px;
+      border: 1px solid rgba(0,163,173,.18);
+      border-radius: 16px;
+      background: rgba(255,255,255,.68);
+    }
+
+    .choice-summary small {
+      display: block;
+      color: var(--faint);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .choice-summary strong {
+      display: block;
+      margin-top: 2px;
+      color: #111D25;
+      font-size: 15px;
+      font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+    }
+
+    .change-choice {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--white);
+      color: var(--blue);
+      font-weight: 800;
+      font-size: 12px;
+      padding: 8px 11px;
+    }
+
+    .inline-choices {
+      display: none;
+      gap: 8px;
+      margin: 0 0 14px;
+    }
+
+    .inline-choices.open {
+      display: grid;
+    }
+
+    .inline-choices p {
+      margin: 0 0 2px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .inline-choice-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .inline-choice {
+      min-height: 44px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--white);
+      color: #111D25;
+      font-size: 12.5px;
+      font-weight: 800;
+    }
+
+    .inline-choice.selected {
+      color: var(--white);
+      background: var(--brand-grad);
+      border-color: rgba(0,114,206,.22);
+    }
+
     .action-panel h3 {
       color: #111D25;
       font-size: 22px;
@@ -1166,6 +1244,19 @@
             </section>
 
             <article class="action-panel" id="action-panel" data-note="nearby">
+              <div class="choice-summary" id="choice-summary">
+                <div><small>You chose</small><strong id="choice-label">I can’t hear clearly</strong></div>
+                <button class="change-choice" type="button" id="change-choice">Change</button>
+              </div>
+              <div class="inline-choices" id="inline-choices">
+                <p>What feels wrong instead?</p>
+                <div class="inline-choice-grid">
+                  <button class="inline-choice" type="button" data-inline-problem="clarity">I can’t hear clearly</button>
+                  <button class="inline-choice" type="button" data-inline-problem="reconnect">Won’t connect</button>
+                  <button class="inline-choice" type="button" data-inline-problem="noise">Noise or hiss</button>
+                  <button class="inline-choice" type="button" data-inline-problem="support">Ask someone</button>
+                </div>
+              </div>
               <div class="action-panel-head">
                 <span class="micro-label" id="action-kicker">Nearby sound</span>
                 <span class="state" id="action-state"><span class="dot"></span>Stable</span>
@@ -1179,7 +1270,7 @@
               </div>
               <div class="action-panel-items" id="action-items" hidden></div>
               <button class="primary-action" type="button" id="action-primary">Choose a problem above</button>
-              <button class="secondary-action" type="button" id="action-reset" hidden>Back to stable view</button>
+              <button class="secondary-action" type="button" id="action-reset" hidden>Choose a different problem</button>
             </article>
           </section>
 
@@ -1494,6 +1585,7 @@
       },
       clarity: {
         note: "clarity",
+        label: "I can’t hear clearly",
         kicker: "Speech clarity",
         state: "Ready",
         title: "Make speech clearer",
@@ -1509,6 +1601,7 @@
       },
       reconnect: {
         note: "reconnect",
+        label: "Won’t connect",
         kicker: "Connection help",
         state: "Fix",
         title: "Reconnect devices",
@@ -1524,6 +1617,7 @@
       },
       noise: {
         note: "noise",
+        label: "Noise or hiss",
         kicker: "Noise comfort",
         state: "Tune",
         title: "Soften noise or hiss",
@@ -1539,6 +1633,7 @@
       },
       support: {
         note: "support",
+        label: "Ask someone",
         kicker: "Human support",
         state: "Care",
         title: "Ask someone",
@@ -1563,10 +1658,17 @@
     const ambientMap = document.getElementById("ambient-map");
     const actionPrimary = document.getElementById("action-primary");
     const actionReset = document.getElementById("action-reset");
+    const choiceSummary = document.getElementById("choice-summary");
+    const choiceLabel = document.getElementById("choice-label");
+    const changeChoice = document.getElementById("change-choice");
+    const inlineChoices = document.getElementById("inline-choices");
 
     function renderAction(problem) {
       selectedProblem = problem;
       const data = actionData[problem] || actionData.stable;
+      inlineChoices.classList.remove("open");
+      choiceSummary.style.display = problem === "stable" ? "none" : "grid";
+      choiceLabel.textContent = data.label || "";
       actionKicker.textContent = data.kicker;
       actionState.innerHTML = `<span class="dot"></span>${data.state}`;
       actionTitle.textContent = data.title;
@@ -1582,13 +1684,22 @@
       document.querySelectorAll("[data-problem]").forEach(node => {
         node.classList.toggle("selected", node.dataset.problem === problem);
       });
+      document.querySelectorAll("[data-inline-problem]").forEach(node => {
+        node.classList.toggle("selected", node.dataset.inlineProblem === problem);
+      });
       setNote(data.note);
+      document.getElementById("action-panel").scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    function showProblemChoices() {
+      inlineChoices.classList.add("open");
+      actionReset.hidden = true;
       document.getElementById("action-panel").scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
 
     actionPrimary.addEventListener("click", () => {
       if (selectedProblem === "stable-after-done") {
-        renderAction("stable");
+        showProblemChoices();
         return;
       }
       const data = actionData[selectedProblem] || actionData.stable;
@@ -1599,15 +1710,29 @@
       if (selectedProblem !== "stable") {
         actionState.innerHTML = `<span class="dot"></span>Done`;
         actionTitle.textContent = data.done;
-        actionCopy.textContent = "You can stay here, choose another problem, or return to the stable view.";
-        actionPrimary.textContent = "Back to stable view";
+        actionCopy.textContent = "You can keep using this, choose another problem, or ask Dr. Elena for help.";
+        actionPrimary.textContent = "Choose a different problem";
+        actionReset.hidden = false;
+        actionReset.textContent = "Ask someone";
         selectedProblem = "stable-after-done";
       } else if (selectedProblem === "stable-after-done") {
         renderAction("stable");
       }
     });
 
-    actionReset.addEventListener("click", () => renderAction("stable"));
+    actionReset.addEventListener("click", () => {
+      if (selectedProblem === "stable-after-done") {
+        renderAction("support");
+        return;
+      }
+      showProblemChoices();
+    });
+
+    changeChoice.addEventListener("click", showProblemChoices);
+
+    document.querySelectorAll("[data-inline-problem]").forEach(control => {
+      control.addEventListener("click", () => renderAction(control.dataset.inlineProblem));
+    });
 
     function route(name) {
       document.querySelectorAll(".screen").forEach(screen => {
