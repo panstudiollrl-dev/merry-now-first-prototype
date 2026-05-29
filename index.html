@@ -256,6 +256,10 @@
       margin-bottom: 14px;
     }
 
+    .status-grid.care-only {
+      grid-template-columns: 1fr;
+    }
+
     .status-card {
       min-height: 106px;
       padding: 13px;
@@ -519,6 +523,10 @@
       white-space: nowrap;
     }
 
+    button.auto-badge {
+      cursor: pointer;
+    }
+
     .volume-orbit {
       display: flex;
       justify-content: center;
@@ -559,8 +567,8 @@
 
     .master-volume {
       position: relative;
-      width: 190px;
-      min-height: 214px;
+      width: 260px;
+      min-height: 224px;
       padding: 10px;
       border: 1px solid rgba(0,114,206,.16);
       border-radius: 28px;
@@ -573,8 +581,8 @@
 
     .arc-control {
       position: relative;
-      width: 170px;
-      height: 170px;
+      width: 240px;
+      height: 204px;
       display: grid;
       place-items: center;
       border-radius: 50%;
@@ -584,8 +592,8 @@
       position: absolute;
       left: 50%;
       top: 50%;
-      width: 150px;
-      height: 150px;
+      width: 154px;
+      height: 154px;
       transform: translate(-50%, -50%);
       border-radius: 50%;
       background:
@@ -600,6 +608,62 @@
           rgba(215,228,239,.9) 360deg);
       -webkit-mask: radial-gradient(circle, transparent 0 61%, #000 62%);
       mask: radial-gradient(circle, transparent 0 61%, #000 62%);
+    }
+
+    .link-ring {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 204px;
+      height: 204px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .link-ring::before,
+    .link-ring::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 2px solid transparent;
+    }
+
+    .link-ring::before {
+      border-top-color: rgba(47,158,68,.56);
+      border-left-color: rgba(47,158,68,.18);
+      transform: rotate(-18deg);
+    }
+
+    .link-ring::after {
+      border-bottom-color: rgba(47,158,68,.56);
+      border-right-color: rgba(47,158,68,.18);
+      transform: rotate(-18deg);
+    }
+
+    .link-ring.issue::before,
+    .link-ring.issue::after {
+      border-top-color: rgba(242,184,75,.72);
+      border-bottom-color: rgba(242,184,75,.72);
+    }
+
+    .link-ring span {
+      position: absolute;
+      left: 50%;
+      top: -8px;
+      transform: translateX(-50%);
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.9);
+      color: var(--ok);
+      font-size: 10px;
+      font-weight: 900;
+      box-shadow: 0 6px 14px rgba(51,63,72,.08);
+    }
+
+    .link-ring.issue span {
+      color: #8A5A00;
     }
 
     .arc-dial::after {
@@ -642,7 +706,7 @@
     .ear-zone {
       position: absolute;
       z-index: 1;
-      top: 71px;
+      top: 76px;
       display: grid;
       gap: 3px;
       min-width: 34px;
@@ -663,13 +727,42 @@
       display: none;
     }
 
-    .ear-zone.left { left: 18px; }
-    .ear-zone.right { right: 18px; }
+    .ear-zone.left { left: 50px; }
+    .ear-zone.right { right: 50px; }
+
+    .dial-aid {
+      position: absolute;
+      z-index: 2;
+      top: 50%;
+      display: grid;
+      justify-items: center;
+      gap: 4px;
+      width: 46px;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 900;
+      pointer-events: none;
+    }
+
+    .dial-aid.left { left: 1px; }
+    .dial-aid.right { right: 1px; }
+
+    .dial-aid .aid-icon {
+      width: 28px;
+      height: 36px;
+    }
+
+    .dial-aid .battery {
+      width: 36px;
+      height: 12px;
+      margin-top: 1px;
+    }
 
     .ear-value-row {
       position: absolute;
-      left: 12px;
-      right: 12px;
+      left: 44px;
+      right: 44px;
       bottom: 10px;
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -706,21 +799,21 @@
 
     .ear-touch {
       position: relative;
+      cursor: ns-resize;
+      touch-action: none;
+    }
+
+    .ear-touch.dragging {
+      background: rgba(0,163,173,.07);
     }
 
     .ear-touch .slider {
       position: absolute;
-      left: 16px;
-      right: 16px;
+      width: 1px;
+      height: 1px;
+      left: 50%;
       top: 50%;
-      width: calc(100% - 32px);
-      transform: translateY(-50%) rotate(-90deg);
-      transform-origin: center;
       opacity: .001;
-    }
-
-    .ear-touch.right .slider {
-      transform: translateY(-50%) rotate(90deg);
     }
 
     .slider::-webkit-slider-runnable-track {
@@ -1765,11 +1858,22 @@
                   <h3>Comfort volume</h3>
                   <p>Slide the left or right half. Merry keeps both ears comfortable together.</p>
                 </div>
-                <span class="auto-badge"><span class="dot"></span>Connected</span>
+                <button class="auto-badge" type="button" id="connection-demo"><span class="dot"></span><span id="connection-label">Linked</span></button>
               </div>
               <div class="volume-orbit">
                 <div class="master-volume">
                   <div class="arc-control">
+                    <div class="link-ring" id="link-ring"><span id="aid-link">linked</span></div>
+                    <div class="dial-aid left">
+                      <span class="aid-icon"></span>
+                      <span>Left</span>
+                      <div class="battery"><span style="width:85%"></span></div>
+                    </div>
+                    <div class="dial-aid right">
+                      <span class="aid-icon"></span>
+                      <span>Right</span>
+                      <div class="battery" id="right-battery"><span id="right-battery-fill" style="width:92%"></span></div>
+                    </div>
                     <div class="arc-dial" id="arc-dial"></div>
                     <div class="ear-zone left"><strong>Left</strong><span id="left-volume-value">62</span></div>
                     <div class="ear-zone right"><strong>Right</strong><span id="right-volume-value">62</span></div>
@@ -1795,24 +1899,7 @@
               </div>
             </section>
 
-            <div class="status-grid">
-              <article class="status-card" data-note="device" id="device-card">
-                <span class="micro-label">Devices</span>
-                <strong id="device-title">Both connected</strong>
-                <p id="device-copy">Left 85% · Right 92%</p>
-                <div class="device-map">
-                  <span class="aid left"><span class="aid-icon"></span><span>Left</span></span>
-                  <span class="aid-link" id="aid-link">linked</span>
-                  <span class="aid right"><span class="aid-icon"></span><span>Right</span></span>
-                </div>
-                <div class="power-lines">
-                  <div class="power-line"><span>L</span><div class="battery"><span style="width:85%"></span></div><span>85%</span></div>
-                  <div class="power-line"><span>R</span><div class="battery" id="right-battery"><span id="right-battery-fill" style="width:92%"></span></div><span id="right-battery-text">92%</span></div>
-                </div>
-                <div class="connection-row"><span><span class="signal" id="connection-signal"><i></i><i></i><i></i></span><span id="connection-label">Connected</span></span><span id="connection-side">Both ears</span></div>
-                <div class="color-key"><span><i class="chip ok"></i>ok</span><span><i class="chip warn"></i>low</span><span><i class="chip danger"></i>urgent</span></div>
-                <button class="demo-toggle" type="button" id="connection-demo">Check connection</button>
-              </article>
+            <div class="status-grid care-only">
               <article class="status-card" data-problem="support" data-note="care-mini">
                 <span class="micro-label">Care</span>
                 <strong>Available</strong>
@@ -2462,15 +2549,11 @@
     const rightVolumeValueChip = document.getElementById("right-volume-value-chip");
     const arcDial = document.getElementById("arc-dial");
     const connectionDemo = document.getElementById("connection-demo");
-    const deviceTitle = document.getElementById("device-title");
-    const deviceCopy = document.getElementById("device-copy");
     const connectionLabel = document.getElementById("connection-label");
-    const connectionSide = document.getElementById("connection-side");
-    const connectionSignal = document.getElementById("connection-signal");
     const aidLink = document.getElementById("aid-link");
+    const linkRing = document.getElementById("link-ring");
     const rightBattery = document.getElementById("right-battery");
     const rightBatteryFill = document.getElementById("right-battery-fill");
-    const rightBatteryText = document.getElementById("right-battery-text");
 
     function updateVolumeReadouts() {
       const left = Number(leftVolume.value);
@@ -2494,22 +2577,41 @@
       }
       connectionIssue = true;
       nowScreen.classList.toggle("connection-issue", connectionIssue);
-      connectionSignal.classList.toggle("issue", connectionIssue);
-      aidLink.classList.toggle("issue", connectionIssue);
+      linkRing.classList.toggle("issue", connectionIssue);
       rightBattery.classList.toggle("warn", connectionIssue);
-      deviceTitle.textContent = "Right side needs help";
-      deviceCopy.textContent = "Left connected · Right reconnecting";
-      connectionLabel.textContent = "Needs help";
-      connectionSide.textContent = "Right side";
+      connectionLabel.textContent = "Right needs help";
       aidLink.textContent = "check";
       rightBatteryFill.style.width = "42%";
-      rightBatteryText.textContent = "42%";
-      connectionDemo.textContent = "Reconnect right side";
       renderSolution("reconnect");
     }
 
     [leftVolume, rightVolume].forEach(slider => {
       slider.addEventListener("input", updateVolumeReadouts);
+    });
+
+    function setEarVolumeFromPointer(event, slider) {
+      const rect = event.currentTarget.getBoundingClientRect();
+      const ratio = 1 - ((event.clientY - rect.top) / rect.height);
+      const value = Math.max(0, Math.min(100, Math.round(ratio * 100)));
+      slider.value = value;
+      updateVolumeReadouts();
+    }
+
+    document.querySelectorAll(".ear-touch").forEach(zone => {
+      const slider = zone.querySelector("input");
+      zone.addEventListener("pointerdown", event => {
+        zone.classList.add("dragging");
+        zone.setPointerCapture(event.pointerId);
+        setEarVolumeFromPointer(event, slider);
+      });
+      zone.addEventListener("pointermove", event => {
+        if (zone.classList.contains("dragging")) setEarVolumeFromPointer(event, slider);
+      });
+      zone.addEventListener("pointerup", event => {
+        zone.classList.remove("dragging");
+        if (zone.hasPointerCapture(event.pointerId)) zone.releasePointerCapture(event.pointerId);
+      });
+      zone.addEventListener("pointercancel", () => zone.classList.remove("dragging"));
     });
 
     connectionDemo.addEventListener("click", renderConnectionState);
