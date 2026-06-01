@@ -3,32 +3,23 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Merry Hearing - Now First Prototype</title>
+  <title>Merry Hearing Prototype Versions</title>
   <link rel="icon" href="data:,">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --blue: #0072CE;
       --purple: #582C83;
+      --deep: #40106B;
       --teal: #00A3AD;
-      --white: #FFFFFF;
       --ink: #333F48;
       --bg: #F6FAFF;
-      --soft-blue: #EAF5FF;
-      --soft-teal: #EAF8F8;
       --line: #D7E4EF;
       --muted: rgba(51,63,72,.72);
-      --faint: rgba(51,63,72,.5);
-      --ok: #2F9E44;
-      --warn: #F2B84B;
-      --danger: #BA1A1A;
+      --shadow: 0 24px 60px rgba(51,63,72,.12);
       --brand-grad: linear-gradient(135deg, #0072CE 0%, #582C83 100%);
-      --soft-grad: linear-gradient(135deg, #FFFFFF 0%, #EAF5FF 100%);
-      --teal-grad: linear-gradient(135deg, #FFFFFF 0%, #EAF8F8 100%);
-      --shadow: 0 20px 48px rgba(51,63,72,.12);
-      --card-shadow: 0 10px 26px rgba(51,63,72,.07);
     }
 
     * { box-sizing: border-box; }
@@ -39,8 +30,8 @@
       color: var(--ink);
       font-family: "Atkinson Hyperlegible Next", system-ui, sans-serif;
       background:
-        radial-gradient(circle at 12% 12%, rgba(0,114,206,.09), transparent 30%),
-        radial-gradient(circle at 88% 6%, rgba(0,163,173,.08), transparent 28%),
+        radial-gradient(circle at 12% 8%, rgba(0,114,206,.10), transparent 28%),
+        radial-gradient(circle at 88% 12%, rgba(0,163,173,.10), transparent 26%),
         var(--bg);
     }
 
@@ -50,2639 +41,308 @@
       letter-spacing: 0;
     }
 
-    button {
-      font: inherit;
-      cursor: pointer;
-    }
+    a { color: inherit; text-decoration: none; }
 
-    .page {
-      display: grid;
-      grid-template-columns: minmax(280px, 360px) minmax(390px, 420px) minmax(300px, 380px);
-      gap: 32px;
-      max-width: 1260px;
+    .wrap {
+      width: min(1120px, calc(100% - 40px));
       margin: 0 auto;
-      padding: 36px 24px;
-      align-items: start;
+      padding: 42px 0 56px;
     }
 
-    .brief,
-    .notes {
-      position: sticky;
-      top: 28px;
-    }
-
-    .eyebrow {
-      color: var(--purple);
-      font-size: 13px;
-      font-weight: 800;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-    }
-
-    .brief h1 {
-      margin-top: 12px;
-      font-size: 42px;
-      line-height: 1.08;
-      color: #111D25;
-    }
-
-    .lead {
-      margin: 18px 0 0;
-      color: var(--muted);
-      font-size: 18px;
-      line-height: 1.55;
-    }
-
-    .flow-list {
-      margin-top: 28px;
-      display: grid;
-      gap: 10px;
-    }
-
-    .flow-step {
-      display: grid;
-      grid-template-columns: 28px 1fr;
-      gap: 10px;
-      align-items: start;
-      padding: 14px;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      background: rgba(255,255,255,.78);
-      box-shadow: var(--card-shadow);
-    }
-
-    .flow-step i {
-      width: 28px;
-      height: 28px;
-      display: grid;
-      place-items: center;
-      border-radius: 10px;
-      color: var(--white);
-      background: var(--brand-grad);
-      font-style: normal;
-      font-weight: 800;
-      font-size: 12px;
-    }
-
-    .flow-step strong {
-      display: block;
-      color: var(--purple);
-      font-size: 15px;
-      margin-bottom: 3px;
-    }
-
-    .flow-step span {
-      display: block;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.38;
-    }
-
-    .phone-shell {
-      justify-self: center;
-      width: min(100%, 410px);
-      padding: 12px;
-      border-radius: 40px;
-      background: #111D25;
-      box-shadow: 0 34px 80px rgba(51,63,72,.24);
-    }
-
-    .phone {
-      position: relative;
-      height: 820px;
-      overflow: hidden;
-      border: 1px solid rgba(255,255,255,.48);
-      border-radius: 30px;
-      background: var(--bg);
-    }
-
-    .phone-header {
-      height: 64px;
-      display: grid;
-      grid-template-columns: 54px 1fr 54px;
+    .topbar {
+      display: flex;
+      justify-content: space-between;
       align-items: center;
-      padding: 0 18px;
-      background: rgba(255,255,255,.72);
-      border-bottom: 1px solid var(--line);
-      backdrop-filter: blur(14px);
+      gap: 16px;
+      margin-bottom: 46px;
     }
 
-    .m-mark {
-      justify-self: center;
-      width: 30px;
-      height: 30px;
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 900;
+      color: var(--purple);
+    }
+
+    .brand img {
+      width: 34px;
+      height: 34px;
       object-fit: contain;
     }
 
-    .avatar-btn,
-    .header-icon {
-      width: 36px;
-      height: 36px;
-      display: grid;
-      place-items: center;
-      border: 0;
+    .status {
+      padding: 8px 12px;
+      border: 1px solid rgba(0,163,173,.22);
       border-radius: 999px;
-      background: transparent;
-      color: var(--blue);
-      font-weight: 800;
-    }
-
-    .avatar-btn {
-      justify-self: end;
-      background: var(--soft-blue);
-      color: var(--purple);
-    }
-
-    .phone-body {
-      height: calc(100% - 64px - 76px);
-      overflow-y: auto;
-      padding: 22px 20px 24px;
-      scrollbar-width: none;
-    }
-
-    .phone-body::-webkit-scrollbar { display: none; }
-
-    .screen { display: none; }
-    .screen.active { display: block; }
-
-    .screen-title {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 14px;
-      align-items: start;
-      margin-bottom: 18px;
-    }
-
-    .screen-title h2 {
-      color: #111D25;
-      font-size: 28px;
-      line-height: 1.13;
-    }
-
-    .screen-title p {
-      margin: 7px 0 0;
-      color: var(--muted);
-      font-size: 15px;
-      line-height: 1.38;
-    }
-
-    .status-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      min-width: 54px;
-      justify-content: center;
-      padding: 8px 11px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: var(--white);
-      color: var(--muted);
-      font-size: 13px;
-      font-weight: 800;
-      box-shadow: 0 8px 18px rgba(51,63,72,.04);
-    }
-
-    .dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--teal);
-    }
-
-    .status-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-
-    .status-grid.care-only {
-      grid-template-columns: 1fr;
-    }
-
-    .status-card {
-      min-height: 106px;
-      padding: 13px;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      background: rgba(255,255,255,.86);
-      box-shadow: 0 8px 20px rgba(51,63,72,.05);
-    }
-
-    .micro-label {
-      display: block;
-      margin-bottom: 8px;
-      color: var(--faint);
-      font-size: 11px;
-      font-weight: 900;
-      letter-spacing: .04em;
-      text-transform: uppercase;
-    }
-
-    .status-card strong {
-      display: block;
-      color: #111D25;
-      font-size: 17px;
-      line-height: 1.15;
-      font-family: "Plus Jakarta Sans", system-ui, sans-serif;
-    }
-
-    .status-card p {
-      margin: 4px 0 0;
-      color: var(--muted);
-      font-size: 12.5px;
-      line-height: 1.3;
-    }
-
-    .power-lines {
-      display: grid;
-      gap: 7px;
-      margin-top: 9px;
-    }
-
-    .power-line {
-      display: grid;
-      grid-template-columns: 24px 1fr 34px;
-      gap: 7px;
-      align-items: center;
-      color: var(--muted);
-      font-size: 11.5px;
-      font-weight: 800;
-    }
-
-    .battery {
-      position: relative;
-      height: 14px;
-      padding: 2px;
-      border: 1.5px solid rgba(51,63,72,.26);
-      border-radius: 5px;
-      background: var(--white);
-    }
-
-    .battery::after {
-      content: "";
-      position: absolute;
-      right: -4px;
-      top: 4px;
-      width: 3px;
-      height: 5px;
-      border-radius: 0 2px 2px 0;
-      background: rgba(51,63,72,.26);
-    }
-
-    .battery span {
-      display: block;
-      height: 100%;
-      border-radius: 3px;
-      background: linear-gradient(90deg, #2F9E44, #57C46B);
-    }
-
-    .battery.warn span { background: linear-gradient(90deg, #F2B84B, #FFD56E); }
-    .battery.danger span { background: linear-gradient(90deg, #BA1A1A, #EC6A6A); }
-
-    .connection-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      margin-top: 9px;
-      padding-top: 8px;
-      border-top: 1px solid rgba(215,228,239,.72);
-      color: var(--muted);
-      font-size: 11px;
-      font-weight: 800;
-    }
-
-    .connection-row span {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .signal {
-      position: relative;
-      width: 20px;
-      height: 14px;
-      display: inline-flex;
-      align-items: end;
-      gap: 2px;
-    }
-
-    .signal i {
-      width: 4px;
-      border-radius: 999px;
-      background: var(--ok);
-    }
-
-    .signal i:nth-child(1) { height: 5px; opacity: .55; }
-    .signal i:nth-child(2) { height: 9px; opacity: .78; }
-    .signal i:nth-child(3) { height: 13px; }
-
-    .signal.issue i {
-      background: var(--warn);
-    }
-
-    .demo-toggle {
-      width: 100%;
-      margin-top: 9px;
-      padding: 7px 8px;
-      border: 1px solid rgba(0,114,206,.14);
-      border-radius: 999px;
-      background: rgba(234,245,255,.72);
-      color: var(--blue);
-      font-size: 10.5px;
-      font-weight: 900;
-    }
-
-    .device-map {
-      position: relative;
-      display: grid;
-      grid-template-columns: 1fr 42px 1fr;
-      gap: 6px;
-      align-items: center;
-      margin: 10px 0 8px;
-      padding: 8px;
-      border-radius: 16px;
-      background: linear-gradient(135deg, rgba(234,245,255,.72), rgba(234,248,248,.68));
-    }
-
-    .aid {
-      display: grid;
-      justify-items: center;
-      gap: 4px;
-      color: var(--muted);
-      font-size: 10px;
-      font-weight: 900;
-    }
-
-    .aid-icon {
-      position: relative;
-      width: 30px;
-      height: 38px;
-      border-radius: 17px 17px 12px 12px;
-      background:
-        radial-gradient(circle at 50% 72%, rgba(255,255,255,.95) 0 18%, transparent 19%),
-        linear-gradient(145deg, var(--blue), var(--teal));
-      box-shadow: 0 8px 16px rgba(0,114,206,.14);
-    }
-
-    .aid-icon::after {
-      content: "";
-      position: absolute;
-      right: -5px;
-      top: 8px;
-      width: 11px;
-      height: 18px;
-      border: 3px solid rgba(51,63,72,.32);
-      border-left: 0;
-      border-radius: 0 14px 14px 0;
-    }
-
-    .aid.right .aid-icon::after {
-      left: -5px;
-      right: auto;
-      border-left: 3px solid rgba(51,63,72,.32);
-      border-right: 0;
-      border-radius: 14px 0 0 14px;
-    }
-
-    .aid-link {
-      position: relative;
-      height: 28px;
-      display: grid;
-      place-items: center;
-      color: var(--ok);
-      font-size: 10px;
-      font-weight: 900;
-    }
-
-    .aid-link::before,
-    .aid-link::after {
-      content: "";
-      position: absolute;
-      width: 30px;
-      height: 1.5px;
-      background: linear-gradient(90deg, transparent, var(--ok), transparent);
-    }
-
-    .aid-link::before { transform: translateX(-24px); }
-    .aid-link::after { transform: translateX(24px); }
-
-    .aid-link.issue {
-      color: #8A5A00;
-    }
-
-    .aid-link.issue::before,
-    .aid-link.issue::after {
-      background: linear-gradient(90deg, transparent, var(--warn), transparent);
-    }
-
-    .sound-console {
-      margin: 0 0 14px;
-      padding: 13px;
-      border: 1px solid rgba(0,163,173,.18);
-      border-radius: 24px;
-      background:
-        radial-gradient(circle at 86% 10%, rgba(0,163,173,.14), transparent 32%),
-        linear-gradient(135deg, rgba(255,255,255,.96), rgba(234,245,255,.9) 56%, rgba(234,248,248,.88));
-      box-shadow: var(--card-shadow);
-    }
-
-    .sound-console-head {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 12px;
-      align-items: start;
-      margin-bottom: 8px;
-    }
-
-    .sound-console h3 {
-      color: #111D25;
-      font-size: 19px;
-      line-height: 1.12;
-    }
-
-    .sound-console p {
-      margin: 3px 0 0;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.25;
-    }
-
-    .auto-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 7px 9px;
-      border-radius: 999px;
-      border: 1px solid rgba(0,163,173,.18);
-      background: rgba(255,255,255,.78);
+      background: rgba(255,255,255,.72);
       color: var(--teal);
-      font-size: 11px;
-      font-weight: 900;
-      white-space: nowrap;
-    }
-
-    button.auto-badge {
-      cursor: pointer;
-    }
-
-    .volume-orbit {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 86px;
-      gap: 10px;
-      align-items: center;
-      margin-bottom: 2px;
-    }
-
-    .ear-status {
-      min-height: 76px;
-      padding: 10px 8px;
-      border: 1px solid rgba(215,228,239,.86);
-      border-radius: 18px;
-      background: rgba(255,255,255,.72);
-      text-align: center;
-    }
-
-    .ear-status strong {
-      display: block;
-      color: #111D25;
       font-size: 13px;
-      font-family: "Plus Jakarta Sans", system-ui, sans-serif;
-    }
-
-    .ear-status small {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-      margin-top: 5px;
-      color: var(--ok);
-      font-size: 10px;
       font-weight: 900;
     }
 
-    .ear-status .battery {
-      width: 36px;
-      margin: 8px auto 0;
-    }
-
-    .master-volume {
-      position: relative;
-      width: 100%;
-      min-height: 216px;
-      padding: 10px;
-      border: 1px solid rgba(0,114,206,.16);
-      border-radius: 28px;
-      background:
-        radial-gradient(circle at 50% 50%, rgba(255,255,255,.98) 0 35%, transparent 36%),
-        radial-gradient(circle at 50% 50%, rgba(0,163,173,.13) 0 54%, transparent 55%),
-        linear-gradient(135deg, rgba(0,114,206,.10), rgba(88,44,131,.08));
-      box-shadow: 0 18px 34px rgba(51,63,72,.08);
-    }
-
-    .arc-control {
-      position: relative;
-      width: 220px;
-      height: 204px;
+    .hero {
       display: grid;
-      place-items: center;
-      border-radius: 50%;
-      margin: 0 auto;
-    }
-
-    .arc-dial {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      width: 146px;
-      height: 146px;
-      transform: translate(-50%, -50%);
-      border-radius: 50%;
-      background:
-        conic-gradient(from 180deg,
-          var(--blue) 0deg,
-          var(--teal) calc(var(--left-deg) * 1deg),
-          rgba(215,228,239,.9) calc(var(--left-deg) * 1deg),
-          rgba(215,228,239,.9) 180deg,
-          rgba(215,228,239,.9) calc(360deg - (var(--right-deg) * 1deg)),
-          var(--purple) calc(360deg - (var(--right-deg) * 1deg)),
-          var(--teal) 360deg,
-          rgba(215,228,239,.9) 360deg);
-      -webkit-mask: radial-gradient(circle, transparent 0 61%, #000 62%);
-      mask: radial-gradient(circle, transparent 0 61%, #000 62%);
-    }
-
-    .link-ring {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      width: 194px;
-      height: 194px;
-      transform: translate(-50%, -50%);
-      border-radius: 50%;
-      pointer-events: none;
-    }
-
-    .link-ring::before,
-    .link-ring::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      border-radius: 50%;
-      border: 2px solid transparent;
-    }
-
-    .link-ring::before {
-      border-top-color: rgba(47,158,68,.56);
-      border-left-color: rgba(47,158,68,.18);
-      transform: rotate(-18deg);
-    }
-
-    .link-ring::after {
-      border-bottom-color: rgba(47,158,68,.56);
-      border-right-color: rgba(47,158,68,.18);
-      transform: rotate(-18deg);
-    }
-
-    .link-ring.issue::before,
-    .link-ring.issue::after {
-      border-top-color: rgba(242,184,75,.72);
-      border-bottom-color: rgba(242,184,75,.72);
-    }
-
-    .link-ring span {
-      position: absolute;
-      left: 50%;
-      top: -8px;
-      transform: translateX(-50%);
-      padding: 4px 9px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.9);
-      color: var(--ok);
-      font-size: 10px;
-      font-weight: 900;
-      box-shadow: 0 6px 14px rgba(51,63,72,.08);
-    }
-
-    .link-ring.issue span {
-      color: #8A5A00;
-    }
-
-    .arc-dial::after {
-      content: none;
-    }
-
-    .arc-readout {
-      position: relative;
-      z-index: 1;
-      display: grid;
-      justify-items: center;
-      place-self: center;
-      width: 104px;
-      height: 104px;
-      align-content: center;
-      border-radius: 50%;
-      background: rgba(255,255,255,.9);
-      box-shadow: 0 12px 26px rgba(51,63,72,.08);
-    }
-
-    .arc-readout small {
-      color: var(--muted);
-      font-size: 11px;
-      font-weight: 900;
-    }
-
-    .arc-readout strong {
-      color: var(--purple);
-      font-size: 20px;
-      line-height: .95;
-      font-family: "Plus Jakarta Sans", system-ui, sans-serif;
-    }
-
-    .arc-readout span {
-      color: var(--muted);
-      font-size: 10px;
-      font-weight: 800;
-    }
-
-    .dial-aid {
-      position: absolute;
-      z-index: 2;
-      top: 50%;
-      display: grid;
-      justify-items: center;
-      gap: 4px;
-      width: 46px;
-      transform: translateY(-50%);
-      color: var(--muted);
-      font-size: 10px;
-      font-weight: 900;
-      pointer-events: none;
-    }
-
-    .dial-aid.left {
-      left: 0;
-    }
-
-    .dial-aid.right {
-      right: 0;
-    }
-
-    .dial-aid .aid-icon {
-      width: 28px;
-      height: 36px;
-    }
-
-    .dial-aid .battery {
-      width: 36px;
-      height: 12px;
-      margin-top: 1px;
-    }
-
-    .aid-stack {
-      display: grid;
-      justify-items: center;
-      gap: 4px;
-      pointer-events: none;
-    }
-
-    .total-volume-card {
-      min-height: 176px;
-      display: grid;
-      align-content: center;
-      justify-items: center;
-      gap: 4px;
-      padding: 12px 8px;
-      border: 1px solid rgba(215,228,239,.9);
-      border-radius: 22px;
-      background: rgba(255,255,255,.82);
-      box-shadow: 0 10px 20px rgba(51,63,72,.06);
-      text-align: center;
-      cursor: ns-resize;
-      touch-action: none;
-    }
-
-    .total-volume-card.dragging {
-      background: var(--soft-grad);
-    }
-
-    .total-volume-card .total-meter {
-      position: relative;
-      width: 16px;
-      height: 78px;
-      overflow: hidden;
-      border-radius: 999px;
-      background: rgba(215,228,239,.9);
-    }
-
-    .total-volume-card .total-meter span {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 62%;
-      border-radius: inherit;
-      background: var(--brand-grad);
-    }
-
-    .total-volume-card small {
-      color: var(--muted);
-      font-size: 10px;
-      font-weight: 900;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-    }
-
-    .total-volume-card strong {
-      color: transparent;
-      background: var(--total-gradient, var(--brand-grad));
-      -webkit-background-clip: text;
-      background-clip: text;
-      font-size: 34px;
-      line-height: .95;
-      font-family: "Plus Jakarta Sans", system-ui, sans-serif;
-    }
-
-    .total-volume-card span {
-      color: var(--muted);
-      font-size: 10px;
-      font-weight: 800;
-      line-height: 1.2;
-    }
-
-    .slider {
-      width: 100%;
-      height: 34px;
-      margin: 0;
-      appearance: none;
-      background: transparent;
-    }
-
-    .dual-ear-inputs {
-      position: absolute;
-      inset: 0;
-      z-index: 3;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-    }
-
-    .ear-touch {
-      position: relative;
-      cursor: ns-resize;
-      touch-action: none;
-    }
-
-    .ear-touch.dragging {
-      background: rgba(0,163,173,.07);
-    }
-
-    .ear-touch .slider {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      left: 50%;
-      top: 50%;
-      opacity: .001;
-      pointer-events: none;
-    }
-
-
-    .slider::-webkit-slider-runnable-track {
-      height: 10px;
-      border-radius: 999px;
-      background: linear-gradient(90deg, var(--blue), var(--teal) 58%, var(--purple));
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.5);
-    }
-
-    .slider::-webkit-slider-thumb {
-      appearance: none;
-      width: 28px;
-      height: 28px;
-      margin-top: -9px;
-      border: 4px solid var(--white);
-      border-radius: 999px;
-      background: var(--teal);
-      box-shadow: 0 8px 18px rgba(51,63,72,.20);
-    }
-
-    .slider::-moz-range-track {
-      height: 10px;
-      border-radius: 999px;
-      background: linear-gradient(90deg, var(--blue), var(--teal) 58%, var(--purple));
-    }
-
-    .slider::-moz-range-thumb {
-      width: 22px;
-      height: 22px;
-      border: 4px solid var(--white);
-      border-radius: 999px;
-      background: var(--teal);
-      box-shadow: 0 8px 18px rgba(51,63,72,.20);
-    }
-
-    .ear-balance-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-bottom: 10px;
-    }
-
-    .ear-pill {
-      min-height: 44px;
-      display: grid;
-      grid-template-columns: 28px 1fr;
-      gap: 7px;
-      align-items: center;
-      padding: 8px;
-      border: 1px solid rgba(215,228,239,.86);
-      border-radius: 14px;
-      background: rgba(255,255,255,.72);
-    }
-
-    .ear-pill i {
-      width: 28px;
-      height: 28px;
-      display: grid;
-      place-items: center;
-      border-radius: 10px;
-      color: var(--blue);
-      background: var(--soft-blue);
-      font-style: normal;
-      font-weight: 900;
-      font-size: 11px;
-    }
-
-    .ear-pill strong {
-      display: block;
-      color: #111D25;
-      font-size: 11.5px;
-    }
-
-    .ear-pill span {
-      display: block;
-      color: var(--muted);
-      font-size: 10.5px;
-      font-weight: 800;
-    }
-
-    .color-key {
-      display: flex;
-      gap: 7px;
-      align-items: center;
-      margin-top: 8px;
-      color: var(--faint);
-      font-size: 10px;
-      font-weight: 800;
-    }
-
-    .chip {
-      display: inline-block;
-      width: 8px;
-      height: 8px;
-      border-radius: 3px;
-      margin-right: 3px;
-    }
-
-    .chip.ok { background: var(--ok); }
-    .chip.warn { background: var(--warn); }
-    .chip.danger { background: var(--danger); }
-
-    .help-surface {
-      padding: 18px;
-      border: 1px solid var(--line);
-      border-radius: 28px;
-      background:
-        radial-gradient(circle at 88% 10%, rgba(0,163,173,.10), transparent 32%),
-        linear-gradient(135deg, #FFFFFF 0%, #F7FBFF 58%, #F5F0FA 100%);
-      box-shadow: var(--card-shadow);
-    }
-
-    .help-surface h3 {
-      color: #111D25;
-      font-size: 24px;
-      line-height: 1.1;
-    }
-
-    .help-surface > p {
-      margin: 8px 0 16px;
-      color: var(--muted);
-      font-size: 14.5px;
-      line-height: 1.36;
-    }
-
-    .option-list {
-      display: grid;
-      gap: 8px;
-    }
-
-    .option-card {
-      width: 100%;
-      min-height: 58px;
-      display: grid;
-      grid-template-columns: 38px 1fr 22px;
-      gap: 12px;
-      align-items: center;
-      padding: 10px 12px;
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      background: var(--white);
-      text-align: left;
-      box-shadow: 0 8px 18px rgba(51,63,72,.04);
-      transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
-    }
-
-    .option-card:hover {
-      transform: translateY(-1px);
-      border-color: rgba(0,114,206,.32);
-      box-shadow: 0 12px 24px rgba(0,114,206,.10);
-      background: var(--soft-grad);
-    }
-
-    .option-card.primary {
-      min-height: 84px;
-      grid-template-columns: 44px 1fr 22px;
-      border-color: rgba(0,114,206,.26);
-      background: rgba(255,255,255,.92);
-      box-shadow: 0 12px 24px rgba(51,63,72,.07);
-    }
-
-    .option-card.selected {
-      transform: translateY(-1px);
-      border-color: rgba(0,114,206,.28);
-      background: var(--brand-grad);
-      color: var(--white);
-      box-shadow: 0 16px 30px rgba(88,44,131,.18);
-    }
-
-    .option-card.selected strong,
-    .option-card.selected span {
-      color: var(--white);
-    }
-
-    .option-icon {
-      width: 34px;
-      height: 34px;
-      display: grid;
-      place-items: center;
-      border-radius: 12px;
-      color: var(--blue);
-      background: var(--soft-blue);
-      font-weight: 900;
-    }
-
-    .option-card.primary .option-icon {
-      width: 42px;
-      height: 42px;
-    }
-
-    .option-card.selected .option-icon {
-      color: var(--white);
-      background: rgba(255,255,255,.18);
-    }
-
-    .option-card strong {
-      display: block;
-      color: #111D25;
-      font-size: 15px;
-      line-height: 1.14;
-      font-family: "Plus Jakarta Sans", system-ui, sans-serif;
-    }
-
-    .option-card span {
-      display: block;
-      margin-top: 3px;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.28;
-    }
-
-    .check {
-      color: transparent;
-      font-weight: 900;
-      text-align: center;
-    }
-
-    .option-card.selected .check {
-      color: var(--white);
-    }
-
-    .help-surface.solution-mode > h3,
-    .help-surface.solution-mode > p,
-    .help-surface.solution-mode .option-list {
-      display: none;
-    }
-
-    .solution-card {
-      display: none;
-      animation: rise-in 220ms ease-out;
-    }
-
-    .help-surface.solution-mode .solution-card {
-      display: block;
-    }
-
-    @keyframes rise-in {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .solution-top {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      align-items: flex-start;
-      margin-bottom: 14px;
-    }
-
-    .return-problems {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: var(--white);
-      color: var(--blue);
-      font-size: 12px;
-      font-weight: 900;
-      padding: 8px 11px;
-    }
-
-    .solution-choice {
-      text-align: right;
-    }
-
-    .solution-choice small {
-      display: block;
-      color: var(--faint);
-      font-size: 10px;
+      grid-template-columns: minmax(0, 1fr) 360px;
+      gap: 44px;
+      align-items: end;
+      margin-bottom: 34px;
+    }
+
+    .eyebrow {
+      color: var(--teal);
+      font-size: 13px;
       font-weight: 900;
       letter-spacing: .08em;
       text-transform: uppercase;
     }
 
-    .solution-choice strong {
-      display: block;
-      margin-top: 2px;
-      color: #111D25;
-      font-size: 14px;
-      font-family: "Plus Jakarta Sans", system-ui, sans-serif;
-    }
-
-    .solution-card h3 {
-      font-size: 23px;
-    }
-
-    .solution-card p {
-      margin: 8px 0 0;
-      color: var(--muted);
-      font-size: 13.5px;
-      line-height: 1.38;
-    }
-
-    .solution-actions {
-      margin-top: 14px;
-    }
-
-    .screen.solution-active .action-panel {
-      display: none;
-    }
-
-    .nearby-card {
-      margin-top: 14px;
-      padding: 14px;
-      border: 1px solid #BDE5E8;
-      border-radius: 22px;
-      background:
-        radial-gradient(circle at 88% 20%, rgba(0,163,173,.12), transparent 32%),
-        var(--soft-grad);
-      box-shadow: 0 10px 22px rgba(51,63,72,.06);
-    }
-
-    .nearby-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 8px;
-    }
-
-    .nearby-card .micro-label {
-      margin: 0;
-      color: var(--teal);
-    }
-
-    .state {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      color: var(--ok);
-      font-size: 12px;
-      font-weight: 800;
-    }
-
-    .nearby-card p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.35;
-    }
-
-    .ambient {
-      position: relative;
-      height: 66px;
+    h1 {
+      max-width: 720px;
       margin-top: 12px;
-      overflow: hidden;
-      border-radius: 18px;
-      border: 1px solid rgba(0,163,173,.12);
-      background:
-        radial-gradient(circle at 50% 50%, rgba(255,255,255,.98) 0 16%, transparent 17%),
-        radial-gradient(circle at 50% 50%, rgba(0,163,173,.15) 0 34%, transparent 35%),
-        linear-gradient(135deg, rgba(0,114,206,.08), rgba(0,163,173,.10));
-    }
-
-    .ambient-pill {
-      position: absolute;
-      padding: 4px 8px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.9);
-      color: var(--muted);
-      font-size: 10px;
-      font-weight: 900;
-      box-shadow: 0 6px 14px rgba(51,63,72,.08);
-    }
-
-    .ambient-pill.speech { left: 20px; top: 17px; }
-    .ambient-pill.noise { right: 22px; bottom: 14px; }
-
-    .ambient-you {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      width: 34px;
-      height: 34px;
-      transform: translate(-50%, -50%);
-      display: grid;
-      place-items: center;
-      border-radius: 50%;
-      background: var(--teal);
-      color: var(--white);
-      font-size: 11px;
-      font-weight: 900;
-      box-shadow: 0 8px 18px rgba(0,163,173,.24);
-    }
-
-    .primary-action,
-    .secondary-action {
-      width: 100%;
-      min-height: 52px;
-      border-radius: 999px;
-      font-weight: 800;
-    }
-
-    .primary-action {
-      margin-top: 12px;
-      border: 0;
-      background: var(--brand-grad);
-      color: var(--white);
-      box-shadow: 0 16px 32px rgba(88,44,131,.22);
-    }
-
-    .secondary-action {
-      margin-top: 10px;
-      border: 1px solid var(--line);
-      background: var(--white);
-      color: var(--blue);
-    }
-
-    .flow-note {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin: 0 0 14px;
-      padding: 10px 12px;
-      border: 1px solid rgba(0,163,173,.18);
-      border-radius: 16px;
-      background: var(--teal-grad);
-      color: var(--muted);
-      font-size: 12.5px;
-      line-height: 1.3;
-    }
-
-    .flow-note strong {
-      color: var(--teal);
-    }
-
-    .support-card,
-    .package-card,
-    .care-card,
-    .more-row {
-      border: 1px solid var(--line);
-      border-radius: 22px;
-      background: rgba(255,255,255,.88);
-      box-shadow: var(--card-shadow);
-    }
-
-    .support-card { padding: 16px; }
-
-    .support-heading {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 14px;
-      color: var(--blue);
-      font-size: 11px;
-      font-weight: 900;
-      letter-spacing: .03em;
-      text-transform: uppercase;
-    }
-
-    .support-card h3 {
       color: #111D25;
-      font-size: 21px;
-      line-height: 1.16;
+      font-size: clamp(42px, 6vw, 72px);
+      line-height: .96;
     }
 
-    .support-card p {
-      margin: 7px 0 0;
+    .lead {
+      max-width: 660px;
+      margin: 22px 0 0;
       color: var(--muted);
-      font-size: 13px;
-      line-height: 1.38;
+      font-size: 19px;
+      line-height: 1.58;
     }
 
-    .support-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 14px;
-    }
-
-    .support-mini {
-      padding: 12px;
-      border-radius: 14px;
-      background: var(--soft-blue);
-      color: var(--ink);
-      min-height: 76px;
-      font-size: 12px;
-      line-height: 1.25;
-    }
-
-    .support-mini:first-child {
-      grid-column: span 2;
-      text-align: center;
-    }
-
-    .map-card {
-      margin-top: 14px;
-      padding: 14px;
-      border: 1px solid var(--line);
-      border-radius: 22px;
-      background: var(--white);
-      box-shadow: var(--card-shadow);
-    }
-
-    .map-visual {
-      height: 78px;
-      margin-top: 10px;
-      border-radius: 24px;
-      background:
-        radial-gradient(circle at 50% 50%, rgba(255,255,255,.7), transparent 34%),
-        linear-gradient(135deg, rgba(51,63,72,.18), rgba(51,63,72,.34));
-      opacity: .55;
-    }
-
-    .package-stack {
-      display: grid;
-      gap: 12px;
-      margin-top: 18px;
-    }
-
-    .treatment-hero {
-      padding: 18px;
-      border: 1px solid var(--line);
+    .principle {
+      padding: 22px;
+      border: 1px solid rgba(215,228,239,.9);
       border-radius: 26px;
-      background:
-        radial-gradient(circle at 86% 12%, rgba(0,163,173,.13), transparent 30%),
-        var(--soft-grad);
-      box-shadow: var(--card-shadow);
+      background: rgba(255,255,255,.80);
+      box-shadow: var(--shadow);
     }
 
-    .treatment-orb {
-      width: 76px;
-      height: 76px;
-      display: grid;
-      place-items: center;
-      margin-bottom: 16px;
-      border-radius: 24px;
-      color: var(--white);
-      background: var(--brand-grad);
-      font-size: 28px;
-      font-weight: 900;
-      box-shadow: 0 16px 32px rgba(0,114,206,.18);
-    }
-
-    .treatment-hero h3 {
-      color: #111D25;
-      font-size: 24px;
-      line-height: 1.14;
-    }
-
-    .treatment-hero p {
-      margin: 8px 0 0;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.42;
-    }
-
-    .package-card {
-      padding: 16px;
-    }
-
-    .package-card h3 {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: var(--blue);
-      font-size: 15px;
-    }
-
-    .package-icon {
-      width: 32px;
-      height: 32px;
-      display: inline-grid;
-      place-items: center;
-      border-radius: 12px;
-      color: var(--blue);
-      background: var(--soft-blue);
-    }
-
-    .package-card p {
-      margin: 12px 0 0;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.45;
-    }
-
-    .mini-bars {
-      display: grid;
-      grid-template-columns: 1fr 1fr 34px;
-      gap: 8px;
-      margin-top: 12px;
-      align-items: center;
-    }
-
-    .bar {
-      height: 8px;
-      border-radius: 999px;
-      background: var(--soft-blue);
-      overflow: hidden;
-    }
-
-    .bar span {
+    .principle strong {
       display: block;
-      height: 100%;
-      width: 86%;
-      border-radius: inherit;
-      background: var(--blue);
+      color: var(--purple);
+      font-size: 17px;
+      margin-bottom: 9px;
     }
 
-    .done-orb {
-      width: 92px;
-      height: 92px;
-      display: grid;
-      place-items: center;
-      margin: 18px auto 24px;
-      border-radius: 50%;
-      color: var(--white);
-      background: var(--brand-grad);
-      font-size: 34px;
-      font-weight: 900;
-      box-shadow: 0 18px 36px rgba(0,114,206,.18);
+    .principle p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.5;
     }
 
-    .sent-list {
+    .version-grid {
       display: grid;
-      gap: 12px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
       margin-top: 24px;
     }
 
-    .sent-row {
-      min-height: 62px;
+    .version-card {
+      min-height: 330px;
       display: grid;
-      grid-template-columns: 40px 1fr auto;
-      gap: 12px;
+      align-content: space-between;
+      gap: 22px;
+      padding: 24px;
+      border: 1px solid rgba(215,228,239,.92);
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at 90% 12%, rgba(0,163,173,.10), transparent 32%),
+        linear-gradient(135deg, rgba(255,255,255,.96), rgba(234,245,255,.86));
+      box-shadow: 0 16px 38px rgba(51,63,72,.09);
+      transition: transform 160ms ease, box-shadow 160ms ease;
+    }
+
+    .version-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 22px 46px rgba(51,63,72,.14);
+    }
+
+    .version-card.v2 {
+      border-color: rgba(0,163,173,.30);
+      background:
+        radial-gradient(circle at 88% 10%, rgba(0,163,173,.14), transparent 32%),
+        linear-gradient(135deg, #FFFFFF, #EAF8F8 54%, #F4F0FA);
+    }
+
+    .version-meta {
+      display: flex;
       align-items: center;
-      padding: 12px;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      background: var(--white);
-      box-shadow: var(--card-shadow);
+      justify-content: space-between;
+      gap: 12px;
     }
 
-    .sent-row i {
-      width: 36px;
-      height: 36px;
-      display: grid;
-      place-items: center;
-      border-radius: 13px;
+    .tag {
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.78);
       color: var(--blue);
-      background: var(--soft-blue);
-      font-style: normal;
-      font-weight: 900;
-    }
-
-    .sent-row strong {
-      display: block;
-      color: #111D25;
-      font-size: 14px;
-    }
-
-    .sent-row span {
-      display: block;
-      margin-top: 2px;
-      color: var(--muted);
-      font-size: 11.5px;
-    }
-
-    .sent-ok {
-      color: var(--teal);
-      font-weight: 900;
       font-size: 12px;
-    }
-
-    .care-card {
-      padding: 16px;
-      margin-bottom: 14px;
-    }
-
-    .doctor-row {
-      display: grid;
-      grid-template-columns: 54px 1fr auto;
-      gap: 12px;
-      align-items: center;
-    }
-
-    .doctor-avatar {
-      width: 54px;
-      height: 54px;
-      display: grid;
-      place-items: center;
-      border-radius: 18px;
-      color: var(--blue);
-      background: var(--soft-blue);
       font-weight: 900;
     }
 
-    .message {
-      margin-top: 12px;
-      padding: 14px;
-      border-radius: 18px;
-      background: var(--soft-blue);
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.42;
+    .tag.new { color: var(--teal); }
+
+    .version-card h2 {
+      color: #111D25;
+      font-size: 30px;
+      line-height: 1.08;
+      margin: 16px 0 10px;
     }
 
-    .care-package-list {
+    .version-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.52;
+    }
+
+    .features {
       display: grid;
       gap: 8px;
-      margin-top: 12px;
-    }
-
-    .care-package-list div {
-      padding: 10px 12px;
-      border-radius: 999px;
-      background: var(--soft-grad);
-      color: var(--ink);
-      font-size: 12px;
-      font-weight: 800;
-    }
-
-    .more-list {
-      display: grid;
-      gap: 10px;
       margin-top: 18px;
     }
 
-    .more-row {
-      min-height: 60px;
-      display: grid;
-      grid-template-columns: 40px 1fr auto;
-      gap: 12px;
-      align-items: center;
-      padding: 12px;
-      color: var(--ink);
-    }
-
-    .more-row i {
-      width: 36px;
-      height: 36px;
-      display: grid;
-      place-items: center;
-      border-radius: 13px;
-      color: var(--blue);
-      background: var(--soft-blue);
-      font-style: normal;
-      font-weight: 900;
-    }
-
-    .more-row strong {
-      display: block;
-      font-size: 14px;
-    }
-
-    .more-row span {
-      display: block;
-      margin-top: 2px;
-      color: var(--muted);
-      font-size: 11px;
-    }
-
-    .nav {
-      height: 76px;
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      align-items: center;
-      gap: 10px;
-      padding: 10px 16px 12px;
-      border-top: 1px solid var(--line);
-      background: rgba(255,255,255,.94);
-    }
-
-    .nav button {
-      height: 52px;
-      border: 0;
-      border-radius: 999px;
-      background: transparent;
-      color: var(--muted);
-      font-weight: 800;
-      font-size: 12px;
-    }
-
-    .nav button.active {
-      color: var(--white);
-      background: var(--brand-grad);
-      box-shadow: 0 12px 22px rgba(88,44,131,.2);
-    }
-
-    .action-panel {
-      margin-top: 14px;
-      padding: 16px;
-      border: 1px solid #BDE5E8;
-      border-radius: 24px;
-      background:
-        radial-gradient(circle at 90% 18%, rgba(0,163,173,.14), transparent 30%),
-        var(--soft-grad);
-      box-shadow: 0 14px 30px rgba(51,63,72,.08);
-    }
-
-    .action-panel-head {
+    .features span {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 12px;
-    }
-
-    .choice-summary {
-      display: none;
-      grid-template-columns: 1fr auto;
-      gap: 12px;
-      align-items: center;
-      margin-bottom: 14px;
-      padding: 10px 12px;
-      border: 1px solid rgba(0,163,173,.18);
-      border-radius: 16px;
-      background: rgba(255,255,255,.68);
-    }
-
-    .choice-summary small {
-      display: block;
-      color: var(--faint);
-      font-size: 10px;
-      font-weight: 900;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-    }
-
-    .choice-summary strong {
-      display: block;
-      margin-top: 2px;
-      color: #111D25;
-      font-size: 15px;
-      font-family: "Plus Jakarta Sans", system-ui, sans-serif;
-    }
-
-    .change-choice {
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: var(--white);
-      color: var(--blue);
-      font-weight: 800;
-      font-size: 12px;
-      padding: 8px 11px;
-    }
-
-    .inline-choices {
-      display: none;
       gap: 8px;
-      margin: 0 0 14px;
-    }
-
-    .inline-choices.open {
-      display: grid;
-    }
-
-    .inline-choices p {
-      margin: 0 0 2px;
-      color: var(--muted);
-      font-size: 13px;
+      color: var(--ink);
+      font-size: 14px;
       font-weight: 800;
     }
 
-    .inline-choice-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
-
-    .inline-choice {
-      min-height: 44px;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      background: var(--white);
-      color: #111D25;
-      font-size: 12.5px;
-      font-weight: 800;
-    }
-
-    .inline-choice.selected {
-      color: var(--white);
-      background: var(--brand-grad);
-      border-color: rgba(0,114,206,.22);
-    }
-
-    .action-panel h3 {
-      color: #111D25;
-      font-size: 22px;
-      line-height: 1.15;
-    }
-
-    .action-panel p {
-      margin: 8px 0 0;
-      color: var(--muted);
-      font-size: 13.5px;
-      line-height: 1.38;
-    }
-
-    .action-panel-items {
-      display: grid;
-      gap: 8px;
-      margin-top: 14px;
-    }
-
-    .action-item {
-      display: grid;
-      grid-template-columns: 34px 1fr;
-      gap: 10px;
-      align-items: center;
-      min-height: 54px;
-      padding: 10px;
-      border: 1px solid rgba(215,228,239,.8);
-      border-radius: 16px;
-      background: rgba(255,255,255,.72);
-    }
-
-    .action-item i {
-      width: 34px;
-      height: 34px;
-      display: grid;
-      place-items: center;
-      border-radius: 12px;
-      color: var(--blue);
-      background: var(--soft-blue);
+    .features i {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--teal);
       font-style: normal;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 18px;
+      border-radius: 999px;
+      background: var(--brand-grad);
+      color: #FFFFFF;
       font-weight: 900;
+      box-shadow: 0 14px 28px rgba(88,44,131,.20);
     }
 
-    .action-item strong {
-      display: block;
-      color: #111D25;
-      font-size: 13.5px;
-    }
-
-    .action-item span {
-      display: block;
-      margin-top: 2px;
-      color: var(--muted);
-      font-size: 11.5px;
-      line-height: 1.25;
-    }
-
-    .notes {
-      min-height: 390px;
-      padding: 24px;
+    .button.secondary {
       border: 1px solid var(--line);
-      border-radius: 28px;
-      background: rgba(255,255,255,.82);
-      box-shadow: var(--card-shadow);
+      background: rgba(255,255,255,.78);
+      color: var(--blue);
+      box-shadow: none;
     }
 
-    .notes small {
-      color: var(--faint);
-      font-size: 12px;
-      font-weight: 900;
-      letter-spacing: .08em;
-      text-transform: uppercase;
+    .roadmap {
+      margin-top: 24px;
+      padding: 22px;
+      border: 1px dashed rgba(0,114,206,.24);
+      border-radius: 24px;
+      background: rgba(255,255,255,.62);
+      color: var(--muted);
+      line-height: 1.55;
     }
 
-    .notes h2 {
-      margin-top: 10px;
+    .roadmap strong {
       color: var(--purple);
-      font-size: 25px;
-      line-height: 1.18;
     }
 
-    .notes p {
-      margin: 14px 0 0;
-      color: var(--muted);
-      font-size: 16px;
-      line-height: 1.55;
-    }
-
-    .notes ul {
-      margin: 18px 0 0;
-      padding-left: 20px;
-      color: var(--muted);
-      font-size: 15px;
-      line-height: 1.55;
-    }
-
-    .notes li + li { margin-top: 8px; }
-
-    @media (max-width: 1080px) {
-      .page {
+    @media (max-width: 860px) {
+      .hero,
+      .version-grid {
         grid-template-columns: 1fr;
-        max-width: 720px;
-      }
-
-      .brief,
-      .notes {
-        position: static;
       }
     }
 
-    @media (max-width: 480px) {
-      .page { padding: 0; }
-      .brief,
-      .notes { display: none; }
-      .phone-shell {
-        width: 100%;
-        padding: 0;
-        border-radius: 0;
-        box-shadow: none;
-        background: transparent;
-      }
-      .phone {
-        height: 100vh;
-        border: 0;
-        border-radius: 0;
-      }
+    @media (max-width: 520px) {
+      .wrap { width: min(100% - 24px, 1120px); padding-top: 24px; }
+      .topbar { align-items: flex-start; flex-direction: column; }
+      .version-card { min-height: auto; }
     }
   </style>
 </head>
 <body>
-  <main class="page">
-    <section class="brief">
-      <div class="eyebrow">Merry Hearing - Now First</div>
-      <h1>把 app 做成聽覺求助入口</h1>
-      <p class="lead">這版互動網頁把所有求助都留在 Now：點問題卡後，下方常駐大卡直接顯示處置措施、真人求助或送出 package。Care 不再是獨立 tab。</p>
-      <div class="flow-list">
-        <div class="flow-step"><i>1</i><div><strong>Now - Default</strong><span>使用者先看到裝置狀態、常見問題入口與 Nearby sound。</span></div></div>
-        <div class="flow-step"><i>2</i><div><strong>Problem cards</strong><span>點卡片不跳離 Now，而是更新下方處置卡。</span></div></div>
-        <div class="flow-step"><i>3</i><div><strong>Persistent action card</strong><span>同一張大卡顯示建議處置、套用、求助或送出。</span></div></div>
-        <div class="flow-step"><i>4</i><div><strong>Care as action</strong><span>真人協助是 Now 裡的求助能力，不再需要獨立 Care tab。</span></div></div>
+  <main class="wrap">
+    <header class="topbar">
+      <div class="brand">
+        <img src="brand-assets/merry-official-logo-assets/merry-mark-symbol-300.png" alt="Merry mark">
+        <span>Merry Hearing Prototype Lab</span>
       </div>
+      <span class="status">Version compare board</span>
+    </header>
+
+    <section class="hero">
+      <div>
+        <div class="eyebrow">Now-first UX exploration</div>
+        <h1>Prototype versions for a quieter kind of care.</h1>
+        <p class="lead">這裡會保留不同版本，讓同事可以直接比較操作感。v2 開始把 Merry 從靜態功能頁推向低干擾、會回應、會提示的聽覺陪伴系統。</p>
+      </div>
+      <aside class="principle">
+        <strong>Design principle</strong>
+        <p>安靜陪伴，需要時聽見你。提示要有原因、下一步和可忽略性；推薦要降低心智負荷，而不是替使用者做主。</p>
+      </aside>
     </section>
 
-    <section class="phone-shell" aria-label="Merry Hearing interactive prototype">
-      <div class="phone">
-        <header class="phone-header">
-          <button class="header-icon" type="button" data-route="now" aria-label="Back to Now">⌁</button>
-          <img class="m-mark" src="brand-assets/merry-official-logo-assets/merry-mark-symbol-300.png" alt="Merry M mark">
-          <button class="avatar-btn" type="button" data-note="profile">JD</button>
-        </header>
-
-        <div class="phone-body">
-          <section class="screen active" data-screen="now" id="now-screen">
-            <div class="screen-title">
-              <div>
-                <h2>How can Merry help?</h2>
-                <p>Choose what feels wrong right now.</p>
-              </div>
-              <div class="status-pill"><span class="dot"></span>OK</div>
-            </div>
-
-            <section class="sound-console" data-note="sound-control">
-              <div class="sound-console-head">
-                <div>
-                  <span class="micro-label">Merry Sound</span>
-                  <h3>Comfort volume</h3>
-                  <p>Slide the left or right half. Merry keeps both ears comfortable together.</p>
-                </div>
-                <button class="auto-badge" type="button" id="connection-demo"><span class="dot"></span><span id="connection-label">Linked</span></button>
-              </div>
-              <div class="volume-orbit">
-                <div class="master-volume">
-                  <div class="arc-control">
-                    <div class="link-ring" id="link-ring"><span id="aid-link">linked</span></div>
-                    <div class="dial-aid left">
-                      <span class="aid-icon"></span>
-                      <span>Left</span>
-                      <div class="battery"><span style="width:85%"></span></div>
-                    </div>
-                    <div class="dial-aid right">
-                      <span class="aid-icon"></span>
-                      <span>Right</span>
-                      <div class="battery" id="right-battery"><span id="right-battery-fill" style="width:92%"></span></div>
-                    </div>
-                    <div class="arc-dial" id="arc-dial"></div>
-                    <div class="arc-readout">
-                      <small>Both ears</small>
-                      <strong>Sound</strong>
-                      <span>comfort</span>
-                    </div>
-                    <div class="dual-ear-inputs">
-                      <div class="ear-touch left" aria-label="Left ear volume area">
-                        <input class="slider" id="left-volume" type="range" min="0" max="100" value="62" aria-label="Left ear volume">
-                      </div>
-                      <div class="ear-touch right" aria-label="Right ear volume area">
-                        <input class="slider" id="right-volume" type="range" min="0" max="100" value="62" aria-label="Right ear volume">
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="total-volume-card" id="total-volume-control" aria-label="Total volume control">
-                  <small>Total</small>
-                  <div class="total-meter"><span id="total-meter-fill"></span></div>
-                  <strong id="total-volume-value">62</strong>
-                  <span>volume</span>
-                </div>
-              </div>
-            </section>
-
-            <section class="help-surface" data-note="problem">
-              <h3>What do you need help with?</h3>
-              <p>Tap the problem that feels closest. You can always go back.</p>
-              <div class="option-list">
-                <button class="option-card primary selected" type="button" data-problem="clarity" data-note="clarity">
-                  <span class="option-icon">↗</span>
-                  <span><strong>I can’t hear clearly</strong><span>Speech feels unclear or distant.</span></span>
-                  <b class="check">●</b>
-                </button>
-                <button class="option-card" type="button" data-problem="reconnect" data-note="connect">
-                  <span class="option-icon">↻</span>
-                  <span><strong>Won’t connect</strong><span>Fix one side or both devices.</span></span>
-                  <b class="check">●</b>
-                </button>
-                <button class="option-card" type="button" data-problem="noise" data-note="noise">
-                  <span class="option-icon">≈</span>
-                  <span><strong>Noise or hiss</strong><span>Scratchy, noisy, or too sharp.</span></span>
-                  <b class="check">●</b>
-                </button>
-                <button class="option-card" type="button" data-problem="support" data-note="ask">
-                  <span class="option-icon">+</span>
-                  <span><strong>Ask someone</strong><span>Package sound and settings.</span></span>
-                  <b class="check">●</b>
-                </button>
-              </div>
-              <article class="solution-card" id="solution-card">
-                <div class="solution-top">
-                  <button class="return-problems" type="button" id="return-problems">← Return</button>
-                  <div class="solution-choice"><small>You chose</small><strong id="solution-choice">I can’t hear clearly</strong></div>
-                </div>
-                <span class="micro-label" id="solution-kicker">Speech clarity</span>
-                <h3 id="solution-title">Make speech clearer</h3>
-                <p id="solution-copy">Merry will check nearby speech, background noise, and your current clarity profile before applying anything.</p>
-                <div class="action-panel-items" id="solution-items"></div>
-                <div class="solution-actions">
-                  <button class="primary-action" type="button" id="solution-primary">Apply safer clarity setting</button>
-                  <button class="secondary-action" type="button" id="solution-secondary">Ask someone instead</button>
-                </div>
-              </article>
-            </section>
-
-            <article class="action-panel" id="action-panel" data-note="nearby">
-              <div class="choice-summary" id="choice-summary">
-                <div><small>You chose</small><strong id="choice-label">I can’t hear clearly</strong></div>
-                <button class="change-choice" type="button" id="change-choice">Change</button>
-              </div>
-              <div class="inline-choices" id="inline-choices">
-                <p>What feels wrong instead?</p>
-                <div class="inline-choice-grid">
-                  <button class="inline-choice" type="button" data-inline-problem="clarity">I can’t hear clearly</button>
-                  <button class="inline-choice" type="button" data-inline-problem="reconnect">Won’t connect</button>
-                  <button class="inline-choice" type="button" data-inline-problem="noise">Noise or hiss</button>
-                  <button class="inline-choice" type="button" data-inline-problem="support">Ask someone</button>
-                </div>
-              </div>
-              <div class="action-panel-head">
-                <span class="micro-label" id="action-kicker">Nearby sound</span>
-                <span class="state" id="action-state"><span class="dot"></span>Stable</span>
-              </div>
-              <h3 id="action-title">Around you feels stable.</h3>
-              <p id="action-copy">Merry is watching nearby speech and noise, but nothing needs your attention right now.</p>
-              <div class="ambient" id="ambient-map" aria-label="Nearby sound map">
-                <span class="ambient-pill speech">speech</span>
-                <span class="ambient-you">You</span>
-                <span class="ambient-pill noise">noise</span>
-              </div>
-              <div class="action-panel-items" id="action-items" hidden></div>
-              <button class="primary-action" type="button" id="action-primary">Choose a problem above</button>
-              <button class="secondary-action" type="button" id="action-reset" hidden>Choose a different problem</button>
-            </article>
-
-            <div class="status-grid care-only">
-              <article class="status-card" data-problem="support" data-note="care-mini">
-                <span class="micro-label">Care</span>
-                <strong>Available</strong>
-                <p>Dr. Elena can help</p>
-              </article>
-            </div>
-          </section>
-
-          <section class="screen" data-screen="clarity">
-            <div class="flow-note"><span class="dot"></span><span><strong>Now flow</strong> · Speech clarity help. You can go back anytime.</span></div>
-            <div class="treatment-hero">
-              <div class="treatment-orb">↗</div>
-              <h3>Make speech clearer</h3>
-              <p>Merry will check nearby speech, background noise, and your current clarity profile before applying anything.</p>
-            </div>
-            <div class="package-stack">
-              <article class="package-card">
-                <h3><span class="package-icon">♪</span>Speech direction</h3>
-                <p>Front speech looks important. Merry will protect the nearby voice first.</p>
-              </article>
-              <article class="package-card">
-                <h3><span class="package-icon">≋</span>Background noise</h3>
-                <p>Noise is stable enough for a safer clarity adjustment.</p>
-              </article>
-              <article class="package-card">
-                <h3><span class="package-icon">✓</span>Recommended action</h3>
-                <p>Try a gentle clarity setting without changing advanced controls.</p>
-              </article>
-            </div>
-            <button class="primary-action" type="button" data-route="now">Apply safer clarity setting</button>
-            <button class="secondary-action" type="button" data-route="now">Back to Now</button>
-            <button class="secondary-action" type="button" data-route="support">Ask someone instead</button>
-          </section>
-
-          <section class="screen" data-screen="reconnect">
-            <div class="flow-note"><span class="dot"></span><span><strong>Now flow</strong> · Connection help. You can go back anytime.</span></div>
-            <div class="treatment-hero">
-              <div class="treatment-orb">↻</div>
-              <h3>Reconnect devices</h3>
-              <p>Merry will check each side first, then guide one simple step at a time.</p>
-            </div>
-            <div class="package-stack">
-              <article class="package-card">
-                <h3><span class="package-icon">L</span>Left hearing aid</h3>
-                <p>Connected · Battery 85% · ready.</p>
-              </article>
-              <article class="package-card">
-                <h3><span class="package-icon">R</span>Right hearing aid</h3>
-                <p>Searching for connection. Keep the device nearby.</p>
-              </article>
-              <article class="package-card">
-                <h3><span class="package-icon">⌁</span>Next step</h3>
-                <p>Open and close the charging case, then wait for the right aid to appear.</p>
-              </article>
-            </div>
-            <button class="primary-action" type="button" data-route="now">Start guided reconnect</button>
-            <button class="secondary-action" type="button" data-route="now">Back to Now</button>
-            <button class="secondary-action" type="button" data-route="support">Ask someone instead</button>
-          </section>
-
-          <section class="screen" data-screen="noise">
-            <div class="flow-note"><span class="dot"></span><span><strong>Now flow</strong> · Noise comfort help. You can go back anytime.</span></div>
-            <div class="treatment-hero">
-              <div class="treatment-orb">≈</div>
-              <h3>Soften noise or hiss</h3>
-              <p>Merry will reduce sharpness without hiding speech, then keep the setting within safe comfort limits.</p>
-            </div>
-            <div class="package-stack">
-              <article class="package-card">
-                <h3><span class="package-icon">≋</span>Harshness check</h3>
-                <p>Sharper nearby sound is detected on the right side.</p>
-              </article>
-              <article class="package-card">
-                <h3><span class="package-icon">♪</span>Speech protection</h3>
-                <p>Conversation remains the priority while noise is softened.</p>
-              </article>
-              <article class="package-card">
-                <h3><span class="package-icon">✓</span>Recommended action</h3>
-                <p>Try a softer comfort profile for this environment.</p>
-              </article>
-            </div>
-            <button class="primary-action" type="button" data-route="now">Try softer sound</button>
-            <button class="secondary-action" type="button" data-route="now">Back to Now</button>
-            <button class="secondary-action" type="button" data-route="support">Ask someone instead</button>
-          </section>
-
-          <section class="screen" data-screen="support">
-            <div class="flow-note"><span class="dot"></span><span><strong>Now flow</strong> · Human support. You can go back anytime.</span></div>
-            <div class="screen-title">
-              <div>
-                <h2>Support</h2>
-                <p>Professional help with current context.</p>
-              </div>
-            </div>
-
-            <article class="support-card">
-              <div class="support-heading"><span>Ask someone</span><span>Professional help</span></div>
-              <h3>Ask someone</h3>
-              <p>Package sound and settings for your audiologist to review remotely.</p>
-              <div class="support-grid">
-                <div class="support-mini"><strong>Nearby sound</strong><br>Current sound can be shared. Merry can send recent speech and noise context.</div>
-                <div class="support-mini"><strong>Device status</strong><br>Battery color and connection.</div>
-                <div class="support-mini"><strong>Safe setting</strong><br>Current clarity parameters.</div>
-              </div>
-              <button class="primary-action" type="button" data-route="package">Send care package to Dr. Elena →</button>
-              <button class="secondary-action" type="button" data-route="now">Back to Now</button>
-            </article>
-
-            <article class="map-card">
-              <span class="micro-label">Environment Map</span>
-              <div class="map-visual"></div>
-              <p style="font-size:12px;text-align:center;color:var(--muted);margin:10px 0 0;">Analyzing sound levels for clarity optimization...</p>
-            </article>
-          </section>
-
-          <section class="screen" data-screen="package">
-            <div class="flow-note"><span class="dot"></span><span><strong>Now flow</strong> · This is a focused send step, not the Care tab.</span></div>
-            <div class="screen-title">
-              <div>
-                <h2>Care Package - Ready to Send</h2>
-                <p>Merry bundled the current sound environment, device status, battery colors, and safe setting parameters for Dr. Elena.</p>
-              </div>
-            </div>
-
-            <div class="package-stack">
-              <article class="package-card">
-                <h3><span class="package-icon">♪</span>Sound environment</h3>
-                <p>Front speech, nearby noise, harshness snapshot.</p>
-                <div class="mini-bars"><span class="bar"><span></span></span><span class="bar"><span style="width:68%"></span></span><span></span></div>
-              </article>
-              <article class="package-card">
-                <h3><span class="package-icon">⌁</span>Device status</h3>
-                <p>Both connected · Left 85% · Right 92% · green.</p>
-                <div class="mini-bars"><span>L</span><span class="bar"><span style="width:85%"></span></span><span>85%</span></div>
-                <div class="mini-bars"><span>R</span><span class="bar"><span style="width:92%"></span></span><span>92%</span></div>
-              </article>
-              <article class="package-card">
-                <h3><span class="package-icon">✓</span>Safe settings</h3>
-                <p>Current clarity profile and comfort limits.</p>
-              </article>
-            </div>
-
-            <button class="primary-action" type="button" data-route="sent">Send to Dr. Elena</button>
-            <button class="secondary-action" type="button" data-route="now">Back to Now</button>
-          </section>
-
-          <section class="screen" data-screen="sent">
-            <div class="flow-note"><span class="dot"></span><span><strong>Now flow</strong> · Package sent. Return to Now or choose a tab.</span></div>
-            <div class="done-orb">✓</div>
-            <div class="screen-title" style="display:block;text-align:center;">
-              <h2>Care Package - Sent Confirmation</h2>
-              <p>Dr. Elena received the current listening situation and can review it without asking you to explain technical settings.</p>
-            </div>
-            <div class="sent-list">
-              <div class="sent-row"><i>♪</i><div><strong>Audio Snapshot</strong><span>3.2MB · High Fidelity</span></div><b class="sent-ok">Sent</b></div>
-              <div class="sent-row"><i>≋</i><div><strong>Technical Log</strong><span>Firmware v4.2.1</span></div><b class="sent-ok">Sent</b></div>
-              <div class="sent-row"><i>⌁</i><div><strong>Environment</strong><span>Current sound context</span></div><b class="sent-ok">Sent</b></div>
-            </div>
-            <button class="primary-action" type="button" data-route="now">Back to Now →</button>
-          </section>
-
-          <section class="screen" data-screen="care">
-            <div class="screen-title" style="display:block;">
-              <h2>Care Tab</h2>
-              <p>Human support, without asking the user to tune devices alone.</p>
-            </div>
-            <article class="care-card">
-              <div class="doctor-row">
-                <div class="doctor-avatar">ER</div>
-                <div><strong>Dr. Elena Rodriguez</strong><p style="margin:3px 0 0;color:var(--teal);font-size:12px;">Available today</p></div>
-                <span>□</span>
-              </div>
-            </article>
-            <article class="care-card">
-              <span class="micro-label" style="color:var(--blue);">Latest from Elena</span>
-              <div class="message">Sharp sounds were softened. Try it for a day or two. If speech still feels unclear, send me the listening situation.</div>
-            </article>
-            <article class="care-card">
-              <span class="micro-label">Care package</span>
-              <div class="care-package-list">
-                <div>Sound environment</div>
-                <div>Device / battery status</div>
-                <div>Safe setting parameters</div>
-              </div>
-            </article>
-            <button class="primary-action" type="button" data-route="package">▷ Ask my audiologist</button>
-          </section>
-
-          <section class="screen" data-screen="more">
-            <div class="screen-title" style="display:block;">
-              <h2>More Tab</h2>
-              <p>Less frequent but necessary tools live here.</p>
-            </div>
-            <div class="more-list">
-              <div class="more-row"><i>⌁</i><div><strong>Device details</strong><span>Manage your hearing hardware</span></div><b>›</b></div>
-              <div class="more-row"><i>□</i><div><strong>Saved preferences</strong><span>Your custom sound profiles</span></div><b>›</b></div>
-              <div class="more-row"><i>↺</i><div><strong>Activity history</strong><span>Daily usage statistics</span></div><b>›</b></div>
-              <div class="more-row"><i>≋</i><div><strong>Advanced sound</strong><span>Deep-level frequency tuning</span></div><b>›</b></div>
-              <div class="more-row"><i>⚙</i><div><strong>Settings</strong><span>Account and app configuration</span></div><b>›</b></div>
-            </div>
-          </section>
+    <section class="version-grid" aria-label="Prototype versions">
+      <a class="version-card" href="v1.html">
+        <div>
+          <div class="version-meta">
+            <span class="tag">v1</span>
+            <span class="tag">Baseline</span>
+          </div>
+          <h2>Now-first baseline</h2>
+          <p>第一版驗證「問題優先」方向：使用者先選聽覺困擾，再看到對應處置。適合和新版比較資訊架構的前後差異。</p>
+          <div class="features">
+            <span><i></i>四張主要求助卡</span>
+            <span><i></i>Comfort volume control</span>
+            <span><i></i>Care package flow</span>
+          </div>
         </div>
+        <div class="actions">
+          <span class="button secondary">Open v1</span>
+        </div>
+      </a>
 
-        <nav class="nav" aria-label="Bottom navigation">
-          <button class="active" type="button" data-route="now" data-nav="now">Now</button>
-          <button type="button" data-route="more" data-nav="more">More</button>
-        </nav>
-      </div>
+      <a class="version-card v2" href="v2.html">
+        <div>
+          <div class="version-meta">
+            <span class="tag new">v2</span>
+            <span class="tag new">Companion cues</span>
+          </div>
+          <h2>Low-interruption companion</h2>
+          <p>第二版加入 Merry noticed、場域安全 icon、可預測下一步、圖示導向提示與更明確的 v1 差異說明。</p>
+          <div class="features">
+            <span><i></i>Icon-led Merry noticed cards</span>
+            <span><i></i>Scene-aware safety recommendations</span>
+            <span><i></i>Visible next-step guidance</span>
+          </div>
+        </div>
+        <div class="actions">
+          <span class="button">Try v2</span>
+          <span class="button secondary">Compare changes</span>
+        </div>
+      </a>
     </section>
 
-    <aside class="notes" aria-live="polite">
-      <small id="note-kicker">Flow</small>
-      <h2 id="note-title">Now-first prototype</h2>
-      <p id="note-copy">操作路徑收斂在 Now：點任一問題卡，下方常駐 action card 直接更新處置措施。More 保留低頻工具。</p>
-      <ul id="note-list">
-        <li>Now 是當下求助，不是控制台。</li>
-        <li>真人協助是 action，不再需要獨立 Care tab。</li>
-        <li>More 收納低頻工具。</li>
-      </ul>
-    </aside>
+    <section class="roadmap">
+      <strong>Roadmap:</strong> 這個頁面預留成一週五版的比較入口。後續可加入 v3/v4/v5 與問卷連結，讓使用者完整體驗後回饋「是否被支援、是否找得到、是否被打擾」。
+    </section>
   </main>
-
-  <script>
-    const notes = {
-      now: {
-        kicker: "Now",
-        title: "Now - Default",
-        copy: "使用者打開 app 先看到裝置是否正常，以及四個常見求助入口。點卡片後不跳頁，直接更新下方常駐處置卡。",
-        list: ["每張問題卡都會更新 action card。", "沒有二次 Confirm。", "真人協助是 Now 裡的 action。"]
-      },
-      clarity: {
-        kicker: "Treatment",
-        title: "I can’t hear clearly",
-        copy: "直接進入清晰度協助頁。Merry 先檢查人聲方向、背景噪音與目前設定，再提供安全的清晰度處置。",
-        list: ["不再需要 Confirm 按鈕。", "主要處置是 Apply safer clarity setting。", "誤按可 Back to Now。"]
-      },
-      reconnect: {
-        kicker: "Treatment",
-        title: "Won’t connect",
-        copy: "直接進入連線修復頁。使用者不需要去 More 或設定裡找 pairing，畫面用一步一步方式修復。",
-        list: ["先顯示左右耳狀態。", "主行動是 Start guided reconnect。", "也可改走 Ask someone。"]
-      },
-      noise: {
-        kicker: "Treatment",
-        title: "Noise or hiss",
-        copy: "直接進入噪音舒適度處置頁。Merry 會降低刺耳感，同時保護人聲不要被一起壓掉。",
-        list: ["用感受語言，不用 EQ 術語。", "主行動是 Try softer sound。", "也可改走 Ask someone。"]
-      },
-      support: {
-        kicker: "Now state",
-        title: "Ask someone",
-        copy: "真人求助直接在 Now 下方處置卡中呈現。它會說明送出的聲音、裝置與設定上下文。",
-        list: ["Care 不再需要獨立 tab。", "按鈕直接進 Ready to Send。", "也可回到 stable view。"]
-      },
-      package: {
-        kicker: "Confirm",
-        title: "Care Package - Ready to Send",
-        copy: "送出前確認三種資料：Sound environment、Device status、Safe settings。使用者可以送出，也可以回 Now。",
-        list: ["建立信任與可預期性。", "資料摘要使用日常語言。", "避免暴露複雜醫療參數。"]
-      },
-      sent: {
-        kicker: "Done",
-        title: "Care Package - Sent Confirmation",
-        copy: "送出成功狀態。重點是平靜、確定，讓使用者知道 Dr. Elena 已收到上下文。",
-        list: ["顯示已送出的項目。", "主 CTA 回到 Now。", "不做警報式視覺。"]
-      },
-      care: {
-        kicker: "Tab",
-        title: "Care Tab",
-        copy: "Care 是長期照護關係：聽檢師、最新訊息、Care package 摘要與再次求助。",
-        list: ["不是 Ask someone 流程的中間頁。", "用 initials avatar，不用假照片。", "保留真人後援感。"]
-      },
-      more: {
-        kicker: "Tab",
-        title: "More Tab",
-        copy: "低頻但必要的工具都在 More，避免 Now 首頁變成工程控制台。",
-        list: ["Device details、preferences、history。", "Advanced sound 不放首頁。", "Settings 放最後。"]
-      },
-      device: {
-        kicker: "Status",
-        title: "Device status as a picture",
-        copy: "電量卡牌不只顯示百分比，而是把左右助聽器、電池與中間連線畫在同一張卡上。",
-        list: ["左右耳各有助聽器圖示。", "中間 linked 線條顯示是否連上。", "異常時使用者先看到狀態，再決定是否修復。"]
-      },
-      "sound-control": {
-        kicker: "Sound",
-        title: "Three-arc volume",
-        copy: "音量控制改成左耳弧線、Total 大弧線、右耳弧線。它看起來像聽覺舒適度，而不是工程 slider。",
-        list: ["中間 Total 是主要控制。", "Left / Right 是左右耳各自音量。", "弧線保留 Merry 的圓環觸感。"]
-      },
-      nearby: {
-        kicker: "Ambient",
-        title: "Nearby sound",
-        copy: "這張卡使用白、淡藍與 teal，而不是大片紫色。它是環境提示，不是讀數據的儀表板。",
-        list: ["中心是 You。", "speech/noise 是環境膠囊。", "不使用 bar chart。"]
-      }
-    };
-
-    const noteKicker = document.getElementById("note-kicker");
-    const noteTitle = document.getElementById("note-title");
-    const noteCopy = document.getElementById("note-copy");
-    const noteList = document.getElementById("note-list");
-
-    function setNote(key) {
-      const note = notes[key] || notes.now;
-      noteKicker.textContent = note.kicker;
-      noteTitle.textContent = note.title;
-      noteCopy.textContent = note.copy;
-      noteList.innerHTML = note.list.map(item => `<li>${item}</li>`).join("");
-    }
-
-    const actionData = {
-      stable: {
-        note: "nearby",
-        kicker: "Nearby sound",
-        state: "Stable",
-        title: "Around you feels stable.",
-        copy: "Merry is watching nearby speech and noise, but nothing needs your attention right now.",
-        primary: "Choose a problem above",
-        route: null,
-        ambient: true,
-        items: []
-      },
-      clarity: {
-        note: "clarity",
-        label: "I can’t hear clearly",
-        kicker: "Speech clarity",
-        state: "Ready",
-        title: "Make speech clearer",
-        copy: "Merry will check nearby speech, background noise, and your current clarity profile before applying anything.",
-        primary: "Apply safer clarity setting",
-        done: "Clarity setting applied",
-        ambient: false,
-        items: [
-          ["♪", "Speech direction", "Front speech looks important."],
-          ["≋", "Background noise", "Stable enough for a safer clarity adjustment."],
-          ["✓", "Recommended action", "Try a gentle clarity setting without advanced controls."]
-        ]
-      },
-      reconnect: {
-        note: "reconnect",
-        label: "Won’t connect",
-        kicker: "Connection help",
-        state: "Fix",
-        title: "Reconnect devices",
-        copy: "Merry will check each side first, then guide one simple step at a time.",
-        primary: "Start guided reconnect",
-        done: "Guided reconnect started",
-        ambient: false,
-        items: [
-          ["L", "Left hearing aid", "Connected · Battery 85% · ready."],
-          ["R", "Right hearing aid", "Searching for connection nearby."],
-          ["⌁", "Next step", "Open and close the charging case."]
-        ]
-      },
-      noise: {
-        note: "noise",
-        label: "Noise or hiss",
-        kicker: "Noise comfort",
-        state: "Tune",
-        title: "Soften noise or hiss",
-        copy: "Merry will reduce sharpness without hiding speech, then keep the setting within safe comfort limits.",
-        primary: "Try softer sound",
-        done: "Softer sound profile applied",
-        ambient: false,
-        items: [
-          ["≋", "Harshness check", "Sharper nearby sound is detected."],
-          ["♪", "Speech protection", "Conversation remains the priority."],
-          ["✓", "Recommended action", "Try a softer comfort profile."]
-        ]
-      },
-      support: {
-        note: "support",
-        label: "Ask someone",
-        kicker: "Human support",
-        state: "Care",
-        title: "Ask someone",
-        copy: "Merry can package sound and settings for your audiologist to review remotely.",
-        primary: "Send care package to Dr. Elena",
-        route: "package",
-        ambient: false,
-        items: [
-          ["♪", "Nearby sound", "Recent speech and noise context."],
-          ["●", "Device status", "Connection and battery color state."],
-          ["✓", "Safe settings", "Current clarity and comfort parameters."]
-        ]
-      }
-    };
-
-    let selectedProblem = "stable";
-    const actionKicker = document.getElementById("action-kicker");
-    const actionState = document.getElementById("action-state");
-    const actionTitle = document.getElementById("action-title");
-    const actionCopy = document.getElementById("action-copy");
-    const actionItems = document.getElementById("action-items");
-    const ambientMap = document.getElementById("ambient-map");
-    const actionPrimary = document.getElementById("action-primary");
-    const actionReset = document.getElementById("action-reset");
-    const choiceSummary = document.getElementById("choice-summary");
-    const choiceLabel = document.getElementById("choice-label");
-    const changeChoice = document.getElementById("change-choice");
-    const inlineChoices = document.getElementById("inline-choices");
-    const nowScreen = document.querySelector('[data-screen="now"]');
-    const helpSurface = document.querySelector(".help-surface");
-    const returnProblems = document.getElementById("return-problems");
-    const solutionChoice = document.getElementById("solution-choice");
-    const solutionKicker = document.getElementById("solution-kicker");
-    const solutionTitle = document.getElementById("solution-title");
-    const solutionCopy = document.getElementById("solution-copy");
-    const solutionItems = document.getElementById("solution-items");
-    const solutionPrimary = document.getElementById("solution-primary");
-    const solutionSecondary = document.getElementById("solution-secondary");
-
-    function renderAction(problem) {
-      selectedProblem = problem;
-      const data = actionData[problem] || actionData.stable;
-      inlineChoices.classList.remove("open");
-      choiceSummary.style.display = problem === "stable" ? "none" : "grid";
-      choiceLabel.textContent = data.label || "";
-      actionKicker.textContent = data.kicker;
-      actionState.innerHTML = `<span class="dot"></span>${data.state}`;
-      actionTitle.textContent = data.title;
-      actionCopy.textContent = data.copy;
-      actionPrimary.textContent = data.primary;
-      actionPrimary.disabled = !data.route && problem === "stable";
-      actionReset.hidden = problem === "stable";
-      ambientMap.hidden = !data.ambient;
-      actionItems.hidden = data.ambient;
-      actionItems.innerHTML = data.items.map(item => `
-        <div class="action-item"><i>${item[0]}</i><div><strong>${item[1]}</strong><span>${item[2]}</span></div></div>
-      `).join("");
-      document.querySelectorAll("[data-problem]").forEach(node => {
-        node.classList.toggle("selected", node.dataset.problem === problem);
-      });
-      document.querySelectorAll("[data-inline-problem]").forEach(node => {
-        node.classList.toggle("selected", node.dataset.inlineProblem === problem);
-      });
-      setNote(data.note);
-      document.getElementById("action-panel").scrollIntoView({ behavior: "smooth", block: "nearest" });
-    }
-
-    function showProblemChoices() {
-      inlineChoices.classList.add("open");
-      actionReset.hidden = true;
-      document.getElementById("action-panel").scrollIntoView({ behavior: "smooth", block: "nearest" });
-    }
-
-    actionPrimary.addEventListener("click", () => {
-      if (selectedProblem === "stable-after-done") {
-        showProblemChoices();
-        return;
-      }
-      const data = actionData[selectedProblem] || actionData.stable;
-      if (data.route) {
-        route(data.route);
-        return;
-      }
-      if (selectedProblem !== "stable") {
-        actionState.innerHTML = `<span class="dot"></span>Done`;
-        actionTitle.textContent = data.done;
-        actionCopy.textContent = "You can keep using this, choose another problem, or ask Dr. Elena for help.";
-        actionPrimary.textContent = "Choose a different problem";
-        actionReset.hidden = false;
-        actionReset.textContent = "Ask someone";
-        selectedProblem = "stable-after-done";
-      } else if (selectedProblem === "stable-after-done") {
-        renderAction("stable");
-      }
-    });
-
-    actionReset.addEventListener("click", () => {
-      if (selectedProblem === "stable-after-done") {
-        renderAction("support");
-        return;
-      }
-      showProblemChoices();
-    });
-
-    changeChoice.addEventListener("click", showProblemChoices);
-
-    document.querySelectorAll("[data-inline-problem]").forEach(control => {
-      control.addEventListener("click", () => renderAction(control.dataset.inlineProblem));
-    });
-
-    let solutionDone = false;
-
-    function renderSolution(problem) {
-      solutionDone = false;
-      selectedProblem = problem;
-      const data = actionData[problem] || actionData.clarity;
-      nowScreen.classList.add("solution-active");
-      helpSurface.classList.add("solution-mode");
-      solutionChoice.textContent = data.label || "";
-      solutionKicker.textContent = data.kicker;
-      solutionTitle.textContent = data.title;
-      solutionCopy.textContent = data.copy;
-      solutionPrimary.textContent = data.primary;
-      solutionSecondary.hidden = problem === "support";
-      solutionItems.innerHTML = data.items.map(item => `
-        <div class="action-item"><i>${item[0]}</i><div><strong>${item[1]}</strong><span>${item[2]}</span></div></div>
-      `).join("");
-      document.querySelectorAll("[data-problem]").forEach(node => {
-        node.classList.toggle("selected", node.dataset.problem === problem);
-      });
-      setNote(data.note);
-      helpSurface.scrollIntoView({ behavior: "smooth", block: "nearest" });
-    }
-
-    function returnToProblemList() {
-      solutionDone = false;
-      nowScreen.classList.remove("solution-active");
-      helpSurface.classList.remove("solution-mode");
-      document.querySelectorAll("[data-problem]").forEach(node => {
-        node.classList.remove("selected");
-      });
-      renderAction("stable");
-      document.querySelector('[data-problem="clarity"]').classList.add("selected");
-      setNote("now");
-      helpSurface.scrollIntoView({ behavior: "smooth", block: "nearest" });
-    }
-
-    solutionPrimary.addEventListener("click", () => {
-      if (solutionDone) {
-        returnToProblemList();
-        return;
-      }
-      const data = actionData[selectedProblem] || actionData.stable;
-      if (data.route) {
-        route(data.route);
-        return;
-      }
-      solutionKicker.textContent = "Done";
-      solutionTitle.textContent = data.done;
-      solutionCopy.textContent = "You can keep using this, return to the problem list, or ask Dr. Elena for help.";
-      solutionPrimary.textContent = "Return to problem list";
-      solutionDone = true;
-      solutionSecondary.hidden = false;
-      solutionSecondary.textContent = "Ask someone";
-    });
-
-    solutionSecondary.addEventListener("click", () => renderSolution("support"));
-    returnProblems.addEventListener("click", returnToProblemList);
-
-    function route(name) {
-      document.querySelectorAll(".screen").forEach(screen => {
-        screen.classList.toggle("active", screen.dataset.screen === name);
-      });
-      const navKey = name === "care" ? "care" : name === "more" ? "more" : "now";
-      document.querySelectorAll(".nav button").forEach(button => {
-        button.classList.toggle("active", button.dataset.nav === navKey);
-      });
-      document.querySelector(".phone-body").scrollTop = 0;
-      if (name === "now") returnToProblemList();
-      setNote(name);
-    }
-
-    document.querySelectorAll("[data-route]").forEach(control => {
-      control.addEventListener("click", () => route(control.dataset.route));
-    });
-
-    document.querySelectorAll("[data-problem]").forEach(control => {
-      control.addEventListener("click", () => renderSolution(control.dataset.problem));
-    });
-
-    document.querySelectorAll("[data-note]").forEach(node => {
-      node.addEventListener("mouseenter", () => setNote(node.dataset.note));
-      node.addEventListener("focus", () => setNote(node.dataset.note));
-    });
-
-    const leftVolume = document.getElementById("left-volume");
-    const rightVolume = document.getElementById("right-volume");
-    const totalVolumeControl = document.getElementById("total-volume-control");
-    const totalVolumeValue = document.getElementById("total-volume-value");
-    const totalMeterFill = document.getElementById("total-meter-fill");
-    const totalVolumeCard = document.getElementById("total-volume-control");
-    const arcDial = document.getElementById("arc-dial");
-    const connectionDemo = document.getElementById("connection-demo");
-    const connectionLabel = document.getElementById("connection-label");
-    const aidLink = document.getElementById("aid-link");
-    const linkRing = document.getElementById("link-ring");
-    const rightBattery = document.getElementById("right-battery");
-    const rightBatteryFill = document.getElementById("right-battery-fill");
-    let totalVolume = 62;
-
-    function updateVolumeReadouts() {
-      const left = Number(leftVolume.value);
-      const right = Number(rightVolume.value);
-      arcDial.style.setProperty("--left-deg", left * 1.8);
-      arcDial.style.setProperty("--right-deg", right * 1.8);
-    }
-
-    function updateTotalReadout() {
-      totalVolumeValue.textContent = totalVolume;
-      totalMeterFill.style.height = `${totalVolume}%`;
-      const gradient = totalVolume < 40
-        ? "linear-gradient(180deg, #0072CE, #3CA0E8)"
-        : totalVolume < 72
-          ? "linear-gradient(180deg, #0072CE, #00A3AD)"
-          : "linear-gradient(180deg, #00A3AD, #582C83)";
-      const fill = totalVolume < 40
-        ? "linear-gradient(0deg, #0072CE, #3CA0E8)"
-        : totalVolume < 72
-          ? "linear-gradient(0deg, #0072CE, #00A3AD)"
-          : "linear-gradient(0deg, #0072CE, #00A3AD 48%, #582C83)";
-      totalVolumeCard.style.setProperty("--total-gradient", gradient);
-      totalMeterFill.style.background = fill;
-    }
-
-    let connectionIssue = false;
-
-    function renderConnectionState() {
-      if (connectionIssue) {
-        renderSolution("reconnect");
-        return;
-      }
-      connectionIssue = true;
-      nowScreen.classList.toggle("connection-issue", connectionIssue);
-      linkRing.classList.toggle("issue", connectionIssue);
-      rightBattery.classList.toggle("warn", connectionIssue);
-      connectionLabel.textContent = "Right needs help";
-      aidLink.textContent = "check";
-      rightBatteryFill.style.width = "42%";
-      renderSolution("reconnect");
-    }
-
-    [leftVolume, rightVolume].forEach(slider => {
-      slider.addEventListener("input", updateVolumeReadouts);
-    });
-
-    function valueFromPointer(event) {
-      const rect = event.currentTarget.getBoundingClientRect();
-      const ratio = 1 - ((event.clientY - rect.top) / rect.height);
-      return Math.max(0, Math.min(100, Math.round(ratio * 100)));
-    }
-
-    function setEarVolumeFromPointer(event, slider) {
-      slider.value = valueFromPointer(event);
-      updateVolumeReadouts();
-    }
-
-    function setTotalVolumeFromPointer(event) {
-      totalVolume = valueFromPointer(event);
-      updateTotalReadout();
-    }
-
-    document.querySelectorAll(".ear-touch").forEach(zone => {
-      const slider = zone.querySelector("input");
-      zone.addEventListener("pointerdown", event => {
-        zone.classList.add("dragging");
-        zone.setPointerCapture(event.pointerId);
-        setEarVolumeFromPointer(event, slider);
-      });
-      zone.addEventListener("pointermove", event => {
-        if (zone.classList.contains("dragging")) setEarVolumeFromPointer(event, slider);
-      });
-      zone.addEventListener("pointerup", event => {
-        zone.classList.remove("dragging");
-        if (zone.hasPointerCapture(event.pointerId)) zone.releasePointerCapture(event.pointerId);
-      });
-      zone.addEventListener("pointercancel", () => zone.classList.remove("dragging"));
-    });
-
-    totalVolumeControl.addEventListener("pointerdown", event => {
-      totalVolumeControl.classList.add("dragging");
-      totalVolumeControl.setPointerCapture(event.pointerId);
-      setTotalVolumeFromPointer(event);
-    });
-    totalVolumeControl.addEventListener("pointermove", event => {
-      if (totalVolumeControl.classList.contains("dragging")) setTotalVolumeFromPointer(event);
-    });
-    totalVolumeControl.addEventListener("pointerup", event => {
-      totalVolumeControl.classList.remove("dragging");
-      if (totalVolumeControl.hasPointerCapture(event.pointerId)) totalVolumeControl.releasePointerCapture(event.pointerId);
-    });
-    totalVolumeControl.addEventListener("pointercancel", () => totalVolumeControl.classList.remove("dragging"));
-
-    connectionDemo.addEventListener("click", renderConnectionState);
-
-    updateVolumeReadouts();
-    updateTotalReadout();
-  </script>
 </body>
 </html>
