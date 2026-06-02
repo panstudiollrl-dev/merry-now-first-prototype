@@ -1,0 +1,2287 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Merry Hearing v3 — Interactive Prototype</title>
+  <link rel="icon" href="data:,">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,700;0,800;1,400&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+  /* ─── Design tokens ─── */
+  :root {
+    --blue:    #0072CE;
+    --purple:  #582C83;
+    --teal:    #00A3AD;
+    --ink:     #1A2330;
+    --muted:   #6B7A88;
+    --faint:   #9AAAB8;
+    --bg:      #F5F9FF;
+    --white:   #FFFFFF;
+    --line:    #D8E6F0;
+    --ok:      #1F8B3B;
+    --warn:    #D4820A;
+    --danger:  #B91C1C;
+    --safety-bg: #FFF4E0;
+    --device-bg: #FFFAE8;
+    --grad:    linear-gradient(135deg,#0072CE 0%,#582C83 100%);
+    --soft:    linear-gradient(135deg,#EAF5FF 0%,#EDF0FF 60%,#F0EAF8 100%);
+    --card-shadow: 0 4px 16px rgba(26,35,48,.08);
+    --lift-shadow: 0 8px 24px rgba(26,35,48,.14);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: "Atkinson Hyperlegible Next", system-ui, sans-serif;
+    color: var(--ink);
+    background: linear-gradient(160deg, #0B1C38 0%, #1A0B38 60%, #0C2040 100%);
+    padding: 24px 16px 40px;
+  }
+
+  /* ─── Top bar ─── */
+  .topbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .topbar-label {
+    color: rgba(255,255,255,.42);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    margin-right: 4px;
+  }
+
+  .version-pill {
+    padding: 5px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,.18);
+    background: rgba(255,255,255,.08);
+    color: rgba(255,255,255,.60);
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background .15s, color .15s;
+  }
+
+  .version-pill:hover { background: rgba(255,255,255,.16); color: #fff; }
+  .version-pill.current { background: rgba(255,255,255,.18); color: #fff; border-color: rgba(255,255,255,.36); }
+
+  /* ─── Device frame ─── */
+  .device-wrap {
+    position: relative;
+    width: 393px;
+    max-width: 100%;
+  }
+
+  .device {
+    position: relative;
+    width: 393px;
+    max-width: 100%;
+    height: 852px;
+    border-radius: 48px;
+    background: #111D28;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,.12),
+      0 40px 100px rgba(0,0,0,.60),
+      inset 0 0 0 1px rgba(255,255,255,.06);
+    overflow: hidden;
+    padding: 14px;
+  }
+
+  .device-screen {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 36px;
+    background: var(--bg);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Dynamic island */
+  .dynamic-island {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 34px;
+    background: #111D28;
+    border-radius: 20px;
+    z-index: 100;
+  }
+
+  /* ─── Status bar ─── */
+  .status-bar {
+    height: 54px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 0 24px 8px;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 10;
+    background: transparent;
+  }
+
+  .status-time {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--ink);
+    letter-spacing: -.3px;
+  }
+
+  .status-icons {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+  }
+
+  .status-icons svg { width: 16px; height: 12px; }
+
+  /* ─── App header ─── */
+  .app-header {
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    flex-shrink: 0;
+    border-bottom: 1px solid var(--line);
+    background: rgba(245,249,255,.92);
+    backdrop-filter: blur(12px);
+    position: relative;
+    z-index: 10;
+  }
+
+  .back-btn {
+    width: 32px; height: 32px;
+    display: grid; place-items: center;
+    border: none; background: none;
+    color: var(--blue);
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: background .15s;
+    flex-shrink: 0;
+  }
+  .back-btn:hover { background: rgba(0,114,206,.08); }
+  .back-btn.hidden { visibility: hidden; pointer-events: none; }
+
+  .header-logo {
+    height: 22px;
+    width: auto;
+    object-fit: contain;
+  }
+
+  .header-avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #EAF5FF, #EDF0FF);
+    display: grid; place-items: center;
+    font-size: 11px; font-weight: 800;
+    color: var(--purple);
+    border: 1px solid rgba(88,44,131,.16);
+    flex-shrink: 0;
+  }
+
+  .header-title-area {
+    text-align: center;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .header-eyebrow {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--teal);
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    display: block;
+  }
+
+  .header-title-text {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--ink);
+    font-family: "Plus Jakarta Sans", sans-serif;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* ─── Screens container ─── */
+  .screens {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .screen {
+    position: absolute;
+    inset: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+    padding: 16px 16px 24px;
+    background: var(--bg);
+    transition: transform .3s cubic-bezier(.4,0,.2,1), opacity .3s ease;
+  }
+  .screen::-webkit-scrollbar { display: none; }
+  .screen.hidden { transform: translateX(100%); opacity: 0; pointer-events: none; }
+  .screen.exit   { transform: translateX(-100%); opacity: 0; pointer-events: none; }
+
+  /* ─── Bottom nav ─── */
+  .bottom-nav {
+    height: 72px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--line);
+    background: rgba(245,249,255,.95);
+    backdrop-filter: blur(12px);
+    flex-shrink: 0;
+    padding: 0 8px 8px;
+  }
+
+  .nav-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-radius: 14px;
+    transition: background .15s;
+    padding: 8px 4px;
+  }
+  .nav-btn:hover { background: rgba(0,114,206,.06); }
+
+  .nav-icon {
+    width: 26px; height: 26px;
+    display: grid; place-items: center;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: background .2s, color .2s;
+    color: var(--faint);
+  }
+
+  .nav-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--faint);
+    letter-spacing: .04em;
+    transition: color .2s;
+  }
+
+  .nav-btn.active .nav-icon { background: var(--grad); color: #fff; box-shadow: 0 4px 12px rgba(88,44,131,.24); }
+  .nav-btn.active .nav-label { color: var(--purple); }
+
+  /* ─── Common card styles ─── */
+  .card {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 14px;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 12px;
+  }
+
+  .section-eyebrow {
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--faint);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  /* ─── HOME: Merry Noticed ─── */
+  .noticed-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  .noticed-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 999px;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+  .noticed-badge.safety { background: #FFF4E0; color: var(--warn); }
+  .noticed-badge.device { background: #FFFAE8; color: #B06A00; }
+  .noticed-badge.speech { background: #E8F9F9; color: var(--teal); }
+
+  /* Merry noticed — simple flat rows, no nesting issues */
+  .cue-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    background: var(--white);
+    margin-bottom: 6px;
+    cursor: pointer;
+    transition: background .14s, transform .14s, box-shadow .14s;
+    box-shadow: var(--card-shadow);
+    text-align: left;
+    width: 100%;
+  }
+  .cue-row:last-child { margin-bottom: 0; }
+  .cue-row:hover { background: #F8FBFF; transform: translateY(-1px); box-shadow: var(--lift-shadow); }
+  .cue-row.s-border { border-color: rgba(212,130,10,.26); }
+  .cue-row.d-border { border-color: rgba(212,184,10,.28); }
+
+  .cue-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .cue-dot.safety { background: var(--warn); }
+  .cue-dot.cue-dev { background: #C89000; }
+  .cue-dot.speech { background: var(--teal); }
+
+  .cue-msg { flex: 1; min-width: 0; }
+  .cue-tag {
+    font-size: 9px; font-weight: 800;
+    text-transform: uppercase; letter-spacing: .07em;
+    display: block; margin-bottom: 2px;
+  }
+  .cue-tag.safety { color: var(--warn); }
+  .cue-tag.cue-dev { color: #9A6B00; }
+  .cue-tag.speech { color: var(--teal); }
+
+  .cue-title { font-size: 13px; font-weight: 800; color: var(--ink); line-height: 1.2; }
+  .cue-sub   { font-size: 11px; color: var(--muted); margin-top: 1px; line-height: 1.3; }
+
+  .cue-arrow { font-size: 13px; color: var(--blue); font-weight: 900; flex-shrink: 0; opacity: .6; }
+
+  .cue-x {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(107,122,136,.10);
+    color: var(--faint);
+    font-size: 13px; line-height: 1;
+    cursor: pointer;
+    display: grid; place-items: center;
+    flex-shrink: 0;
+    transition: background .13s, color .13s;
+  }
+  .cue-x:hover { background: rgba(185,28,28,.12); color: var(--danger); }
+
+  /* ─── HOME: Device card ─── */
+  .device-row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .aid-block {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .aid-block.right { align-items: flex-end; }
+
+  .aid-block-top {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .aid-block.right .aid-block-top { flex-direction: row-reverse; }
+
+  .aid-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--ok);
+    flex-shrink: 0;
+  }
+
+  .aid-side-label {
+    font-size: 10px; font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--muted);
+  }
+
+  .aid-pct-val {
+    font-size: 18px; font-weight: 800;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    color: var(--ink);
+    line-height: 1;
+  }
+
+  .aid-pct-label {
+    font-size: 10px; color: var(--faint); font-weight: 700;
+  }
+
+  .aid-batt {
+    width: 52px; height: 5px;
+    border-radius: 999px;
+    background: var(--line);
+    overflow: hidden;
+  }
+  .aid-batt-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #1F8B3B, #38C15A);
+  }
+  .aid-block.right .aid-batt { margin-left: auto; }
+
+  .link-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .link-dot-row {
+    display: flex; gap: 3px; align-items: center;
+  }
+
+  .link-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: rgba(31,139,59,.35);
+    animation: ring-pulse 2.4s ease-in-out infinite;
+  }
+  .link-dot:nth-child(2) { animation-delay: .6s; }
+  .link-dot:nth-child(3) { animation-delay: 1.2s; }
+
+  .link-text {
+    font-size: 10px; font-weight: 800;
+    color: var(--ok);
+  }
+
+  @keyframes ring-pulse {
+    0%, 100% { opacity: .3; }
+    50% { opacity: 1; }
+  }
+
+  /* ─── HOME: Comfort Volume ─── */
+  /* ─── Comfort Volume — arc gauges ─── */
+  .vol-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+
+  .vol-arcs-layout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+  }
+
+  .vol-gauge-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .vol-ear-tag {
+    font-size: 10px; font-weight: 800;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+  }
+  .vol-ear-tag.l { color: var(--blue); }
+  .vol-ear-tag.r { color: var(--purple); }
+
+  .vol-gauge {
+    width: 88px; height: 88px;
+    cursor: crosshair;
+    touch-action: none;
+    user-select: none;
+    position: relative;
+  }
+
+  .vol-gauge svg { overflow: visible; }
+
+  /* Link bridge between the two gauges */
+  .vol-bridge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 50px;
+    padding-bottom: 20px; /* align with gauge center */
+  }
+
+  .vol-master-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 7px 10px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #EAF5FF, #EDF0FF);
+    border: 1px solid rgba(0,114,206,.10);
+    gap: 1px;
+    min-width: 44px;
+  }
+
+  .vol-master-num {
+    font-size: 17px; font-weight: 800;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    color: var(--ink);
+    line-height: 1;
+  }
+
+  .vol-master-label {
+    font-size: 8px; font-weight: 800;
+    color: var(--faint);
+    text-transform: uppercase;
+    letter-spacing: .06em;
+  }
+
+  .vol-lock-btn {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    border: 1.5px solid var(--line);
+    background: var(--white);
+    display: grid; place-items: center;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all .15s;
+    box-shadow: 0 2px 6px rgba(0,0,0,.06);
+  }
+  .vol-lock-btn.linked {
+    border-color: rgba(0,114,206,.28);
+    background: rgba(0,114,206,.06);
+  }
+
+  .vol-safe-note {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
+    font-size: 10px; font-weight: 700;
+    color: var(--ok);
+  }
+  .vol-safe-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--ok);
+    flex-shrink: 0;
+  }
+
+  /* ─── HOME: Problem cards ─── */
+  .screen-heading {
+    margin-bottom: 14px;
+  }
+  .screen-heading h2 {
+    font-size: 22px;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    color: var(--ink);
+    line-height: 1.15;
+  }
+  .screen-heading p {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 4px;
+    line-height: 1.4;
+  }
+
+  .problem-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .problem-card {
+    padding: 14px 12px;
+    border-radius: 18px;
+    background: var(--white);
+    border: 1.5px solid var(--line);
+    cursor: pointer;
+    transition: all .16s ease;
+    text-align: left;
+    box-shadow: var(--card-shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .problem-card:hover, .problem-card.selected {
+    border-color: var(--blue);
+    background: linear-gradient(135deg, #F0F8FF, #F3EEFF);
+    box-shadow: var(--lift-shadow);
+    transform: translateY(-1px);
+  }
+
+  .problem-icon {
+    width: 36px; height: 36px;
+    border-radius: 12px;
+    background: var(--soft);
+    display: grid; place-items: center;
+    font-size: 16px;
+    border: 1px solid rgba(0,114,206,.12);
+  }
+
+  .problem-card.selected .problem-icon {
+    background: var(--grad);
+    border-color: transparent;
+  }
+
+  .problem-name {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--ink);
+    font-family: "Plus Jakarta Sans", sans-serif;
+    line-height: 1.2;
+  }
+
+  .problem-hint {
+    font-size: 10.5px;
+    color: var(--muted);
+    line-height: 1.3;
+  }
+
+  /* ─── FLOW screen ─── */
+  .flow-screen-label {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--teal);
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+
+  .flow-title {
+    font-size: 20px;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    color: var(--ink);
+    line-height: 1.2;
+    margin-bottom: 6px;
+  }
+
+  .flow-subtitle {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.45;
+    margin-bottom: 16px;
+  }
+
+  /* Visual stage */
+  .flow-visual {
+    height: 100px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(0,114,206,.07), rgba(88,44,131,.06));
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Clarity: sonar rings */
+  .sonar-center {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--teal);
+    display: grid; place-items: center;
+    color: #fff; font-size: 13px;
+    font-weight: 900;
+    box-shadow: 0 6px 18px rgba(0,163,173,.28);
+    position: relative; z-index: 2;
+    transition: background .4s ease;
+  }
+
+  .sonar-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1.5px solid rgba(0,163,173,.35);
+    animation: sonar 2.4s ease-out infinite;
+  }
+  .sonar-ring:nth-child(2) { animation-delay: .8s; }
+  .sonar-ring:nth-child(3) { animation-delay: 1.6s; }
+
+  @keyframes sonar {
+    0%   { width: 40px; height: 40px; opacity: .8; }
+    100% { width: 110px; height: 110px; opacity: 0; }
+  }
+
+  /* Reconnect: aids moving toward phone */
+  .recon-scene { position: relative; width: 100%; height: 100%; }
+
+  .recon-phone {
+    position: absolute;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    width: 28px; height: 52px;
+    border: 2px solid rgba(26,35,48,.30);
+    border-radius: 9px;
+    background: linear-gradient(180deg, #fff, #EAF5FF);
+    z-index: 2;
+  }
+
+  .recon-aid {
+    position: absolute;
+    width: 14px; height: 22px;
+    border-radius: 8px 8px 5px 5px;
+    background: var(--grad);
+    box-shadow: 0 4px 10px rgba(0,114,206,.18);
+    top: 50%; transform: translateY(-50%);
+  }
+  .recon-aid.left  { left: 20px; animation: aid-left 3s ease-in-out infinite; }
+  .recon-aid.right { right: 20px; animation: aid-right 3s ease-in-out infinite; }
+
+  @keyframes aid-left  { 0%,100%{left:20px} 45%,70%{left:calc(50% - 26px)} }
+  @keyframes aid-right { 0%,100%{right:20px} 45%,70%{right:calc(50% - 26px)} }
+
+  .recon-wave {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 80px; height: 50px;
+    border-radius: 50%;
+    border: 2px solid rgba(0,163,173,.30);
+    transform: translate(-50%, -50%) scale(.6);
+    opacity: 0;
+    animation: recon-wave 3s ease-in-out infinite;
+  }
+  @keyframes recon-wave { 0%,30%{opacity:0;transform:translate(-50%,-50%) scale(.6)} 50%,70%{opacity:.7;transform:translate(-50%,-50%) scale(1)} 100%{opacity:0;transform:translate(-50%,-50%) scale(1.1)} }
+
+  /* Noise: animated bars */
+  .noise-bars { display: flex; gap: 4px; align-items: flex-end; }
+  .nbar {
+    width: 8px;
+    border-radius: 4px 4px 0 0;
+    background: var(--blue);
+    opacity: .75;
+    animation: nbar-bounce 1s ease-in-out infinite alternate;
+  }
+  .nbar:nth-child(1){height:24px;animation-delay:.00s}
+  .nbar:nth-child(2){height:40px;animation-delay:.07s}
+  .nbar:nth-child(3){height:30px;animation-delay:.14s}
+  .nbar:nth-child(4){height:50px;animation-delay:.21s}
+  .nbar:nth-child(5){height:34px;animation-delay:.28s}
+  .nbar:nth-child(6){height:22px;animation-delay:.35s}
+  .nbar:nth-child(7){height:44px;animation-delay:.42s}
+
+  @keyframes nbar-bounce { 0%{transform:scaleY(1)} 100%{transform:scaleY(.35)} }
+
+  .flow-visual.smoothing .nbar { animation-name: nbar-calm; background: var(--teal); }
+  @keyframes nbar-calm { 0%{transform:scaleY(.7)} 100%{transform:scaleY(.75)} }
+
+  /* Support: icons bundling */
+  .pkg-scene { position: relative; width: 100%; height: 100%; }
+  .pkg-dot {
+    position: absolute;
+    width: 32px; height: 32px;
+    border-radius: 12px;
+    background: var(--white);
+    border: 1px solid var(--line);
+    display: grid; place-items: center;
+    font-size: 15px;
+    box-shadow: var(--card-shadow);
+    transition: all .7s cubic-bezier(.34,1.56,.64,1);
+  }
+  .pkg-dot.pkg-device { left: 16px; top: 50%; transform: translateY(-50%); }
+  .pkg-dot.pkg-scene  { left: 50%; top: 14px; transform: translateX(-50%); }
+  .pkg-dot.pkg-sound  { right: 16px; top: 50%; transform: translateY(-50%); }
+  .pkg-center-icon {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 38px; height: 38px;
+    border-radius: 14px;
+    background: var(--grad);
+    display: grid; place-items: center;
+    font-size: 18px;
+    transform: translate(-50%,-50%);
+    opacity: 0;
+    box-shadow: 0 8px 20px rgba(88,44,131,.28);
+    transition: opacity .4s ease .5s;
+  }
+
+  .flow-visual.bundling .pkg-dot.pkg-device { left: 50%; transform: translate(-50%, -50%) !important; top: 50%; }
+  .flow-visual.bundling .pkg-dot.pkg-scene  { left: 50%; top: 50%; transform: translate(-50%,-50%) !important; }
+  .flow-visual.bundling .pkg-dot.pkg-sound  { right: auto; left: 50%; top: 50%; transform: translate(-50%,-50%) !important; }
+  .flow-visual.bundling .pkg-center-icon    { opacity: 1; }
+
+  /* ─── Step progress ─── */
+  .step-progress {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 14px;
+  }
+
+  .step-dot {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: grid; place-items: center;
+    font-size: 11px; font-weight: 800;
+    flex-shrink: 0;
+    border: 2px solid var(--line);
+    background: var(--white);
+    color: var(--faint);
+    transition: all .3s ease;
+    position: relative; z-index: 1;
+  }
+  .step-dot.active { border-color: var(--blue); background: var(--blue); color: #fff; }
+  .step-dot.done   { border-color: var(--ok); background: var(--ok); color: #fff; }
+
+  .step-connector {
+    flex: 1;
+    height: 2px;
+    background: var(--line);
+    transition: background .3s ease;
+  }
+  .step-connector.done { background: var(--ok); }
+
+  /* ─── Step card ─── */
+  .step-card {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+    box-shadow: var(--card-shadow);
+  }
+
+  .step-card-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .step-card-num {
+    width: 24px; height: 24px;
+    border-radius: 8px;
+    background: var(--soft);
+    display: grid; place-items: center;
+    font-size: 11px; font-weight: 800;
+    color: var(--blue);
+    border: 1px solid rgba(0,114,206,.14);
+    flex-shrink: 0;
+  }
+  .step-card-num.active { background: var(--blue); color: #fff; border-color: transparent; }
+  .step-card-num.done   { background: var(--ok); color: #fff; border-color: transparent; }
+
+  .step-card-title { font-size: 13px; font-weight: 800; color: var(--ink); }
+  .step-card-body  { font-size: 12px; color: var(--muted); line-height: 1.4; padding-left: 32px; }
+
+  /* Noise type picker */
+  .noise-type-row {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 7px;
+    margin-bottom: 12px;
+  }
+  .noise-type-btn {
+    padding: 10px 6px;
+    border-radius: 14px;
+    border: 1.5px solid var(--line);
+    background: var(--white);
+    font-size: 11px; font-weight: 800;
+    color: var(--muted);
+    cursor: pointer;
+    display: flex; flex-direction: column; align-items: center; gap: 5px;
+    transition: all .15s;
+  }
+  .noise-type-btn span { font-size: 18px; }
+  .noise-type-btn.selected {
+    border-color: var(--teal);
+    background: rgba(0,163,173,.07);
+    color: var(--teal);
+  }
+
+  /* Success card */
+  .success-card {
+    background: rgba(31,139,59,.07);
+    border: 1.5px solid rgba(31,139,59,.22);
+    border-radius: 16px;
+    padding: 14px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .success-icon {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--ok);
+    display: grid; place-items: center;
+    color: #fff; font-size: 15px;
+    flex-shrink: 0;
+  }
+  .success-card strong { font-size: 13px; color: var(--ok); display: block; margin-bottom: 3px; font-family: "Plus Jakarta Sans", sans-serif; }
+  .success-card span { font-size: 12px; color: var(--muted); line-height: 1.35; }
+
+  /* ─── Action buttons ─── */
+  .btn-primary {
+    width: 100%;
+    min-height: 50px;
+    border: none;
+    border-radius: 999px;
+    background: var(--grad);
+    color: #fff;
+    font-size: 15px; font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 8px 22px rgba(88,44,131,.22);
+    transition: opacity .2s, transform .15s;
+    margin-bottom: 8px;
+  }
+  .btn-primary:hover { opacity: .92; transform: translateY(-1px); }
+  .btn-primary:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+
+  .btn-secondary {
+    width: 100%;
+    min-height: 44px;
+    border: 1.5px solid var(--line);
+    border-radius: 999px;
+    background: var(--white);
+    color: var(--blue);
+    font-size: 14px; font-weight: 800;
+    cursor: pointer;
+    transition: background .15s;
+    margin-bottom: 8px;
+  }
+  .btn-secondary:hover { background: rgba(0,114,206,.05); }
+
+  /* ─── SCENE screen ─── */
+  .scene-grid {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+
+  .scene-btn {
+    padding: 14px 10px;
+    border-radius: 18px;
+    border: 1.5px solid var(--line);
+    background: var(--white);
+    cursor: pointer;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    transition: all .16s ease;
+    box-shadow: var(--card-shadow);
+  }
+  .scene-btn.active {
+    border-color: var(--teal);
+    background: rgba(0,163,173,.06);
+    box-shadow: var(--lift-shadow);
+  }
+
+  .scene-emoji { font-size: 26px; }
+  .scene-name { font-size: 12px; font-weight: 800; color: var(--muted); }
+  .scene-btn.active .scene-name { color: var(--teal); }
+
+  .scene-description {
+    background: rgba(0,163,173,.07);
+    border: 1px solid rgba(0,163,173,.20);
+    border-radius: 16px;
+    padding: 14px;
+    margin-bottom: 14px;
+  }
+  .scene-description strong { font-size: 14px; color: var(--ink); display: block; margin-bottom: 4px; font-family: "Plus Jakarta Sans", sans-serif; }
+  .scene-description span { font-size: 12.5px; color: var(--muted); line-height: 1.45; }
+
+  /* Personal Listening Space */
+  .sound-field {
+    position: relative;
+    height: 160px;
+    border-radius: 20px;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 50% 50%, rgba(255,255,255,.98) 0 14%, transparent 15%),
+      radial-gradient(circle at 50% 50%, rgba(0,163,173,.12) 0 36%, transparent 37%),
+      radial-gradient(circle at 50% 50%, rgba(0,114,206,.07) 0 58%, transparent 59%),
+      linear-gradient(135deg, #EAF5FF, #EDF0FF);
+    margin-bottom: 10px;
+  }
+
+  .listener-dot {
+    position: absolute;
+    left: 50%; top: 50%;
+    transform: translate(-50%,-50%);
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: var(--teal);
+    display: grid; place-items: center;
+    color: #fff; font-size: 10px; font-weight: 800;
+    box-shadow: 0 8px 18px rgba(0,163,173,.26);
+    z-index: 3;
+  }
+
+  .sound-source {
+    position: absolute;
+    display: flex; align-items: center; gap: 4px;
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.92);
+    border: 1.5px solid rgba(215,230,240,.80);
+    font-size: 11px; font-weight: 800;
+    color: var(--muted);
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(26,35,48,.07);
+    transition: all .3s cubic-bezier(.34,1.56,.64,1);
+    z-index: 2;
+    white-space: nowrap;
+  }
+  .sound-source.close { color: var(--teal); border-color: rgba(0,163,173,.36); background: rgba(234,249,249,.94); }
+  .sound-source.far   { color: var(--faint); opacity: .72; }
+
+  .sound-source.pos-front { left: 50%; top: 12px; transform: translateX(-50%); }
+  .sound-source.pos-traffic { right: 12px; top: 60px; }
+  .sound-source.pos-back { left: 50%; bottom: 12px; transform: translateX(-50%); }
+
+  .sound-source.close.pos-front { top: 20px; }
+  .sound-source.far.pos-front   { top: 6px; }
+  .sound-source.close.pos-back  { bottom: 20px; }
+  .sound-source.far.pos-back    { bottom: 6px; }
+
+  .source-toggle { font-size: 9px; opacity: .65; }
+
+  /* ─── CARE screen ─── */
+  .care-dr-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, #F5F0FA, #EDF5FF);
+    border: 1px solid rgba(88,44,131,.14);
+    margin-bottom: 12px;
+  }
+
+  .dr-avatar {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: var(--grad);
+    display: grid; place-items: center;
+    color: #fff; font-size: 18px;
+    flex-shrink: 0;
+    box-shadow: 0 6px 14px rgba(88,44,131,.22);
+  }
+
+  .dr-name { font-size: 15px; font-weight: 800; color: var(--ink); font-family: "Plus Jakarta Sans", sans-serif; }
+  .dr-title { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .dr-status { font-size: 11px; font-weight: 700; color: var(--ok); margin-top: 4px; display: flex; align-items: center; gap: 4px; }
+
+  .pkg-preview {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 12px;
+    margin-bottom: 12px;
+  }
+
+  .pkg-preview-title {
+    font-size: 12px; font-weight: 800; color: var(--muted);
+    text-transform: uppercase; letter-spacing: .06em;
+    margin-bottom: 10px;
+  }
+
+  .pkg-row {
+    display: flex; align-items: center; gap: 9px;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .pkg-row:last-child { border-bottom: none; padding-bottom: 0; }
+
+  .pkg-row-icon {
+    width: 28px; height: 28px;
+    border-radius: 9px;
+    background: var(--soft);
+    display: grid; place-items: center;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+
+  .pkg-row-label { font-size: 12px; font-weight: 700; color: var(--ink); }
+  .pkg-row-val   { font-size: 11px; color: var(--muted); margin-top: 1px; }
+
+  /* ─── SURVEY screen ─── */
+  .survey-q { margin-bottom: 16px; }
+  .survey-q-label { font-size: 13px; font-weight: 800; color: var(--ink); margin-bottom: 8px; display: block; }
+
+  .star-row { display: flex; gap: 6px; }
+  .star-btn {
+    font-size: 26px; line-height: 1;
+    border: none; background: none;
+    color: var(--line); cursor: pointer;
+    transition: color .1s, transform .1s;
+    padding: 0;
+  }
+  .star-btn.lit { color: #F2B84B; }
+  .star-btn:hover { transform: scale(1.15); }
+
+  .opt-row { display: flex; flex-wrap: wrap; gap: 7px; }
+  .opt-btn {
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1.5px solid var(--line);
+    background: var(--white);
+    font-size: 12px; font-weight: 800;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all .14s;
+  }
+  .opt-btn.selected {
+    background: var(--grad);
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 6px 14px rgba(88,44,131,.18);
+  }
+
+  .survey-submit {
+    width: 100%; min-height: 50px;
+    border: none; border-radius: 999px;
+    background: var(--grad); color: #fff;
+    font-size: 15px; font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 8px 22px rgba(88,44,131,.22);
+    opacity: .42;
+    transition: opacity .2s;
+    margin-top: 4px;
+  }
+  .survey-submit.ready { opacity: 1; cursor: pointer; }
+
+  .survey-done {
+    text-align: center;
+    padding: 20px 0;
+  }
+  .survey-done .done-emoji { font-size: 40px; display: block; margin-bottom: 10px; }
+  .survey-done strong { font-size: 17px; color: var(--purple); font-family: "Plus Jakarta Sans", sans-serif; display: block; margin-bottom: 6px; }
+  .survey-done span { font-size: 13px; color: var(--muted); line-height: 1.4; }
+
+  /* ─── Utility ─── */
+  .hidden { display: none !important; }
+  .notice-count-badge {
+    font-size: 10px; font-weight: 800;
+    padding: 2px 7px;
+    border-radius: 999px;
+    background: rgba(0,163,173,.10);
+    color: var(--teal);
+  }
+
+  /* ─── Prototype caption ─── */
+  .proto-caption {
+    text-align: center;
+    margin-top: 14px;
+    color: rgba(255,255,255,.36);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+  </style>
+</head>
+<body>
+
+  <!-- Version nav -->
+  <div class="topbar">
+    <span class="topbar-label">Merry Hearing</span>
+    <a class="version-pill" href="v1.html">v1</a>
+    <a class="version-pill" href="v2.html">v2</a>
+    <a class="version-pill current">v3</a>
+    <a class="version-pill" href="index.html">All versions</a>
+  </div>
+
+  <!-- Device -->
+  <div class="device-wrap">
+    <div class="device">
+      <div class="device-screen">
+        <!-- Dynamic island -->
+        <div class="dynamic-island"></div>
+
+        <!-- Status bar -->
+        <div class="status-bar">
+          <span class="status-time">9:41</span>
+          <div class="status-icons">
+            <!-- Signal bars -->
+            <svg viewBox="0 0 17 12" fill="none">
+              <rect x="0" y="7" width="3" height="5" rx="1" fill="currentColor" opacity=".4"/>
+              <rect x="4.5" y="4.5" width="3" height="7.5" rx="1" fill="currentColor" opacity=".6"/>
+              <rect x="9" y="2" width="3" height="10" rx="1" fill="currentColor" opacity=".8"/>
+              <rect x="13.5" y="0" width="3" height="12" rx="1" fill="currentColor"/>
+            </svg>
+            <!-- WiFi -->
+            <svg viewBox="0 0 16 12" fill="none" style="width:16px">
+              <path d="M8 9.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" fill="currentColor"/>
+              <path d="M5.2 7.1A4 4 0 0110.8 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M2.4 4.5A8 8 0 0113.6 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity=".5"/>
+            </svg>
+            <!-- Battery -->
+            <svg viewBox="0 0 25 12" fill="none" style="width:25px">
+              <rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="currentColor" opacity=".35"/>
+              <rect x="22.5" y="3.5" width="2" height="5" rx="1" fill="currentColor" opacity=".4"/>
+              <rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- App header -->
+        <div class="app-header">
+          <button class="back-btn hidden" id="back-btn" aria-label="Back">‹</button>
+          <div class="header-title-area">
+            <img class="header-logo" src="brand-assets/merry-official-logo-assets/merry-official/merry-wordmark-400.png" alt="Merry" id="header-logo" onerror="this.style.display='none';document.getElementById('header-logo-text').style.display='block'">
+            <span id="header-logo-text" style="display:none;font-size:17px;font-weight:900;font-family:'Plus Jakarta Sans',sans-serif;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent">MERRY</span>
+            <span class="header-eyebrow" id="header-eyebrow" style="display:none"></span>
+            <span class="header-title-text" id="header-title" style="display:none"></span>
+          </div>
+          <div class="header-avatar">JD</div>
+        </div>
+
+        <!-- Screens -->
+        <div class="screens">
+
+          <!-- ═══ HOME ═══ -->
+          <div class="screen" id="screen-home">
+
+            <!-- Merry Noticed -->
+            <div style="margin-bottom:14px">
+              <div class="noticed-header">
+                <span class="section-eyebrow" style="margin-bottom:0">Merry noticed</span>
+                <span class="notice-count-badge" id="notice-count">3 active</span>
+              </div>
+
+              <!-- Safety -->
+              <div class="cue-row s-border" id="cue-street" data-goto-flow="noise">
+                <span class="cue-dot safety"></span>
+                <div class="cue-msg">
+                  <span class="cue-tag safety">⚠ Safety</span>
+                  <div class="cue-title">Busy street detected.</div>
+                  <div class="cue-sub">Safety sounds should stay audible.</div>
+                </div>
+                <span class="cue-arrow">›</span>
+                <button class="cue-x" data-dismiss="street" aria-label="Dismiss">×</button>
+              </div>
+
+              <!-- Device -->
+              <div class="cue-row d-border" id="cue-aid" data-goto-flow="reconnect">
+                <span class="cue-dot cue-dev"></span>
+                <div class="cue-msg">
+                  <span class="cue-tag cue-dev">⚡ Device</span>
+                  <div class="cue-title">Right aid seems weak.</div>
+                  <div class="cue-sub">Signal lower than usual.</div>
+                </div>
+                <span class="cue-arrow">›</span>
+                <button class="cue-x" data-dismiss="aid" aria-label="Dismiss">×</button>
+              </div>
+
+              <!-- Speech -->
+              <div class="cue-row" id="cue-speech" data-goto-flow="clarity">
+                <span class="cue-dot speech"></span>
+                <div class="cue-msg">
+                  <span class="cue-tag speech">◉ Speech</span>
+                  <div class="cue-title">Speech is nearby.</div>
+                  <div class="cue-sub">Merry can protect front voice.</div>
+                </div>
+                <span class="cue-arrow">›</span>
+                <button class="cue-x" data-dismiss="speech" aria-label="Dismiss">×</button>
+              </div>
+            </div>
+
+            <!-- Device status -->
+            <div class="card">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+                <span class="section-eyebrow" style="margin-bottom:0">Devices</span>
+                <span style="font-size:11px;font-weight:800;color:var(--ok);display:flex;align-items:center;gap:4px">
+                  <span style="width:6px;height:6px;border-radius:50%;background:var(--ok);display:inline-block"></span>Both connected
+                </span>
+              </div>
+              <div class="device-row">
+                <div class="aid-block">
+                  <div class="aid-block-top">
+                    <div class="aid-dot"></div>
+                    <span class="aid-side-label">Left</span>
+                  </div>
+                  <div class="aid-pct-val">85<span style="font-size:11px;font-weight:700;color:var(--muted)">%</span></div>
+                  <span class="aid-pct-label">Battery</span>
+                  <div class="aid-batt"><div class="aid-batt-fill" style="width:85%"></div></div>
+                </div>
+                <div class="link-badge">
+                  <div class="link-dot-row">
+                    <div class="link-dot"></div>
+                    <div class="link-dot"></div>
+                    <div class="link-dot"></div>
+                  </div>
+                  <span class="link-text">Linked</span>
+                </div>
+                <div class="aid-block right">
+                  <div class="aid-block-top">
+                    <span class="aid-side-label">Right</span>
+                    <div class="aid-dot"></div>
+                  </div>
+                  <div class="aid-pct-val">92<span style="font-size:11px;font-weight:700;color:var(--muted)">%</span></div>
+                  <span class="aid-pct-label">Battery</span>
+                  <div class="aid-batt"><div class="aid-batt-fill" style="width:92%"></div></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Comfort Volume: arc gauges -->
+            <div class="card">
+              <div class="vol-card-head">
+                <span class="section-eyebrow" style="margin-bottom:0">Comfort Volume</span>
+                <span style="font-size:10px;color:var(--faint);font-weight:700">Drag each arc</span>
+              </div>
+
+              <div class="vol-arcs-layout">
+
+                <!-- Left arc gauge -->
+                <div class="vol-gauge-col">
+                  <div class="vol-gauge" id="gauge-l" aria-label="Left ear volume">
+                    <svg width="88" height="88" viewBox="0 0 88 88">
+                      <defs>
+                        <linearGradient id="gl" x1="0" y1="1" x2="1" y2="0">
+                          <stop offset="0%" stop-color="#3B9EFF"/>
+                          <stop offset="100%" stop-color="#0072CE"/>
+                        </linearGradient>
+                      </defs>
+                      <!-- Track -->
+                      <circle cx="44" cy="44" r="32" fill="none"
+                        stroke="#E5EEF6" stroke-width="8" stroke-linecap="round"
+                        stroke-dasharray="150.8 1000"
+                        transform="rotate(135 44 44)"/>
+                      <!-- Safe zone tint (55–85% = 82.9–128.2 of arc) -->
+                      <circle cx="44" cy="44" r="32" fill="none"
+                        stroke="rgba(31,139,59,.12)" stroke-width="8"
+                        stroke-dasharray="45.3 1000"
+                        stroke-dashoffset="-82.9"
+                        transform="rotate(135 44 44)"/>
+                      <!-- Fill -->
+                      <circle id="arc-l" cx="44" cy="44" r="32" fill="none"
+                        stroke="url(#gl)" stroke-width="8" stroke-linecap="round"
+                        stroke-dasharray="102.5 1000"
+                        transform="rotate(135 44 44)"/>
+                      <!-- Value -->
+                      <text x="44" y="40" text-anchor="middle"
+                        font-family="'Plus Jakarta Sans',sans-serif"
+                        font-size="16" font-weight="800" fill="#1A2330" id="txt-l">68</text>
+                      <text x="44" y="53" text-anchor="middle"
+                        font-family="'Plus Jakarta Sans',sans-serif"
+                        font-size="9" font-weight="700" fill="#9AAAB8">LEFT</text>
+                    </svg>
+                  </div>
+                </div>
+
+                <!-- Bridge: master display + lock -->
+                <div class="vol-bridge">
+                  <div class="vol-master-display">
+                    <span class="vol-master-num" id="vol-master-num">70</span>
+                    <span class="vol-master-label">avg</span>
+                  </div>
+                  <button class="vol-lock-btn linked" id="vol-lock" aria-label="Toggle link both ears">🔗</button>
+                </div>
+
+                <!-- Right arc gauge -->
+                <div class="vol-gauge-col">
+                  <div class="vol-gauge" id="gauge-r" aria-label="Right ear volume">
+                    <svg width="88" height="88" viewBox="0 0 88 88">
+                      <defs>
+                        <linearGradient id="gr" x1="0" y1="1" x2="1" y2="0">
+                          <stop offset="0%" stop-color="#8B5CF6"/>
+                          <stop offset="100%" stop-color="#582C83"/>
+                        </linearGradient>
+                      </defs>
+                      <!-- Track -->
+                      <circle cx="44" cy="44" r="32" fill="none"
+                        stroke="#E5EEF6" stroke-width="8" stroke-linecap="round"
+                        stroke-dasharray="150.8 1000"
+                        transform="rotate(135 44 44)"/>
+                      <!-- Safe zone tint -->
+                      <circle cx="44" cy="44" r="32" fill="none"
+                        stroke="rgba(31,139,59,.12)" stroke-width="8"
+                        stroke-dasharray="45.3 1000"
+                        stroke-dashoffset="-82.9"
+                        transform="rotate(135 44 44)"/>
+                      <!-- Fill -->
+                      <circle id="arc-r" cx="44" cy="44" r="32" fill="none"
+                        stroke="url(#gr)" stroke-width="8" stroke-linecap="round"
+                        stroke-dasharray="108.6 1000"
+                        transform="rotate(135 44 44)"/>
+                      <!-- Value -->
+                      <text x="44" y="40" text-anchor="middle"
+                        font-family="'Plus Jakarta Sans',sans-serif"
+                        font-size="16" font-weight="800" fill="#1A2330" id="txt-r">72</text>
+                      <text x="44" y="53" text-anchor="middle"
+                        font-family="'Plus Jakarta Sans',sans-serif"
+                        font-size="9" font-weight="700" fill="#9AAAB8">RIGHT</text>
+                    </svg>
+                  </div>
+                </div>
+
+              </div><!-- /vol-arcs-layout -->
+
+              <div class="vol-safe-note">
+                <div class="vol-safe-dot" id="vol-safe-dot"></div>
+                <span id="vol-safe-text">Both within safe range · 55–85% recommended</span>
+              </div>
+            </div>
+
+            <!-- Problem cards -->
+            <div class="screen-heading">
+              <h2>How can Merry help?</h2>
+              <p>Choose what feels wrong right now.</p>
+            </div>
+
+            <div class="problem-grid">
+              <button class="problem-card" data-flow="clarity">
+                <div class="problem-icon">🔊</div>
+                <div>
+                  <div class="problem-name">I can't hear clearly</div>
+                  <div class="problem-hint">Speech feels unclear or distant.</div>
+                </div>
+              </button>
+              <button class="problem-card" data-flow="reconnect">
+                <div class="problem-icon">📡</div>
+                <div>
+                  <div class="problem-name">Won't connect</div>
+                  <div class="problem-hint">One or both sides missing.</div>
+                </div>
+              </button>
+              <button class="problem-card" data-flow="noise">
+                <div class="problem-icon">〰️</div>
+                <div>
+                  <div class="problem-name">Noise or hiss</div>
+                  <div class="problem-hint">Scratchy or too sharp.</div>
+                </div>
+              </button>
+              <button class="problem-card" data-flow="support">
+                <div class="problem-icon">👩‍⚕️</div>
+                <div>
+                  <div class="problem-name">Ask someone</div>
+                  <div class="problem-hint">Send situation to care.</div>
+                </div>
+              </button>
+            </div>
+
+          </div><!-- /screen-home -->
+
+          <!-- ═══ FLOW ═══ -->
+          <div class="screen hidden" id="screen-flow">
+
+            <div class="flow-screen-label">
+              <span class="dot-indicator"></span>
+              <span id="flow-breadcrumb">You chose</span>
+            </div>
+
+            <h2 class="flow-title" id="flow-title">Make speech clearer.</h2>
+            <p class="flow-subtitle" id="flow-subtitle">Merry checks front speech, nearby noise, and your comfort level before applying a safer setting.</p>
+
+            <!-- Visual stage -->
+            <div class="flow-visual" id="flow-visual">
+              <!-- content injected by JS -->
+            </div>
+
+            <!-- Step progress -->
+            <div class="step-progress" id="step-progress"></div>
+
+            <!-- Step cards -->
+            <div id="step-cards"></div>
+
+            <!-- Noise type picker (only noise flow) -->
+            <div class="noise-type-row hidden" id="noise-type-row">
+              <button class="noise-type-btn" data-noise="hiss"><span>🔊</span>Hiss</button>
+              <button class="noise-type-btn" data-noise="traffic"><span>🚗</span>Traffic</button>
+              <button class="noise-type-btn" data-noise="crowd"><span>👥</span>Crowd</button>
+            </div>
+
+            <!-- Success card (hidden until done) -->
+            <div class="success-card hidden" id="success-card">
+              <div class="success-icon">✓</div>
+              <div>
+                <strong id="success-title">Done.</strong>
+                <span id="success-copy">Merry is holding this setting.</span>
+              </div>
+            </div>
+
+            <!-- Actions -->
+            <button class="btn-primary" id="flow-primary">Start</button>
+            <button class="btn-secondary" id="flow-secondary">Send to care instead</button>
+
+          </div><!-- /screen-flow -->
+
+          <!-- ═══ SCENE ═══ -->
+          <div class="screen hidden" id="screen-scene">
+
+            <div class="screen-heading">
+              <h2>Scene-aware sound</h2>
+              <p>Tell Merry where you are. It decides what to keep and what to soften.</p>
+            </div>
+
+            <div class="scene-grid">
+              <button class="scene-btn active" data-scene="street">
+                <span class="scene-emoji">🚦</span>
+                <span class="scene-name">Busy Street</span>
+              </button>
+              <button class="scene-btn" data-scene="restaurant">
+                <span class="scene-emoji">🍽️</span>
+                <span class="scene-name">Restaurant</span>
+              </button>
+              <button class="scene-btn" data-scene="clinic">
+                <span class="scene-emoji">🏥</span>
+                <span class="scene-name">Clinic</span>
+              </button>
+              <button class="scene-btn" data-scene="home">
+                <span class="scene-emoji">🏠</span>
+                <span class="scene-name">Home</span>
+              </button>
+            </div>
+
+            <div class="scene-description" id="scene-description">
+              <strong id="scene-desc-title">Busy street detected.</strong>
+              <span id="scene-desc-copy">Merry keeps vehicle and crossing sounds audible while softening harsh background noise. Safety stays first.</span>
+            </div>
+
+            <!-- Personal Listening Space -->
+            <div class="card">
+              <span class="section-eyebrow">Personal Listening Space</span>
+              <p style="font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.4">Tap a sound source to pull it closer or push it farther away.</p>
+              <div class="sound-field">
+                <button class="sound-source pos-front close" data-source="front">
+                  <span>front speech</span><span class="source-toggle">↑</span>
+                </button>
+                <button class="sound-source pos-traffic" data-source="traffic">
+                  <span>traffic</span><span class="source-toggle">•</span>
+                </button>
+                <button class="sound-source pos-back far" data-source="back">
+                  <span>background</span><span class="source-toggle">↓</span>
+                </button>
+                <div class="listener-dot">You</div>
+              </div>
+              <div style="display:flex;gap:14px;flex-wrap:wrap">
+                <span style="font-size:10px;font-weight:700;color:var(--teal);display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:50%;background:var(--teal);display:inline-block"></span>Close</span>
+                <span style="font-size:10px;font-weight:700;color:var(--faint);display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:50%;background:var(--line);display:inline-block"></span>Normal</span>
+                <span style="font-size:10px;font-weight:700;color:var(--faint);display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:50%;background:var(--faint);display:inline-block"></span>Far</span>
+              </div>
+            </div>
+
+          </div><!-- /screen-scene -->
+
+          <!-- ═══ CARE ═══ -->
+          <div class="screen hidden" id="screen-care">
+
+            <div class="screen-heading">
+              <h2>Ask someone</h2>
+              <p>Merry bundles your current situation and sends it to your audiologist — no technical explanation needed.</p>
+            </div>
+
+            <div class="care-dr-card">
+              <div class="dr-avatar">👩‍⚕️</div>
+              <div>
+                <div class="dr-name">Dr. Elena</div>
+                <div class="dr-title">Audiologist · Merry Hearing Clinic</div>
+                <div class="dr-status"><span style="width:7px;height:7px;border-radius:50%;background:var(--ok);display:inline-block"></span>Available today</div>
+              </div>
+            </div>
+
+            <div class="pkg-preview">
+              <div class="pkg-preview-title">What Merry will send</div>
+              <div class="pkg-row">
+                <div class="pkg-row-icon">🔊</div>
+                <div>
+                  <div class="pkg-row-label">Sound environment</div>
+                  <div class="pkg-row-val">Busy street · front speech nearby</div>
+                </div>
+              </div>
+              <div class="pkg-row">
+                <div class="pkg-row-icon">📡</div>
+                <div>
+                  <div class="pkg-row-label">Device status</div>
+                  <div class="pkg-row-val">Both linked · L 85% · R 92%</div>
+                </div>
+              </div>
+              <div class="pkg-row">
+                <div class="pkg-row-icon">🎚️</div>
+                <div>
+                  <div class="pkg-row-label">Comfort level</div>
+                  <div class="pkg-row-val" id="care-comfort-val">68% — within safe range</div>
+                </div>
+              </div>
+              <div class="pkg-row">
+                <div class="pkg-row-icon">📍</div>
+                <div>
+                  <div class="pkg-row-label">Scene</div>
+                  <div class="pkg-row-val" id="care-scene-val">Busy street</div>
+                </div>
+              </div>
+            </div>
+
+            <button class="btn-primary" id="care-send-btn">Send care package to Dr. Elena</button>
+            <button class="btn-secondary" id="care-cancel-btn">Not now</button>
+
+            <!-- Success state (hidden) -->
+            <div class="success-card hidden" id="care-success">
+              <div class="success-icon">✓</div>
+              <div>
+                <strong>Care package sent.</strong>
+                <span>Dr. Elena will review your situation and may follow up today.</span>
+              </div>
+            </div>
+
+          </div><!-- /screen-care -->
+
+          <!-- ═══ SURVEY ═══ -->
+          <div class="screen hidden" id="screen-survey">
+
+            <div class="screen-heading">
+              <h2>How did that feel?</h2>
+              <p>4 quick questions — helps Merry get better for you.</p>
+            </div>
+
+            <div id="survey-form">
+              <div class="survey-q">
+                <span class="survey-q-label">1. Did Merry support you?</span>
+                <div class="star-row" id="star-row">
+                  <button class="star-btn" data-star="1">★</button>
+                  <button class="star-btn" data-star="2">★</button>
+                  <button class="star-btn" data-star="3">★</button>
+                  <button class="star-btn" data-star="4">★</button>
+                  <button class="star-btn" data-star="5">★</button>
+                </div>
+              </div>
+
+              <div class="survey-q">
+                <span class="survey-q-label">2. Was anything confusing?</span>
+                <div class="opt-row">
+                  <button class="opt-btn" data-q="confusing" data-v="nothing">Nothing</button>
+                  <button class="opt-btn" data-q="confusing" data-v="alittle">A little</button>
+                  <button class="opt-btn" data-q="confusing" data-v="yes">Yes</button>
+                </div>
+              </div>
+
+              <div class="survey-q">
+                <span class="survey-q-label">3. Did the icons help you understand?</span>
+                <div class="opt-row">
+                  <button class="opt-btn" data-q="icons" data-v="alot">Yes, a lot</button>
+                  <button class="opt-btn" data-q="icons" data-v="alittle">A little</button>
+                  <button class="opt-btn" data-q="icons" data-v="no">Not really</button>
+                </div>
+              </div>
+
+              <div class="survey-q">
+                <span class="survey-q-label">4. Would you use Merry daily?</span>
+                <div class="opt-row">
+                  <button class="opt-btn" data-q="daily" data-v="yes">Yes</button>
+                  <button class="opt-btn" data-q="daily" data-v="maybe">Maybe</button>
+                  <button class="opt-btn" data-q="daily" data-v="notyet">Not yet</button>
+                </div>
+              </div>
+
+              <button class="survey-submit" id="survey-submit" disabled>Submit feedback</button>
+            </div>
+
+            <div class="survey-done hidden" id="survey-done">
+              <span class="done-emoji">🎧</span>
+              <strong>Thank you!</strong>
+              <span>Your feedback helps Merry improve. Dr. Elena may also review this session.</span>
+            </div>
+
+          </div><!-- /screen-survey -->
+
+        </div><!-- /screens -->
+
+        <!-- Bottom nav -->
+        <nav class="bottom-nav">
+          <button class="nav-btn active" data-nav="home">
+            <div class="nav-icon">🏠</div>
+            <span class="nav-label">Now</span>
+          </button>
+          <button class="nav-btn" data-nav="scene">
+            <div class="nav-icon">🌍</div>
+            <span class="nav-label">Scene</span>
+          </button>
+          <button class="nav-btn" data-nav="care">
+            <div class="nav-icon">👩‍⚕️</div>
+            <span class="nav-label">Care</span>
+          </button>
+        </nav>
+
+      </div><!-- /device-screen -->
+    </div><!-- /device -->
+  </div>
+
+  <div class="proto-caption">Merry Hearing v3 · Interactive Prototype</div>
+
+  <script>
+  /* ═══ Flow data ═══ */
+  const FLOWS = {
+    clarity: {
+      label: "I can't hear clearly",
+      title: "Make speech clearer.",
+      subtitle: "Merry checks your mic, boosts front speech, and confirms the improvement — one step at a time.",
+      primaryFirst: "Start clarity check",
+      steps: [
+        { label: "Check microphone",   body: "Merry is checking your microphone direction and current speech level." },
+        { label: "Boost front speech", body: "Applying a 15% front speech boost and a soft noise gate. Safety sounds stay." },
+        { label: "Confirm",            body: "Can you hear more clearly now? Merry will hold this setting." }
+      ],
+      successTitle: "Speech clarity improved.",
+      successCopy:  "Merry is holding this setting. Adjust any time from Comfort Volume.",
+      stage: "clarity"
+    },
+    reconnect: {
+      label: "Won't connect",
+      title: "Reconnect one step at a time.",
+      subtitle: "Merry tells you what to do physically, only when each step is needed.",
+      primaryFirst: "Start guided reconnect",
+      steps: [
+        { label: "Bring aids close", body: "Place both aids within 30 cm of your phone." },
+        { label: "Wake right aid",   body: "Open the case and wait 3 seconds. Merry listens for the right aid." },
+        { label: "Confirm linked",   body: "Merry detected both aids. Connection confirmed." }
+      ],
+      successTitle: "Both aids are linked.",
+      successCopy:  "Left 85% · Right 92%. Connection is strong.",
+      stage: "reconnect"
+    },
+    noise: {
+      label: "Noise or hiss",
+      title: "Soften what feels uncomfortable.",
+      subtitle: "Pick the noise type. Merry reduces only that — speech and safety sounds stay unchanged.",
+      primaryFirst: "Start noise reduction",
+      noiseType: true,
+      steps: [
+        { label: "Identify noise type",     body: "Tap the type below that's bothering you most." },
+        { label: "Apply targeted filter",   body: "Reducing selected noise frequency. Speech and traffic are protected." },
+        { label: "Confirm comfort",         body: "Does this feel better? Merry can reduce further if needed." }
+      ],
+      successTitle: "Noise softened.",
+      successCopy:  "Harsh frequencies reduced. Speech and safety sounds are unchanged.",
+      stage: "noise"
+    },
+    support: {
+      label: "Ask someone",
+      title: "Send this to Dr. Elena.",
+      subtitle: "Merry bundles your current sound environment, device status, and settings into one package.",
+      primaryFirst: "Prepare care package",
+      steps: [
+        { label: "Collect status", body: "Merry is gathering sound environment, device status, scene, and comfort level." },
+        { label: "Send to care",   body: "Package ready. Dr. Elena receives it with full context — no explanation needed." }
+      ],
+      successTitle: "Care package sent.",
+      successCopy:  "Dr. Elena will review your situation and may follow up today.",
+      stage: "support"
+    }
+  };
+
+  const SCENES = {
+    street:     { title: "Busy street detected.",  copy: "Merry keeps vehicle and crossing sounds audible while softening harsh background noise. Safety stays first." },
+    restaurant: { title: "Busy table nearby.",     copy: "Merry keeps front conversation close and pushes steady table noise farther back." },
+    clinic:     { title: "Front speech matters.",  copy: "Merry makes near conversation clearer so you can follow instructions at the counter or clinic." },
+    home:       { title: "Home sound is steady.",  copy: "Merry balances TV and nearby voices without making the room feel too sharp." }
+  };
+
+  /* ═══ State ═══ */
+  let currentScreen = "home";
+  let currentFlow   = null;
+  let flowStep      = 0;
+  let noiseChoice   = null;
+  let currentScene  = "street";
+  let comfortVal    = 68;
+  let surveyAnswers = {};
+  let surveyStars   = 0;
+  let dismissedCues = new Set();
+
+  /* ═══ Screen router ═══ */
+  function goTo(name, opts = {}) {
+    const prev = document.getElementById("screen-" + currentScreen);
+    const next = document.getElementById("screen-" + name);
+    if (!next) return;
+    prev.classList.add("exit");
+    next.classList.remove("hidden");
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        prev.classList.add("hidden");
+        prev.classList.remove("exit");
+      });
+    });
+
+    currentScreen = name;
+
+    // Update nav buttons
+    document.querySelectorAll(".nav-btn").forEach(btn => {
+      const navTarget = { home: "home", scene: "scene", care: "care" }[btn.dataset.nav];
+      btn.classList.toggle("active", navTarget === name);
+    });
+
+    // Update header
+    const backBtn  = document.getElementById("back-btn");
+    const logoEl   = document.getElementById("header-logo");
+    const logoText = document.getElementById("header-logo-text");
+    const eyebrow  = document.getElementById("header-eyebrow");
+    const titleEl  = document.getElementById("header-title");
+
+    if (name === "home") {
+      backBtn.classList.add("hidden");
+      logoEl.style.display = "";
+      logoText.style.display = "none";
+      eyebrow.style.display = "none";
+      titleEl.style.display = "none";
+    } else {
+      backBtn.classList.remove("hidden");
+      logoEl.style.display = "none";
+      logoText.style.display = "none";
+      eyebrow.style.display = "block";
+      titleEl.style.display = "block";
+      if (name === "flow" && currentFlow) {
+        eyebrow.textContent = "You chose";
+        titleEl.textContent = FLOWS[currentFlow].label;
+      } else if (name === "scene") {
+        eyebrow.textContent = "Scene";
+        titleEl.textContent = "Scene-aware sound";
+      } else if (name === "care") {
+        eyebrow.textContent = "Care";
+        titleEl.textContent = "Ask someone";
+      } else if (name === "survey") {
+        eyebrow.textContent = "After your session";
+        titleEl.textContent = "How did that feel?";
+      }
+    }
+
+    // Scroll to top
+    next.scrollTop = 0;
+  }
+
+  /* ═══ Back button ═══ */
+  document.getElementById("back-btn").addEventListener("click", () => {
+    goTo("home");
+  });
+
+  /* ═══ Bottom nav ═══ */
+  document.querySelectorAll(".nav-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const target = btn.dataset.nav;
+      if (target === "home") goTo("home");
+      else if (target === "scene") goTo("scene");
+      else if (target === "care") goTo("care");
+    });
+  });
+
+  /* ═══ Dismiss cues ═══ */
+  document.querySelectorAll(".cue-x").forEach(btn => {
+    btn.addEventListener("click", e => {
+      e.stopPropagation();
+      const row = document.getElementById("cue-" + btn.dataset.dismiss);
+      if (!row) return;
+      dismissedCues.add(btn.dataset.dismiss);
+      row.style.transition = "opacity .2s, transform .2s, max-height .25s";
+      row.style.opacity = "0";
+      row.style.transform = "translateX(6px)";
+      row.style.maxHeight = "0";
+      row.style.overflow = "hidden";
+      row.style.marginBottom = "0";
+      row.style.padding = "0";
+      setTimeout(() => { row.remove(); updateNoticeCount(); }, 260);
+    });
+  });
+
+  function updateNoticeCount() {
+    const remaining = 3 - dismissedCues.size;
+    const el = document.getElementById("notice-count");
+    if (remaining > 0) {
+      el.textContent = remaining + " active";
+      el.style.background = "";
+      el.style.color = "";
+    } else {
+      el.textContent = "All clear";
+      el.style.background = "rgba(31,139,59,.10)";
+      el.style.color = "var(--ok)";
+    }
+  }
+
+  /* ═══ Cue rows → flow ═══ */
+  document.querySelectorAll("[data-goto-flow]").forEach(row => {
+    row.addEventListener("click", e => {
+      if (e.target.classList.contains("cue-x")) return;
+      startFlow(row.dataset.gotoFlow);
+    });
+  });
+
+  /* ═══ Problem cards ═══ */
+  document.querySelectorAll("[data-flow]").forEach(card => {
+    card.addEventListener("click", () => {
+      document.querySelectorAll("[data-flow]").forEach(c => c.classList.remove("selected"));
+      card.classList.add("selected");
+      startFlow(card.dataset.flow);
+    });
+  });
+
+  /* ═══ Flow: start ═══ */
+  function startFlow(key) {
+    currentFlow = key;
+    flowStep = 0;
+    noiseChoice = null;
+
+    const data = FLOWS[key];
+
+    document.getElementById("flow-breadcrumb").textContent = "You chose";
+    document.getElementById("flow-title").textContent = data.title;
+    document.getElementById("flow-subtitle").textContent = data.subtitle;
+    document.getElementById("flow-primary").textContent = data.primaryFirst;
+    document.getElementById("flow-primary").disabled = false;
+    document.getElementById("success-card").classList.add("hidden");
+
+    // Noise type row
+    const ntr = document.getElementById("noise-type-row");
+    ntr.classList.toggle("hidden", !data.noiseType);
+    document.querySelectorAll("[data-noise]").forEach(b => b.classList.remove("selected"));
+    noiseChoice = null;
+
+    renderFlowVisual(key);
+    renderStepProgress(data.steps, -1);
+    renderStepCards(data.steps, -1);
+
+    goTo("flow");
+  }
+
+  /* ═══ Flow visual ═══ */
+  function renderFlowVisual(key) {
+    const el = document.getElementById("flow-visual");
+    el.className = "flow-visual";
+
+    if (key === "clarity") {
+      el.innerHTML = `
+        <div class="sonar-ring" style="width:50px;height:50px"></div>
+        <div class="sonar-ring" style="width:80px;height:80px"></div>
+        <div class="sonar-ring" style="width:110px;height:110px"></div>
+        <div class="sonar-center" id="sonar-center">🔊</div>`;
+    } else if (key === "reconnect") {
+      el.innerHTML = `
+        <div class="recon-scene">
+          <div class="recon-wave"></div>
+          <div class="recon-aid left"></div>
+          <div class="recon-aid right"></div>
+          <div class="recon-phone"></div>
+        </div>`;
+    } else if (key === "noise") {
+      el.innerHTML = `
+        <div class="noise-bars">
+          <div class="nbar"></div><div class="nbar"></div><div class="nbar"></div>
+          <div class="nbar"></div><div class="nbar"></div><div class="nbar"></div>
+          <div class="nbar"></div>
+        </div>`;
+    } else if (key === "support") {
+      el.innerHTML = `
+        <div class="pkg-scene">
+          <div class="pkg-dot pkg-device">📱</div>
+          <div class="pkg-dot pkg-scene">🌍</div>
+          <div class="pkg-dot pkg-sound">🔊</div>
+          <div class="pkg-center-icon">📦</div>
+        </div>`;
+    }
+  }
+
+  /* ═══ Step progress ═══ */
+  function renderStepProgress(steps, activeIndex) {
+    const el = document.getElementById("step-progress");
+    let html = "";
+    steps.forEach((s, i) => {
+      if (i > 0) html += `<div class="step-connector${i <= activeIndex ? " done" : ""}"></div>`;
+      const cls = i < activeIndex ? "done" : i === activeIndex ? "active" : "";
+      const content = i < activeIndex ? "✓" : i + 1;
+      html += `<div class="step-dot ${cls}">${content}</div>`;
+    });
+    el.innerHTML = html;
+  }
+
+  /* ═══ Step cards ═══ */
+  function renderStepCards(steps, activeIndex) {
+    const el = document.getElementById("step-cards");
+    el.innerHTML = steps.map((s, i) => {
+      const cls = i < activeIndex ? "done" : i === activeIndex ? "active" : "";
+      return `<div class="step-card">
+        <div class="step-card-head">
+          <div class="step-card-num ${cls}">${i < activeIndex ? "✓" : i + 1}</div>
+          <div class="step-card-title" style="${i > activeIndex ? "color:var(--faint)" : ""}">${s.label}</div>
+        </div>
+        <div class="step-card-body" style="${i > activeIndex ? "opacity:.45" : ""}">${i <= activeIndex ? s.body : "Waiting…"}</div>
+      </div>`;
+    }).join("");
+  }
+
+  /* ═══ Flow primary action ═══ */
+  document.getElementById("flow-primary").addEventListener("click", () => {
+    const data = FLOWS[currentFlow];
+    if (!data) return;
+
+    // Noise: require type selection before step 1
+    if (currentFlow === "noise" && flowStep === 0 && !noiseChoice) {
+      const ntr = document.getElementById("noise-type-row");
+      ntr.style.outline = "2px solid var(--danger)";
+      ntr.style.borderRadius = "14px";
+      setTimeout(() => ntr.style.outline = "", 1200);
+      return;
+    }
+
+    if (flowStep < data.steps.length) {
+      renderStepProgress(data.steps, flowStep);
+      renderStepCards(data.steps, flowStep);
+      flowStep++;
+
+      // Update visual
+      if (currentFlow === "noise" && flowStep >= 2) {
+        document.getElementById("flow-visual").classList.add("smoothing");
+      }
+      if (currentFlow === "support" && flowStep >= 2) {
+        document.getElementById("flow-visual").classList.add("bundling");
+      }
+
+      if (flowStep < data.steps.length) {
+        document.getElementById("flow-primary").textContent = flowStep === data.steps.length - 1 ? "Final step →" : "Next step →";
+      } else {
+        document.getElementById("flow-primary").textContent = "Checking…";
+        document.getElementById("flow-primary").disabled = true;
+        setTimeout(completeFlow, 1100);
+      }
+    }
+  });
+
+  function completeFlow() {
+    const data = FLOWS[currentFlow];
+    renderStepProgress(data.steps, data.steps.length);
+    renderStepCards(data.steps, data.steps.length);
+
+    // Visual done state
+    const visual = document.getElementById("flow-visual");
+    const sonar = document.getElementById("sonar-center");
+    if (sonar) { sonar.textContent = "✓"; sonar.style.background = "var(--ok)"; }
+    if (currentFlow === "noise")   visual.classList.add("smoothing");
+    if (currentFlow === "support") visual.classList.add("bundling");
+
+    // Show success
+    document.getElementById("success-card").classList.remove("hidden");
+    document.getElementById("success-title").textContent = data.successTitle;
+    document.getElementById("success-copy").textContent  = data.successCopy;
+
+    document.getElementById("flow-primary").textContent = "Done — take a quick survey?";
+    document.getElementById("flow-primary").disabled = false;
+    document.getElementById("flow-primary").onclick = () => goTo("survey");
+    document.getElementById("flow-secondary").textContent = "Back to home";
+    document.getElementById("flow-secondary").onclick = () => goTo("home");
+  }
+
+  document.getElementById("flow-secondary").addEventListener("click", () => goTo("care"));
+
+  /* ═══ Noise type picker ═══ */
+  document.querySelectorAll("[data-noise]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll("[data-noise]").forEach(b => b.classList.remove("selected"));
+      btn.classList.add("selected");
+      noiseChoice = btn.dataset.noise;
+      document.getElementById("noise-type-row").style.outline = "";
+    });
+  });
+
+  /* ═══ Comfort Volume — arc gauge drag ═══ */
+  let volLinked = true;
+  let valL = 68, valR = 72;
+  const ARC_MAX = 150.8; // px length of 270° arc (r=32, 2π×32×270/360)
+
+  function arcFill(v) { return v / 100 * ARC_MAX; }
+
+  function volSafe(v) { return v >= 55 && v <= 85; }
+
+  function applyArc(side, v) {
+    v = Math.max(0, Math.min(100, v));
+    if (side === "L") valL = v; else valR = v;
+
+    const arcEl = document.getElementById(side === "L" ? "arc-l" : "arc-r");
+    const txtEl = document.getElementById(side === "L" ? "txt-l" : "txt-r");
+    const safe  = volSafe(v);
+    const color = side === "L"
+      ? (safe ? "url(#gl)" : "#E05050")
+      : (safe ? "url(#gr)" : "#E05050");
+
+    arcEl.setAttribute("stroke-dasharray", `${arcFill(v)} 1000`);
+    arcEl.setAttribute("stroke", color);
+    txtEl.textContent = v;
+
+    // master avg
+    const avg = Math.round((valL + valR) / 2);
+    const mn = document.getElementById("vol-master-num");
+    if (mn) mn.textContent = avg;
+
+    // safe note
+    const both = volSafe(valL) && volSafe(valR);
+    const dot = document.getElementById("vol-safe-dot");
+    const txt = document.getElementById("vol-safe-text");
+    if (dot && txt) {
+      dot.style.background = both ? "var(--ok)" : "var(--warn)";
+      const noteEl = document.querySelector(".vol-safe-note");
+      if (noteEl) noteEl.style.color = both ? "var(--ok)" : "var(--warn)";
+      txt.textContent = both
+        ? "Both within safe range · 55–85% recommended"
+        : "⚠ Outside safe range — check your audiologist";
+    }
+
+    // care screen
+    const cc = document.getElementById("care-comfort-val");
+    if (cc) cc.textContent = `L ${valL}% · R ${valR}%`;
+  }
+
+  function getArcValue(e, gaugeEl) {
+    const rect = gaugeEl.getBoundingClientRect();
+    const cx = rect.left + rect.width  / 2;
+    const cy = rect.top  + rect.height / 2;
+    const px = e.touches ? e.touches[0].clientX : e.clientX;
+    const py = e.touches ? e.touches[0].clientY : e.clientY;
+
+    // Angle from 3 o'clock, clockwise (SVG convention), 0–360
+    let ang = Math.atan2(py - cy, px - cx) * 180 / Math.PI;
+    if (ang < 0) ang += 360;
+
+    // Our arc starts 135° from 3 o'clock (= 7 o'clock position), spans 270°
+    ang -= 135;
+    if (ang < 0) ang += 360;
+
+    // If in the gap (270–360°), snap to nearest end
+    if (ang > 270) ang = ang < 315 ? 270 : 0;
+
+    return Math.round(ang / 270 * 100);
+  }
+
+  function setupArcDrag(gaugeId, side) {
+    const el = document.getElementById(gaugeId);
+    if (!el) return;
+    let active = false;
+
+    el.addEventListener("pointerdown", e => {
+      active = true;
+      el.setPointerCapture(e.pointerId);
+      const v = getArcValue(e, el);
+      applyArc(side, v);
+      if (volLinked) applyArc(side === "L" ? "R" : "L", v);
+    });
+    el.addEventListener("pointermove", e => {
+      if (!active) return;
+      const v = getArcValue(e, el);
+      applyArc(side, v);
+      if (volLinked) applyArc(side === "L" ? "R" : "L", v);
+    });
+    el.addEventListener("pointerup",     () => { active = false; });
+    el.addEventListener("pointercancel", () => { active = false; });
+  }
+
+  setupArcDrag("gauge-l", "L");
+  setupArcDrag("gauge-r", "R");
+
+  document.getElementById("vol-lock").addEventListener("click", () => {
+    volLinked = !volLinked;
+    const btn = document.getElementById("vol-lock");
+    btn.classList.toggle("linked", volLinked);
+    btn.textContent = volLinked ? "🔗" : "↔";
+    btn.title = volLinked ? "Linked (master)" : "Independent L/R";
+    if (volLinked) applyArc("R", valL); // sync on re-link
+  });
+
+  /* ═══ Scene selector ═══ */
+  document.querySelectorAll("[data-scene]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll("[data-scene]").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      currentScene = btn.dataset.scene;
+      const d = SCENES[currentScene];
+      document.getElementById("scene-desc-title").textContent = d.title;
+      document.getElementById("scene-desc-copy").textContent  = d.copy;
+      const careScene = document.getElementById("care-scene-val");
+      if (careScene) careScene.textContent = btn.querySelector(".scene-name").textContent;
+    });
+  });
+
+  /* ═══ Personal Listening Space ═══ */
+  const SOURCE_CYCLE = ["close", "normal", "far"];
+  const SOURCE_ARROW = { close: "↑", normal: "•", far: "↓" };
+  const sourceState  = { front: "close", traffic: "normal", back: "far" };
+
+  document.querySelectorAll("[data-source]").forEach(pill => {
+    pill.addEventListener("click", () => {
+      const src = pill.dataset.source;
+      const idx  = SOURCE_CYCLE.indexOf(sourceState[src]);
+      const next = SOURCE_CYCLE[(idx + 1) % SOURCE_CYCLE.length];
+      sourceState[src] = next;
+
+      pill.className = `sound-source pos-${src} ${next === "normal" ? "" : next}`.trim();
+      pill.querySelector(".source-toggle").textContent = SOURCE_ARROW[next];
+    });
+  });
+
+  /* ═══ Care ═══ */
+  document.getElementById("care-send-btn").addEventListener("click", () => {
+    document.getElementById("care-send-btn").disabled = true;
+    document.getElementById("care-send-btn").textContent = "Sending…";
+    setTimeout(() => {
+      document.getElementById("care-send-btn").classList.add("hidden");
+      document.getElementById("care-cancel-btn").classList.add("hidden");
+      document.getElementById("care-success").classList.remove("hidden");
+    }, 1200);
+  });
+
+  document.getElementById("care-cancel-btn").addEventListener("click", () => goTo("home"));
+
+  /* ═══ Survey ═══ */
+  document.querySelectorAll(".star-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const r = parseInt(btn.dataset.star);
+      surveyStars = r;
+      document.querySelectorAll(".star-btn").forEach((b, i) => b.classList.toggle("lit", i < r));
+      surveyAnswers["supported"] = r;
+      checkSurveyReady();
+    });
+  });
+
+  document.querySelectorAll(".opt-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const q = btn.dataset.q;
+      document.querySelectorAll(`.opt-btn[data-q="${q}"]`).forEach(b => b.classList.remove("selected"));
+      btn.classList.add("selected");
+      surveyAnswers[q] = btn.dataset.v;
+      checkSurveyReady();
+    });
+  });
+
+  function checkSurveyReady() {
+    const ready = ["supported","confusing","icons","daily"].every(k => surveyAnswers[k]);
+    const sub = document.getElementById("survey-submit");
+    sub.disabled = !ready;
+    sub.classList.toggle("ready", ready);
+  }
+
+  document.getElementById("survey-submit").addEventListener("click", () => {
+    document.getElementById("survey-form").style.opacity = "0";
+    document.getElementById("survey-form").style.transition = "opacity .3s";
+    setTimeout(() => {
+      document.getElementById("survey-form").classList.add("hidden");
+      document.getElementById("survey-done").classList.remove("hidden");
+    }, 300);
+  });
+  </script>
+</body>
+</html>
