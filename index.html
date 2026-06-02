@@ -9,340 +9,152 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --blue: #0072CE;
-      --purple: #582C83;
-      --deep: #40106B;
-      --teal: #00A3AD;
-      --ink: #333F48;
-      --bg: #F6FAFF;
-      --line: #D7E4EF;
-      --muted: rgba(51,63,72,.72);
-      --shadow: 0 24px 60px rgba(51,63,72,.12);
-      --brand-grad: linear-gradient(135deg, #0072CE 0%, #582C83 100%);
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      color: var(--ink);
-      font-family: "Atkinson Hyperlegible Next", system-ui, sans-serif;
-      background:
-        radial-gradient(circle at 12% 8%, rgba(0,114,206,.10), transparent 28%),
-        radial-gradient(circle at 88% 12%, rgba(0,163,173,.10), transparent 26%),
-        var(--bg);
-    }
-
-    h1, h2, h3 {
-      margin: 0;
-      font-family: "Plus Jakarta Sans", system-ui, sans-serif;
-      letter-spacing: 0;
-    }
-
-    a { color: inherit; text-decoration: none; }
-
-    .wrap {
-      width: min(1120px, calc(100% - 40px));
-      margin: 0 auto;
-      padding: 42px 0 56px;
-    }
-
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 46px;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-weight: 900;
-      color: var(--purple);
-    }
-
-    .brand img {
-      width: 34px;
-      height: 34px;
-      object-fit: contain;
-    }
-
-    .status {
-      padding: 8px 12px;
-      border: 1px solid rgba(0,163,173,.22);
-      border-radius: 999px;
-      background: rgba(255,255,255,.72);
-      color: var(--teal);
-      font-size: 13px;
-      font-weight: 900;
-    }
-
-    .hero {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 360px;
-      gap: 44px;
-      align-items: end;
-      margin-bottom: 34px;
-    }
-
-    .eyebrow {
-      color: var(--teal);
-      font-size: 13px;
-      font-weight: 900;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-    }
-
-    h1 {
-      max-width: 720px;
-      margin-top: 12px;
-      color: #111D25;
-      font-size: clamp(42px, 6vw, 72px);
-      line-height: .96;
-    }
-
-    .lead {
-      max-width: 660px;
-      margin: 22px 0 0;
-      color: var(--muted);
-      font-size: 19px;
-      line-height: 1.58;
-    }
-
-    .principle {
-      padding: 22px;
-      border: 1px solid rgba(215,228,239,.9);
-      border-radius: 26px;
-      background: rgba(255,255,255,.80);
-      box-shadow: var(--shadow);
-    }
-
-    .principle strong {
-      display: block;
-      color: var(--purple);
-      font-size: 17px;
-      margin-bottom: 9px;
-    }
-
-    .principle p {
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.5;
-    }
-
-    .version-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 18px;
-      margin-top: 24px;
-    }
-
-    .version-card {
-      min-height: 330px;
-      display: grid;
-      align-content: space-between;
-      gap: 22px;
-      padding: 24px;
-      border: 1px solid rgba(215,228,239,.92);
-      border-radius: 28px;
-      background:
-        radial-gradient(circle at 90% 12%, rgba(0,163,173,.10), transparent 32%),
-        linear-gradient(135deg, rgba(255,255,255,.96), rgba(234,245,255,.86));
-      box-shadow: 0 16px 38px rgba(51,63,72,.09);
-      transition: transform 160ms ease, box-shadow 160ms ease;
-    }
-
-    .version-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 22px 46px rgba(51,63,72,.14);
-    }
-
-    .version-card.v2 {
-      border-color: rgba(0,163,173,.30);
-      background:
-        radial-gradient(circle at 88% 10%, rgba(0,163,173,.14), transparent 32%),
-        linear-gradient(135deg, #FFFFFF, #EAF8F8 54%, #F4F0FA);
-    }
-
-    .version-meta {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .tag {
-      padding: 7px 10px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.78);
-      color: var(--blue);
-      font-size: 12px;
-      font-weight: 900;
-    }
-
-    .tag.new { color: var(--teal); }
-
-    .version-card h2 {
-      color: #111D25;
-      font-size: 30px;
-      line-height: 1.08;
-      margin: 16px 0 10px;
-    }
-
-    .version-card p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 16px;
-      line-height: 1.52;
-    }
-
-    .features {
-      display: grid;
-      gap: 8px;
-      margin-top: 18px;
-    }
-
-    .features span {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--ink);
-      font-size: 14px;
-      font-weight: 800;
-    }
-
-    .features i {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--teal);
-      font-style: normal;
-    }
-
-    .actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 48px;
-      padding: 0 18px;
-      border-radius: 999px;
-      background: var(--brand-grad);
-      color: #FFFFFF;
-      font-weight: 900;
-      box-shadow: 0 14px 28px rgba(88,44,131,.20);
-    }
-
-    .button.secondary {
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,.78);
-      color: var(--blue);
-      box-shadow: none;
-    }
-
-    .roadmap {
-      margin-top: 24px;
-      padding: 22px;
-      border: 1px dashed rgba(0,114,206,.24);
-      border-radius: 24px;
-      background: rgba(255,255,255,.62);
-      color: var(--muted);
-      line-height: 1.55;
-    }
-
-    .roadmap strong {
-      color: var(--purple);
-    }
-
-    @media (max-width: 860px) {
-      .hero,
-      .version-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 520px) {
-      .wrap { width: min(100% - 24px, 1120px); padding-top: 24px; }
-      .topbar { align-items: flex-start; flex-direction: column; }
-      .version-card { min-height: auto; }
-    }
+    :root{--blue:#0072CE;--purple:#582C83;--teal:#00A3AD;--ink:#333F48;--bg:#F6FAFF;--line:#D7E4EF;--muted:rgba(51,63,72,.72);--shadow:0 24px 60px rgba(51,63,72,.12);--grad:linear-gradient(135deg,#0072CE 0%,#582C83 100%)}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;color:var(--ink);font-family:"Atkinson Hyperlegible Next",system-ui,sans-serif;background:radial-gradient(circle at 12% 8%,rgba(0,114,206,.10),transparent 28%),radial-gradient(circle at 88% 12%,rgba(0,163,173,.10),transparent 26%),var(--bg)}
+    h1,h2,h3{margin:0;font-family:"Plus Jakarta Sans",system-ui,sans-serif}
+    a{color:inherit;text-decoration:none}
+    .wrap{width:min(1160px,calc(100% - 40px));margin:0 auto;padding:42px 0 56px}
+    .topbar{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:46px}
+    .brand{display:flex;align-items:center;gap:12px;font-weight:900;color:var(--purple)}
+    .brand img{width:34px;height:34px;object-fit:contain}
+    .status{padding:8px 12px;border:1px solid rgba(0,163,173,.22);border-radius:999px;background:rgba(255,255,255,.72);color:var(--teal);font-size:13px;font-weight:900}
+    .hero{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:44px;align-items:end;margin-bottom:28px}
+    .eyebrow{color:var(--teal);font-size:13px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+    h1{max-width:720px;margin-top:12px;color:#111D25;font-size:clamp(36px,5vw,62px);line-height:.98}
+    .lead{max-width:660px;margin:22px 0 0;color:var(--muted);font-size:18px;line-height:1.58}
+    .principle{padding:22px;border:1px solid rgba(215,228,239,.9);border-radius:26px;background:rgba(255,255,255,.80);box-shadow:var(--shadow)}
+    .principle strong{display:block;color:var(--purple);font-size:17px;margin-bottom:9px}
+    .principle p{margin:0;color:var(--muted);line-height:1.5}
+    .evolution{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-bottom:20px;padding:20px 24px;border-radius:22px;background:rgba(255,255,255,.62);border:1px solid rgba(215,228,239,.90)}
+    .evo-step{padding:0 20px;border-right:1px solid var(--line)}
+    .evo-step:first-child{padding-left:0}
+    .evo-step:last-child{border-right:none}
+    .evo-tag{font-size:10px;font-weight:900;color:var(--teal);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:5px}
+    .evo-title{font-size:14px;font-weight:900;color:var(--ink);font-family:"Plus Jakarta Sans",sans-serif;margin-bottom:4px}
+    .evo-copy{font-size:12px;color:var(--muted);line-height:1.4;margin:0}
+    .version-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+    .vcard{min-height:290px;display:grid;align-content:space-between;gap:16px;padding:24px;border:1px solid rgba(215,228,239,.92);border-radius:28px;background:radial-gradient(circle at 90% 12%,rgba(0,163,173,.10),transparent 32%),linear-gradient(135deg,rgba(255,255,255,.96),rgba(234,245,255,.86));box-shadow:0 16px 38px rgba(51,63,72,.09);transition:transform 160ms ease,box-shadow 160ms ease}
+    .vcard:hover{transform:translateY(-2px);box-shadow:0 22px 46px rgba(51,63,72,.14)}
+    .vcard.v2{border-color:rgba(0,163,173,.30);background:radial-gradient(circle at 88% 10%,rgba(0,163,173,.14),transparent 32%),linear-gradient(135deg,#FFF,#EAF8F8 54%,#F4F0FA)}
+    .vcard.v3{grid-column:1/-1;min-height:auto;border-color:rgba(88,44,131,.26);background:radial-gradient(circle at 92% 18%,rgba(88,44,131,.10),transparent 36%),radial-gradient(circle at 8% 82%,rgba(0,114,206,.07),transparent 32%),linear-gradient(135deg,#FFF,#F5F0FA 50%,#EAF5FF)}
+    .v3-layout{display:grid;grid-template-columns:1fr auto;gap:32px;align-items:start}
+    .vmeta{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .tag{padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.78);color:var(--blue);font-size:12px;font-weight:900}
+    .tag.new{color:var(--teal)}
+    .tag.latest{background:var(--grad);color:#fff}
+    .vcard h2{color:#111D25;font-size:24px;line-height:1.1;margin:12px 0 8px}
+    .vcard p{margin:0;color:var(--muted);font-size:14.5px;line-height:1.52}
+    .features{display:grid;gap:6px;margin-top:12px}
+    .features span{display:flex;align-items:center;gap:8px;color:var(--ink);font-size:13px;font-weight:800}
+    .features i{width:7px;height:7px;border-radius:50%;background:var(--teal);font-style:normal;flex-shrink:0}
+    .feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:16px}
+    .feat-item{padding:11px 13px;border-radius:15px;background:rgba(255,255,255,.72);border:1px solid rgba(215,228,239,.80)}
+    .feat-item strong{display:block;font-size:12.5px;color:var(--purple);margin-bottom:3px}
+    .feat-item span{font-size:11.5px;color:var(--muted);line-height:1.35}
+    .actions{display:flex;gap:10px;flex-wrap:wrap}
+    .btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 18px;border-radius:999px;background:var(--grad);color:#fff;font-weight:900;font-size:14px;box-shadow:0 12px 24px rgba(88,44,131,.18)}
+    .btn.sec{background:rgba(255,255,255,.78);border:1px solid var(--line);color:var(--blue);box-shadow:none}
+    @media(max-width:900px){.hero,.version-grid,.evolution{grid-template-columns:1fr}.v3-layout{grid-template-columns:1fr}.feat-grid{grid-template-columns:1fr 1fr}.evo-step{border-right:none;border-bottom:1px solid var(--line);padding:0 0 12px}.evo-step:last-child{border-bottom:none;padding-bottom:0}}
+    @media(max-width:540px){.wrap{padding-top:24px}.topbar{flex-direction:column;align-items:flex-start}.feat-grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
-  <main class="wrap">
-    <header class="topbar">
-      <div class="brand">
-        <img src="brand-assets/merry-official-logo-assets/merry-mark-symbol-300.png" alt="Merry mark">
-        <span>Merry Hearing Prototype Lab</span>
-      </div>
-      <span class="status">Version compare board</span>
-    </header>
+<main class="wrap">
+  <header class="topbar">
+    <div class="brand">
+      <img src="brand-assets/merry-official-logo-assets/merry-mark-symbol-300.png" alt="Merry">
+      <span>Merry Hearing Prototype Lab</span>
+    </div>
+    <span class="status">v1 · v2 · v3 compare board</span>
+  </header>
 
-    <section class="hero">
+  <section class="hero">
+    <div>
+      <div class="eyebrow">Now-first UX exploration</div>
+      <h1>Prototype versions for a quieter kind of care.</h1>
+      <p class="lead">三個版本的設計演進記錄。從功能控制台到問題入口，再到完整互動式陪伴系統。每版可獨立操作，方便比較設計決策。</p>
+    </div>
+    <aside class="principle">
+      <strong>Design principle</strong>
+      <p>安靜陪伴，需要時聽見你。提示要有原因、下一步和可忽略性；推薦要降低心智負荷，而不是替使用者做主。</p>
+    </aside>
+  </section>
+
+  <div class="evolution">
+    <div class="evo-step">
+      <span class="evo-tag">v1 · Baseline</span>
+      <div class="evo-title">Problem-first 問題入口</div>
+      <p class="evo-copy">把功能清單換成四張問題卡，使用者先說困擾，不用理解技術名詞。</p>
+    </div>
+    <div class="evo-step">
+      <span class="evo-tag">v2 · Companion</span>
+      <div class="evo-title">低干擾陪伴感</div>
+      <p class="evo-copy">加入 Merry noticed、場域安全提示、icon-led 引導、Guided reconnect。</p>
+    </div>
+    <div class="evo-step">
+      <span class="evo-tag">v3 · Adaptive</span>
+      <div class="evo-title">完整互動流程</div>
+      <p class="evo-copy">每個問題都有 guided flow、弧形音量撥盤、互動聲場、體驗問卷。</p>
+    </div>
+  </div>
+
+  <section class="version-grid">
+
+    <a class="vcard" href="v1.html">
       <div>
-        <div class="eyebrow">Now-first UX exploration</div>
-        <h1>Prototype versions for a quieter kind of care.</h1>
-        <p class="lead">這裡會保留不同版本，讓同事可以直接比較操作感。v2 開始把 Merry 從靜態功能頁推向低干擾、會回應、會提示的聽覺陪伴系統。</p>
+        <div class="vmeta"><span class="tag">v1</span><span class="tag">Baseline</span></div>
+        <h2>Now-first baseline</h2>
+        <p>驗證「問題優先」方向：使用者先選聽覺困擾，再看對應處置。</p>
+        <div class="features">
+          <span><i></i>四張主要求助卡</span>
+          <span><i></i>Comfort volume control</span>
+          <span><i></i>Care package flow</span>
+        </div>
       </div>
-      <aside class="principle">
-        <strong>Design principle</strong>
-        <p>安靜陪伴，需要時聽見你。提示要有原因、下一步和可忽略性；推薦要降低心智負荷，而不是替使用者做主。</p>
-      </aside>
-    </section>
+      <div class="actions"><span class="btn sec">Open v1</span></div>
+    </a>
 
-    <section class="version-grid" aria-label="Prototype versions">
-      <a class="version-card" href="v1.html">
+    <a class="vcard v2" href="v2.html">
+      <div>
+        <div class="vmeta"><span class="tag new">v2</span><span class="tag new">Companion cues</span></div>
+        <h2>Low-interruption companion</h2>
+        <p>加入 Merry noticed、場域安全 icon、可預測下一步、圖示導向提示。</p>
+        <div class="features">
+          <span><i></i>Icon-led Merry noticed</span>
+          <span><i></i>Scene-aware safety</span>
+          <span><i></i>Guided reconnect flow</span>
+        </div>
+      </div>
+      <div class="actions"><span class="btn sec">Open v2</span></div>
+    </a>
+
+    <a class="vcard v3" href="v3.html">
+      <div class="v3-layout">
         <div>
-          <div class="version-meta">
-            <span class="tag">v1</span>
-            <span class="tag">Baseline</span>
+          <div class="vmeta">
+            <span class="tag latest">v3 · Latest</span>
+            <span class="tag new">Adaptive companion</span>
           </div>
-          <h2>Now-first baseline</h2>
-          <p>第一版驗證「問題優先」方向：使用者先選聽覺困擾，再看到對應處置。適合和新版比較資訊架構的前後差異。</p>
-          <div class="features">
-            <span><i></i>四張主要求助卡</span>
-            <span><i></i>Comfort volume control</span>
-            <span><i></i>Care package flow</span>
+          <h2>Every problem has a guided path.</h2>
+          <p>完整互動式 prototype。四張問題卡各有動畫引導流程、弧形音量撥盤、互動聲場、Care 送出流程，以及完成後解鎖的體驗問卷。</p>
+          <div class="feat-grid">
+            <div class="feat-item"><strong>Adaptive noticed</strong><span>安全→裝置→語音優先排序，可 dismiss</span></div>
+            <div class="feat-item"><strong>Arc volume gauges</strong><span>左右耳獨立弧形撥盤，支援 master 連動</span></div>
+            <div class="feat-item"><strong>4 guided flows</strong><span>Clarity · Reconnect · Noise · Care</span></div>
+            <div class="feat-item"><strong>Interactive sound field</strong><span>Personal Listening Space 可互動</span></div>
+            <div class="feat-item"><strong>Scene-aware</strong><span>Street · Table · Clinic · Home</span></div>
+            <div class="feat-item"><strong>Experience survey</strong><span>完成流程後解鎖 4 題回饋問卷</span></div>
           </div>
         </div>
-        <div class="actions">
-          <span class="button secondary">Open v1</span>
+        <div class="actions" style="flex-direction:column;align-items:flex-start;gap:10px;padding-top:4px">
+          <span class="btn" style="min-width:120px">Try v3 →</span>
+          <span style="font-size:11px;color:var(--muted);font-weight:700;padding:0 2px;line-height:1.5">Tap to open<br>interactive prototype</span>
         </div>
-      </a>
+      </div>
+    </a>
 
-      <a class="version-card v2" href="v2.html">
-        <div>
-          <div class="version-meta">
-            <span class="tag new">v2</span>
-            <span class="tag new">Companion cues</span>
-          </div>
-          <h2>Low-interruption companion</h2>
-          <p>第二版加入 Merry noticed、場域安全 icon、可預測下一步、圖示導向提示與更明確的 v1 差異說明。</p>
-          <div class="features">
-            <span><i></i>Icon-led Merry noticed cards</span>
-            <span><i></i>Scene-aware safety recommendations</span>
-            <span><i></i>Visible next-step guidance</span>
-          </div>
-        </div>
-        <div class="actions">
-          <span class="button">Try v2</span>
-          <span class="button secondary">Compare changes</span>
-        </div>
-      </a>
-    </section>
-
-    <section class="roadmap">
-      <strong>Roadmap:</strong> 這個頁面預留成一週五版的比較入口。後續可加入 v3/v4/v5 與問卷連結，讓使用者完整體驗後回饋「是否被支援、是否找得到、是否被打擾」。
-    </section>
-  </main>
+  </section>
+</main>
 </body>
 </html>
