@@ -2103,46 +2103,62 @@
   /* ═══ Comfort Volume — arc gauge drag ═══ */
   let volLinked = true;
   let valL = 68, valR = 72;
-  const ARC_MAX = 150.8; // px length of 270° arc (r=32, 2π×32×270/360)
+  const ARC_MAX = 150.8;
 
   function arcFill(v) { return v / 100 * ARC_MAX; }
-
   function volSafe(v) { return v >= 55 && v <= 85; }
 
   function applyArc(side, v) {
-    v = Math.max(0, Math.min(100, v));
+    v = Math.max(0, Math.min(100, Math.round(v)));
     if (side === "L") valL = v; else valR = v;
 
     const arcEl = document.getElementById(side === "L" ? "arc-l" : "arc-r");
     const txtEl = document.getElementById(side === "L" ? "txt-l" : "txt-r");
-    const safe  = volSafe(v);
-    const color = side === "L"
-      ? (safe ? "url(#gl)" : "#E05050")
-      : (safe ? "url(#gr)" : "#E05050");
+
+    // Color: safe=brand gradient, warn zone (85-95)=orange, danger (>95)=red
+    let color;
+    if (v <= 85)      color = side === "L" ? "url(#gl)" : "url(#gr)";
+    else if (v <= 95) color = "#E08A00";
+    else              color = "#C0392B";
 
     arcEl.setAttribute("stroke-dasharray", `${arcFill(v)} 1000`);
     arcEl.setAttribute("stroke", color);
     txtEl.textContent = v;
 
     // master avg
-    const avg = Math.round((valL + valR) / 2);
     const mn = document.getElementById("vol-master-num");
-    if (mn) mn.textContent = avg;
+    if (mn) mn.textContent = Math.round((valL + valR) / 2);
 
-    // safe note
-    const both = volSafe(valL) && volSafe(valR);
-    const dot = document.getElementById("vol-safe-dot");
-    const txt = document.getElementById("vol-safe-text");
-    if (dot && txt) {
-      dot.style.background = both ? "var(--ok)" : "var(--warn)";
-      const noteEl = document.querySelector(".vol-safe-note");
-      if (noteEl) noteEl.style.color = both ? "var(--ok)" : "var(--warn)";
-      txt.textContent = both
-        ? "Both within safe range · 55–85% recommended"
-        : "⚠ Outside safe range — check your audiologist";
+    // safe note + warning
+    const dot  = document.getElementById("vol-safe-dot");
+    const txt  = document.getElementById("vol-safe-text");
+    const note = document.querySelector(".vol-safe-note");
+    if (!dot || !txt || !note) return;
+
+    const lSafe = volSafe(valL), rSafe = volSafe(valR);
+    const both  = lSafe && rSafe;
+    const over  = valL > 85 || valR > 85;
+    const way   = valL > 95 || valR > 95;
+
+    if (both) {
+      dot.style.background  = "var(--ok)";
+      note.style.color      = "var(--ok)";
+      txt.textContent       = "Both within safe range · 55–85% recommended";
+    } else if (way) {
+      dot.style.background  = "#C0392B";
+      note.style.color      = "#C0392B";
+      txt.textContent       = "⚠ Very loud — not recommended. Reduce if uncomfortable.";
+    } else if (over) {
+      dot.style.background  = "var(--warn)";
+      note.style.color      = "var(--warn)";
+      const who = !lSafe && !rSafe ? "Both ears" : (!lSafe ? "Left" : "Right");
+      txt.textContent       = `${who} above 85% — use with caution`;
+    } else {
+      dot.style.background  = "var(--warn)";
+      note.style.color      = "var(--warn)";
+      txt.textContent       = "Below recommended range · may be too quiet";
     }
 
-    // care screen
     const cc = document.getElementById("care-comfort-val");
     if (cc) cc.textContent = `L ${valL}% · R ${valR}%`;
   }
@@ -2153,18 +2169,11 @@
     const cy = rect.top  + rect.height / 2;
     const px = e.touches ? e.touches[0].clientX : e.clientX;
     const py = e.touches ? e.touches[0].clientY : e.clientY;
-
-    // Angle from 3 o'clock, clockwise (SVG convention), 0–360
     let ang = Math.atan2(py - cy, px - cx) * 180 / Math.PI;
     if (ang < 0) ang += 360;
-
-    // Our arc starts 135° from 3 o'clock (= 7 o'clock position), spans 270°
     ang -= 135;
     if (ang < 0) ang += 360;
-
-    // If in the gap (270–360°), snap to nearest end
     if (ang > 270) ang = ang < 315 ? 270 : 0;
-
     return Math.round(ang / 270 * 100);
   }
 
@@ -2172,19 +2181,30 @@
     const el = document.getElementById(gaugeId);
     if (!el) return;
     let active = false;
+    let dragStartVal = 0;   // value of THIS side when drag began
+    let otherStartVal = 0;  // value of OTHER side when drag began
 
     el.addEventListener("pointerdown", e => {
-      active = true;
+      active        = true;
+      dragStartVal  = side === "L" ? valL : valR;
+      otherStartVal = side === "L" ? valR : valL;
       el.setPointerCapture(e.pointerId);
       const v = getArcValue(e, el);
       applyArc(side, v);
-      if (volLinked) applyArc(side === "L" ? "R" : "L", v);
+      if (volLinked) {
+        // delta from drag start, applied to other side's start value
+        const delta = v - dragStartVal;
+        applyArc(side === "L" ? "R" : "L", otherStartVal + delta);
+      }
     });
     el.addEventListener("pointermove", e => {
       if (!active) return;
       const v = getArcValue(e, el);
       applyArc(side, v);
-      if (volLinked) applyArc(side === "L" ? "R" : "L", v);
+      if (volLinked) {
+        const delta = v - dragStartVal;
+        applyArc(side === "L" ? "R" : "L", otherStartVal + delta);
+      }
     });
     el.addEventListener("pointerup",     () => { active = false; });
     el.addEventListener("pointercancel", () => { active = false; });
@@ -2198,8 +2218,7 @@
     const btn = document.getElementById("vol-lock");
     btn.classList.toggle("linked", volLinked);
     btn.textContent = volLinked ? "🔗" : "↔";
-    btn.title = volLinked ? "Linked (master)" : "Independent L/R";
-    if (volLinked) applyArc("R", valL); // sync on re-link
+    // re-linking does NOT equalise values — each stays where it is
   });
 
   /* ═══ Scene selector ═══ */
