@@ -1803,7 +1803,6 @@
   let currentScreen = "home";
   let currentFlow   = null;
   let flowStep      = 0;
-  let flowDone      = false;
   let noiseChoice   = null;
   let currentScene  = "street";
   let comfortVal    = 68;
@@ -1943,16 +1942,11 @@
 
     const data = FLOWS[key];
 
-    // Reset any state left over from a completed flow
-    flowDone = false;
-    document.getElementById("survey-card").hidden = true;
-
     document.getElementById("flow-breadcrumb").textContent = "You chose";
     document.getElementById("flow-title").textContent = data.title;
     document.getElementById("flow-subtitle").textContent = data.subtitle;
     document.getElementById("flow-primary").textContent = data.primaryFirst;
     document.getElementById("flow-primary").disabled = false;
-    document.getElementById("flow-secondary").textContent = "Send to care instead";
     document.getElementById("success-card").classList.add("hidden");
 
     // Noise type row
@@ -2035,9 +2029,6 @@
 
   /* ═══ Flow primary action ═══ */
   document.getElementById("flow-primary").addEventListener("click", () => {
-    // If flow already done, go to survey
-    if (flowDone) { goTo("survey"); return; }
-
     const data = FLOWS[currentFlow];
     if (!data) return;
 
@@ -2090,16 +2081,14 @@
     document.getElementById("success-title").textContent = data.successTitle;
     document.getElementById("success-copy").textContent  = data.successCopy;
 
-    flowDone = true;
     document.getElementById("flow-primary").textContent = "Done — take a quick survey?";
     document.getElementById("flow-primary").disabled = false;
+    document.getElementById("flow-primary").onclick = () => goTo("survey");
     document.getElementById("flow-secondary").textContent = "Back to home";
+    document.getElementById("flow-secondary").onclick = () => goTo("home");
   }
 
-  document.getElementById("flow-secondary").addEventListener("click", () => {
-    if (flowDone) { goTo("home"); return; }
-    goTo("care");
-  });
+  document.getElementById("flow-secondary").addEventListener("click", () => goTo("care"));
 
   /* ═══ Noise type picker ═══ */
   document.querySelectorAll("[data-noise]").forEach(btn => {
