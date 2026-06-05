@@ -1349,120 +1349,80 @@
     color: var(--ok); text-transform: uppercase; letter-spacing: .06em;
   }
 
-  /* ─── Volume: liquid zones ─── */
-  .vol-zones-wrap {
+  /* ─── Volume: large arc gauges ─── */
+  .vol-arcs-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
     margin-bottom: 10px;
   }
 
-  .vol-zones-row {
-    display: grid;
-    grid-template-columns: 1fr 52px 1fr;
-    height: 148px;
-    border-radius: 18px;
-    overflow: hidden;
-    border: 1px solid var(--line);
-    box-shadow: inset 0 1px 4px rgba(0,0,0,.04);
+  .vol-gauge-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
   }
 
-  .vliq {
-    position: relative;
-    overflow: hidden;
-    cursor: ns-resize;
+  /* Hit target: bigger than visual arc */
+  .vol-gauge {
+    width: 120px; height: 120px;
+    cursor: crosshair;
     touch-action: none;
     user-select: none;
-    background: #F0F5FB;
+    position: relative;
+    display: grid; place-items: center;
   }
 
-  .vliq-fill {
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    transition: height .04s linear, background .18s;
-    pointer-events: none;
-  }
-
-  .vliq.l .vliq-fill { background: linear-gradient(to top, rgba(0,114,206,.20), rgba(0,114,206,.42)); }
-  .vliq.r .vliq-fill { background: linear-gradient(to top, rgba(88,44,131,.20), rgba(88,44,131,.40)); }
-  .vliq.warn .vliq-fill { background: linear-gradient(to top, rgba(212,130,10,.22), rgba(212,130,10,.45)) !important; }
-  .vliq.over .vliq-fill { background: linear-gradient(to top, rgba(185,28,28,.22), rgba(185,28,28,.42)) !important; }
-
-  /* safe-zone line at 85% */
-  .vliq-safe-line {
-    position: absolute;
-    left: 0; right: 0;
-    bottom: 85%;
-    height: 1px;
-    background: rgba(31,139,59,.30);
-    pointer-events: none;
-    z-index: 2;
-  }
-
-  .vliq-content {
+  /* Invisible hit overlay covers full square */
+  .vol-gauge-hit {
     position: absolute;
     inset: 0;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    pointer-events: none; gap: 1px;
+    border-radius: 50%;
+    z-index: 3;
   }
 
-  .vliq-letter {
+  .vol-gauge svg { pointer-events: none; }
+
+  .vol-gauge-ear {
     font-size: 9px; font-weight: 900;
     letter-spacing: .1em; text-transform: uppercase;
-    opacity: .45;
+    margin-top: -2px;
   }
-  .vliq.l .vliq-letter { color: var(--blue); }
-  .vliq.r .vliq-letter { color: var(--purple); }
+  .vol-gauge-ear.l { color: var(--blue); }
+  .vol-gauge-ear.r { color: var(--purple); }
 
-  .vliq-num {
-    font-size: 30px; font-weight: 900;
-    font-family: "Plus Jakarta Sans", sans-serif;
-    color: var(--ink); line-height: 1;
-  }
-
-  .vliq-pct {
-    font-size: 11px; font-weight: 700;
-    color: var(--muted);
-  }
-
-  .vliq-hint {
-    font-size: 9px; font-weight: 700;
-    color: var(--warn); margin-top: 2px;
-    display: none;
-  }
-  .vliq.warn .vliq-hint, .vliq.over .vliq-hint { display: block; }
-  .vliq.over .vliq-hint { color: var(--danger); }
-
-  .vliq-center {
+  /* Center bridge */
+  .vol-bridge {
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
-    gap: 8px;
-    background: #F8FBFF;
-    border-left: 1px solid var(--line);
-    border-right: 1px solid var(--line);
+    gap: 8px; width: 52px;
+    padding-bottom: 22px;
   }
 
-  .vliq-avg-num {
-    font-size: 15px; font-weight: 900;
-    font-family: "Plus Jakarta Sans", sans-serif;
-    color: var(--ink); line-height: 1;
+  .vol-avg-badge {
+    display: flex; flex-direction: column; align-items: center;
+    padding: 7px 10px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #EAF5FF, #EDF0FF);
+    border: 1px solid rgba(0,114,206,.10);
+    gap: 1px; min-width: 46px;
   }
-  .vliq-avg-label {
-    font-size: 8px; font-weight: 800;
-    color: var(--faint); text-transform: uppercase;
-    letter-spacing: .06em;
-  }
+  .vol-avg-num   { font-size: 18px; font-weight: 900; font-family:"Plus Jakarta Sans",sans-serif; color:var(--ink); line-height:1; }
+  .vol-avg-label { font-size: 8px; font-weight: 800; color:var(--faint); text-transform:uppercase; letter-spacing:.06em; }
 
-  .vliq-lock {
-    width: 28px; height: 28px;
+  .vol-lock-btn {
+    width: 30px; height: 30px;
     border-radius: 50%;
     border: 1.5px solid var(--line);
     background: var(--white);
     display: grid; place-items: center;
-    font-size: 12px;
-    cursor: pointer;
+    font-size: 13px; cursor: pointer;
     transition: all .15s;
-    box-shadow: 0 2px 5px rgba(0,0,0,.06);
+    box-shadow: 0 2px 6px rgba(0,0,0,.06);
   }
-  .vliq-lock.linked { border-color: rgba(0,114,206,.28); background: rgba(0,114,206,.06); }
+  .vol-lock-btn.linked { border-color:rgba(0,114,206,.28); background:rgba(0,114,206,.06); }
 
   .vol-safe-note {
     display: flex; align-items: center; gap: 5px;
@@ -1674,45 +1634,95 @@
               </div>
             </div>
 
-            <!-- Comfort Volume: liquid zones -->
+            <!-- Comfort Volume: large arc gauges -->
             <div class="card">
               <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
                 <span class="section-eyebrow" style="margin-bottom:0">Comfort Volume</span>
-                <span style="font-size:10px;color:var(--faint);font-weight:700">Drag up / down</span>
+                <span style="font-size:10px;color:var(--faint);font-weight:700">Drag the arc</span>
               </div>
-              <div class="vol-zones-wrap">
-                <div class="vol-zones-row">
-                  <!-- Left zone -->
-                  <div class="vliq l" id="vliq-l">
-                    <div class="vliq-fill" id="vfill-l" style="height:68%"></div>
-                    <div class="vliq-safe-line"></div>
-                    <div class="vliq-content">
-                      <span class="vliq-letter">Left</span>
-                      <span class="vliq-num" id="vnum-l">68</span>
-                      <span class="vliq-pct">%</span>
-                      <span class="vliq-hint" id="vhint-l">Caution</span>
-                    </div>
+              <div class="vol-arcs-row">
+
+                <!-- Left arc -->
+                <div class="vol-gauge-wrap">
+                  <div class="vol-gauge" id="gauge-l">
+                    <div class="vol-gauge-hit"></div>
+                    <svg width="116" height="116" viewBox="0 0 116 116">
+                      <defs>
+                        <linearGradient id="gl" x1="0" y1="1" x2="1" y2="0">
+                          <stop offset="0%" stop-color="#3B9EFF"/>
+                          <stop offset="100%" stop-color="#0072CE"/>
+                        </linearGradient>
+                      </defs>
+                      <!-- Track -->
+                      <circle cx="58" cy="58" r="42" fill="none"
+                        stroke="#E5EEF6" stroke-width="9" stroke-linecap="round"
+                        stroke-dasharray="197.9 1000" transform="rotate(135 58 58)"/>
+                      <!-- Safe zone tint 55–85% -->
+                      <circle cx="58" cy="58" r="42" fill="none"
+                        stroke="rgba(31,139,59,.13)" stroke-width="9"
+                        stroke-dasharray="59.4 1000" stroke-dashoffset="-108.9"
+                        transform="rotate(135 58 58)"/>
+                      <!-- Fill -->
+                      <circle id="arc-l" cx="58" cy="58" r="42" fill="none"
+                        stroke="url(#gl)" stroke-width="9" stroke-linecap="round"
+                        stroke-dasharray="134.6 1000" transform="rotate(135 58 58)"/>
+                      <!-- Value -->
+                      <text x="58" y="53" text-anchor="middle"
+                        font-family="'Plus Jakarta Sans',sans-serif"
+                        font-size="22" font-weight="800" fill="#1A2330" id="txt-l">68</text>
+                      <text x="58" y="70" text-anchor="middle"
+                        font-family="'Plus Jakarta Sans',sans-serif"
+                        font-size="10" font-weight="700" fill="#9AAAB8">LEFT</text>
+                    </svg>
                   </div>
-                  <!-- Center: avg + lock -->
-                  <div class="vliq-center">
-                    <div style="text-align:center">
-                      <div class="vliq-avg-num" id="vliq-avg">70</div>
-                      <div class="vliq-avg-label">avg</div>
-                    </div>
-                    <button class="vliq-lock linked" id="vliq-lock" aria-label="Link both ears">🔗</button>
-                  </div>
-                  <!-- Right zone -->
-                  <div class="vliq r" id="vliq-r">
-                    <div class="vliq-fill" id="vfill-r" style="height:72%"></div>
-                    <div class="vliq-safe-line"></div>
-                    <div class="vliq-content">
-                      <span class="vliq-letter">Right</span>
-                      <span class="vliq-num" id="vnum-r">72</span>
-                      <span class="vliq-pct">%</span>
-                      <span class="vliq-hint" id="vhint-r">Caution</span>
-                    </div>
-                  </div>
+                  <span class="vol-gauge-ear l">L</span>
                 </div>
+
+                <!-- Bridge -->
+                <div class="vol-bridge">
+                  <div class="vol-avg-badge">
+                    <span class="vol-avg-num" id="vol-master-num">70</span>
+                    <span class="vol-avg-label">avg</span>
+                  </div>
+                  <button class="vol-lock-btn linked" id="vol-lock" aria-label="Link both ears">🔗</button>
+                </div>
+
+                <!-- Right arc -->
+                <div class="vol-gauge-wrap">
+                  <div class="vol-gauge" id="gauge-r">
+                    <div class="vol-gauge-hit"></div>
+                    <svg width="116" height="116" viewBox="0 0 116 116">
+                      <defs>
+                        <linearGradient id="gr" x1="0" y1="1" x2="1" y2="0">
+                          <stop offset="0%" stop-color="#8B5CF6"/>
+                          <stop offset="100%" stop-color="#582C83"/>
+                        </linearGradient>
+                      </defs>
+                      <!-- Track -->
+                      <circle cx="58" cy="58" r="42" fill="none"
+                        stroke="#E5EEF6" stroke-width="9" stroke-linecap="round"
+                        stroke-dasharray="197.9 1000" transform="rotate(135 58 58)"/>
+                      <!-- Safe zone tint -->
+                      <circle cx="58" cy="58" r="42" fill="none"
+                        stroke="rgba(31,139,59,.13)" stroke-width="9"
+                        stroke-dasharray="59.4 1000" stroke-dashoffset="-108.9"
+                        transform="rotate(135 58 58)"/>
+                      <!-- Fill -->
+                      <circle id="arc-r" cx="58" cy="58" r="42" fill="none"
+                        stroke="url(#gr)" stroke-width="9" stroke-linecap="round"
+                        stroke-dasharray="142.5 1000" transform="rotate(135 58 58)"/>
+                      <!-- Value -->
+                      <text x="58" y="53" text-anchor="middle"
+                        font-family="'Plus Jakarta Sans',sans-serif"
+                        font-size="22" font-weight="800" fill="#1A2330" id="txt-r">72</text>
+                      <text x="58" y="70" text-anchor="middle"
+                        font-family="'Plus Jakarta Sans',sans-serif"
+                        font-size="10" font-weight="700" fill="#9AAAB8">RIGHT</text>
+                    </svg>
+                  </div>
+                  <span class="vol-gauge-ear r">R</span>
+                </div>
+
               </div>
               <div class="vol-safe-note">
                 <div class="vol-safe-dot" id="vol-safe-dot"></div>
@@ -2385,7 +2395,11 @@
     });
   });
 
-  /* ═══ Connection flow ═══ */
+  /* ═══ Connection flow ═══
+     Most users already have aids on when they open the app.
+     Simulate: quick check → already connected → auto-enter home.
+     Only stays on connect screen if aids are NOT found.
+  ═══ */
   (function initConnect() {
     const label  = document.getElementById("conn-label");
     const sub    = document.getElementById("conn-sub");
@@ -2394,32 +2408,47 @@
     const skip   = document.getElementById("conn-skip");
     const visual = document.getElementById("conn-visual");
 
-    // After 2s: aids found
-    setTimeout(() => {
-      label.textContent = "Both Merry aids found.";
-      sub.textContent   = "Ready to connect. Tap the button below.";
-      aids.classList.remove("hidden");
-      cta.classList.remove("hidden");
-    }, 2000);
+    // Prototype: simulate "already connected" — auto-proceed after brief check
+    // (In production: check actual BT state here)
+    const aidsAlreadyConnected = true;
 
-    cta.addEventListener("click", () => {
-      cta.textContent = "Connecting...";
-      cta.disabled = true;
-      label.textContent = "Connecting to both aids...";
-      sub.textContent   = "This usually takes a few seconds.";
-      // After 1.5s: connected
+    if (aidsAlreadyConnected) {
+      // 1.2s scan → connected → 0.8s show → auto home
       setTimeout(() => {
         visual.innerHTML = `<div class="conn-done-icon">✓</div>`;
         label.textContent = "Both aids connected.";
         sub.textContent   = "Left 85%  ·  Right 92%  ·  Linked";
         sub.style.color   = "var(--ok)";
-        cta.classList.add("hidden");
         skip.textContent  = "Start listening →";
         skip.style.color  = "var(--blue)";
         skip.style.fontWeight = "800";
-        setTimeout(() => goTo("home"), 1200);
-      }, 1500);
-    });
+        setTimeout(() => goTo("home"), 800);
+      }, 1200);
+    } else {
+      // Aids NOT found — show pairing UI
+      setTimeout(() => {
+        label.textContent = "Both Merry aids found.";
+        sub.textContent   = "Ready to connect. Tap the button below.";
+        sub.style.color   = "";
+        aids.classList.remove("hidden");
+        cta.classList.remove("hidden");
+        skip.style.display = "none"; // can't skip if not connected
+      }, 2000);
+
+      cta.addEventListener("click", () => {
+        cta.textContent = "Connecting...";
+        cta.disabled = true;
+        label.textContent = "Connecting to both aids...";
+        sub.textContent   = "This usually takes a few seconds.";
+        setTimeout(() => {
+          visual.innerHTML = `<div class="conn-done-icon">✓</div>`;
+          label.textContent = "Both aids connected.";
+          sub.textContent   = "Left 85%  ·  Right 92%  ·  Linked";
+          sub.style.color   = "var(--ok)";
+          setTimeout(() => goTo("home"), 800);
+        }, 1500);
+      });
+    }
 
     skip.addEventListener("click", () => goTo("home"));
   })();
@@ -2428,23 +2457,27 @@
   let volLinked = true;
   let valL = 68, valR = 72;
 
+  const ARC_MAX = 197.9; // 270° arc length for r=42
   function volSafe(v) { return v >= 55 && v <= 85; }
 
-  function applyVol(side, v) {
+  function applyArc(side, v) {
     v = Math.max(0, Math.min(100, Math.round(v)));
     if (side === "L") valL = v; else valR = v;
 
-    const zoneEl = document.getElementById(side === "L" ? "vliq-l" : "vliq-r");
-    const fillEl = document.getElementById(side === "L" ? "vfill-l" : "vfill-r");
-    const numEl  = document.getElementById(side === "L" ? "vnum-l"  : "vnum-r");
+    const arcEl = document.getElementById(side === "L" ? "arc-l" : "arc-r");
+    const txtEl = document.getElementById(side === "L" ? "txt-l" : "txt-r");
+    const fill  = v / 100 * ARC_MAX;
 
-    fillEl.style.height = v + "%";
-    numEl.textContent   = v;
-    zoneEl.classList.toggle("warn", v > 85 && v <= 95);
-    zoneEl.classList.toggle("over", v > 95);
+    let stroke = side === "L" ? "url(#gl)" : "url(#gr)";
+    if (v > 95)      stroke = "#C0392B";
+    else if (v > 85) stroke = "#E08A00";
 
-    const avg = document.getElementById("vliq-avg");
-    if (avg) avg.textContent = Math.round((valL + valR) / 2);
+    arcEl.setAttribute("stroke-dasharray", `${fill} 1000`);
+    arcEl.setAttribute("stroke", stroke);
+    txtEl.textContent = v;
+
+    const mn = document.getElementById("vol-master-num");
+    if (mn) mn.textContent = Math.round((valL + valR) / 2);
 
     const dot  = document.getElementById("vol-safe-dot");
     const txt  = document.getElementById("vol-safe-text");
@@ -2465,38 +2498,59 @@
     if (cc) cc.textContent = `L ${valL}%  ·  R ${valR}%`;
   }
 
-  function setupLiquidDrag(zoneId, side) {
-    const el = document.getElementById(zoneId);
-    if (!el) return;
-    let active = false, startY = 0, startVal = 0, otherStart = 0;
-
-    el.addEventListener("pointerdown", e => {
-      active     = true;
-      startY     = e.clientY;
-      startVal   = side === "L" ? valL : valR;
-      otherStart = side === "L" ? valR : valL;
-      el.setPointerCapture(e.pointerId);
-    });
-    el.addEventListener("pointermove", e => {
-      if (!active) return;
-      const rect  = el.getBoundingClientRect();
-      const delta = -Math.round((e.clientY - startY) / rect.height * 100);
-      applyVol(side, startVal + delta);
-      if (volLinked) applyVol(side === "L" ? "R" : "L", otherStart + delta);
-    });
-    el.addEventListener("pointerup",     () => { active = false; });
-    el.addEventListener("pointercancel", () => { active = false; });
+  function getArcValue(e, gaugeEl) {
+    const rect = gaugeEl.getBoundingClientRect();
+    const cx = rect.left + rect.width  / 2;
+    const cy = rect.top  + rect.height / 2;
+    const px = e.touches ? e.touches[0].clientX : e.clientX;
+    const py = e.touches ? e.touches[0].clientY : e.clientY;
+    let ang = Math.atan2(py - cy, px - cx) * 180 / Math.PI;
+    if (ang < 0) ang += 360;
+    ang -= 135;
+    if (ang < 0) ang += 360;
+    if (ang > 270) ang = ang < 315 ? 270 : 0;
+    return Math.round(ang / 270 * 100);
   }
 
-  setupLiquidDrag("vliq-l", "L");
-  setupLiquidDrag("vliq-r", "R");
+  function setupArcDrag(gaugeId, side) {
+    const el = document.getElementById(gaugeId);
+    if (!el) return;
+    let active = false, dragStart = 0, otherStart = 0;
 
-  document.getElementById("vliq-lock").addEventListener("click", () => {
-    volLinked = !volLinked;
-    const btn = document.getElementById("vliq-lock");
-    btn.classList.toggle("linked", volLinked);
-    btn.textContent = volLinked ? "🔗" : "↔";
-  });
+    // Use the hit overlay for pointer capture
+    const hit = el.querySelector(".vol-gauge-hit");
+    const target = hit || el;
+
+    target.addEventListener("pointerdown", e => {
+      active     = true;
+      dragStart  = side === "L" ? valL : valR;
+      otherStart = side === "L" ? valR : valL;
+      target.setPointerCapture(e.pointerId);
+      const v = getArcValue(e, el);
+      applyArc(side, v);
+      if (volLinked) applyArc(side === "L" ? "R" : "L", Math.max(0, Math.min(100, otherStart + (v - dragStart))));
+    });
+    target.addEventListener("pointermove", e => {
+      if (!active) return;
+      const v = getArcValue(e, el);
+      applyArc(side, v);
+      if (volLinked) applyArc(side === "L" ? "R" : "L", Math.max(0, Math.min(100, otherStart + (v - dragStart))));
+    });
+    target.addEventListener("pointerup",     () => { active = false; });
+    target.addEventListener("pointercancel", () => { active = false; });
+  }
+
+  setupArcDrag("gauge-l", "L");
+  setupArcDrag("gauge-r", "R");
+
+  const volLockBtn = document.getElementById("vol-lock");
+  if (volLockBtn) {
+    volLockBtn.addEventListener("click", () => {
+      volLinked = !volLinked;
+      volLockBtn.classList.toggle("linked", volLinked);
+      volLockBtn.textContent = volLinked ? "🔗" : "↔";
+    });
+  }
 
   /* ═══ Scene selector ═══ */
   document.querySelectorAll("[data-scene]").forEach(btn => {
