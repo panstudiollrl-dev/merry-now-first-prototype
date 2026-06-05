@@ -1190,6 +1190,286 @@
     color: var(--teal);
   }
 
+  /* ─── CONNECT screen ─── */
+  .conn-wrap {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    height: 100%; padding: 24px 20px;
+    gap: 0;
+  }
+
+  .conn-visual {
+    position: relative;
+    width: 120px; height: 120px;
+    display: grid; place-items: center;
+    margin-bottom: 28px;
+  }
+
+  .conn-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1.5px solid rgba(0,114,206,.22);
+    animation: conn-pulse 2.4s ease-out infinite;
+  }
+  .conn-ring-1 { width: 56px;  height: 56px;  animation-delay: 0s; }
+  .conn-ring-2 { width: 84px;  height: 84px;  animation-delay: .7s; }
+  .conn-ring-3 { width: 112px; height: 112px; animation-delay: 1.4s; }
+
+  @keyframes conn-pulse {
+    0%   { opacity: .8; transform: scale(.85); }
+    100% { opacity: 0;  transform: scale(1);   }
+  }
+
+  .conn-mark {
+    width: 40px; height: 40px;
+    object-fit: contain;
+    position: relative; z-index: 2;
+  }
+
+  .conn-mark-fallback {
+    font-size: 28px; font-weight: 900;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    position: relative; z-index: 2;
+  }
+
+  .conn-status { text-align: center; margin-bottom: 20px; }
+  .conn-label  { font-size: 17px; font-weight: 800; color: var(--ink); font-family: "Plus Jakarta Sans", sans-serif; margin-bottom: 6px; }
+  .conn-sub    { font-size: 13px; color: var(--muted); line-height: 1.4; }
+
+  .conn-aids {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 10px; width: 100%; margin-bottom: 20px;
+  }
+
+  .conn-aid-card {
+    padding: 14px 12px;
+    border-radius: 18px;
+    background: var(--white);
+    border: 1px solid var(--line);
+    box-shadow: var(--card-shadow);
+    display: flex; flex-direction: column;
+    align-items: center; gap: 6px;
+    text-align: center;
+  }
+
+  .conn-aid-icon { font-size: 22px; }
+  .conn-aid-side { font-size: 12px; font-weight: 800; color: var(--ink); }
+
+  .conn-signal {
+    display: flex; gap: 3px; align-items: flex-end; height: 12px;
+  }
+  .conn-signal span {
+    width: 4px; border-radius: 2px 2px 0 0;
+    background: var(--ok);
+  }
+  .conn-signal span:nth-child(1) { height: 4px; }
+  .conn-signal span:nth-child(2) { height: 7px; }
+  .conn-signal span:nth-child(3) { height: 10px; }
+  .conn-signal span:nth-child(4) { height: 13px; opacity: .3; }
+  .conn-signal.full span:nth-child(4) { opacity: 1; }
+
+  .conn-cta {
+    width: 100%; min-height: 50px;
+    border: none; border-radius: 999px;
+    background: var(--grad); color: #fff;
+    font-size: 15px; font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 8px 22px rgba(88,44,131,.22);
+    margin-bottom: 14px;
+  }
+
+  .conn-skip {
+    border: none; background: none;
+    color: var(--faint); font-size: 13px; font-weight: 700;
+    cursor: pointer; padding: 8px;
+  }
+
+  .conn-done-icon {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: rgba(31,139,59,.12);
+    display: grid; place-items: center;
+    font-size: 24px;
+    margin-bottom: 16px;
+    border: 2px solid rgba(31,139,59,.22);
+  }
+
+  /* ─── Device card: Sony-style rings ─── */
+  .dev-rings-row {
+    display: grid;
+    grid-template-columns: 1fr 44px 1fr;
+    align-items: center;
+    gap: 0;
+  }
+
+  .dev-col {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 5px;
+  }
+
+  .dev-pct {
+    font-size: 15px; font-weight: 800;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    color: var(--ink);
+  }
+
+  .dev-status {
+    font-size: 10px; font-weight: 700;
+    color: var(--ok);
+    display: flex; align-items: center; gap: 3px;
+  }
+  .dev-status::before {
+    content: "";
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--ok);
+    display: inline-block;
+  }
+
+  .dev-center-col {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 4px;
+  }
+
+  .dev-linked-dots {
+    display: flex; gap: 3px;
+  }
+  .dev-linked-dots span {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: rgba(31,139,59,.4);
+    animation: ring-pulse 2.4s ease-in-out infinite;
+  }
+  .dev-linked-dots span:nth-child(2) { animation-delay: .6s; }
+  .dev-linked-dots span:nth-child(3) { animation-delay: 1.2s; }
+
+  .dev-linked-label {
+    font-size: 9px; font-weight: 800;
+    color: var(--ok); text-transform: uppercase; letter-spacing: .06em;
+  }
+
+  /* ─── Volume: liquid zones ─── */
+  .vol-zones-wrap {
+    margin-bottom: 10px;
+  }
+
+  .vol-zones-row {
+    display: grid;
+    grid-template-columns: 1fr 52px 1fr;
+    height: 148px;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    box-shadow: inset 0 1px 4px rgba(0,0,0,.04);
+  }
+
+  .vliq {
+    position: relative;
+    overflow: hidden;
+    cursor: ns-resize;
+    touch-action: none;
+    user-select: none;
+    background: #F0F5FB;
+  }
+
+  .vliq-fill {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    transition: height .04s linear, background .18s;
+    pointer-events: none;
+  }
+
+  .vliq.l .vliq-fill { background: linear-gradient(to top, rgba(0,114,206,.20), rgba(0,114,206,.42)); }
+  .vliq.r .vliq-fill { background: linear-gradient(to top, rgba(88,44,131,.20), rgba(88,44,131,.40)); }
+  .vliq.warn .vliq-fill { background: linear-gradient(to top, rgba(212,130,10,.22), rgba(212,130,10,.45)) !important; }
+  .vliq.over .vliq-fill { background: linear-gradient(to top, rgba(185,28,28,.22), rgba(185,28,28,.42)) !important; }
+
+  /* safe-zone line at 85% */
+  .vliq-safe-line {
+    position: absolute;
+    left: 0; right: 0;
+    bottom: 85%;
+    height: 1px;
+    background: rgba(31,139,59,.30);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .vliq-content {
+    position: absolute;
+    inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    pointer-events: none; gap: 1px;
+  }
+
+  .vliq-letter {
+    font-size: 9px; font-weight: 900;
+    letter-spacing: .1em; text-transform: uppercase;
+    opacity: .45;
+  }
+  .vliq.l .vliq-letter { color: var(--blue); }
+  .vliq.r .vliq-letter { color: var(--purple); }
+
+  .vliq-num {
+    font-size: 30px; font-weight: 900;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    color: var(--ink); line-height: 1;
+  }
+
+  .vliq-pct {
+    font-size: 11px; font-weight: 700;
+    color: var(--muted);
+  }
+
+  .vliq-hint {
+    font-size: 9px; font-weight: 700;
+    color: var(--warn); margin-top: 2px;
+    display: none;
+  }
+  .vliq.warn .vliq-hint, .vliq.over .vliq-hint { display: block; }
+  .vliq.over .vliq-hint { color: var(--danger); }
+
+  .vliq-center {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 8px;
+    background: #F8FBFF;
+    border-left: 1px solid var(--line);
+    border-right: 1px solid var(--line);
+  }
+
+  .vliq-avg-num {
+    font-size: 15px; font-weight: 900;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    color: var(--ink); line-height: 1;
+  }
+  .vliq-avg-label {
+    font-size: 8px; font-weight: 800;
+    color: var(--faint); text-transform: uppercase;
+    letter-spacing: .06em;
+  }
+
+  .vliq-lock {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: 1.5px solid var(--line);
+    background: var(--white);
+    display: grid; place-items: center;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all .15s;
+    box-shadow: 0 2px 5px rgba(0,0,0,.06);
+  }
+  .vliq-lock.linked { border-color: rgba(0,114,206,.28); background: rgba(0,114,206,.06); }
+
+  .vol-safe-note {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 10px; font-weight: 700; color: var(--ok);
+  }
+  .vol-safe-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ok); flex-shrink: 0; }
+
   /* ─── Prototype caption ─── */
   .proto-caption {
     text-align: center;
@@ -1261,8 +1541,47 @@
         <!-- Screens -->
         <div class="screens">
 
+          <!-- ═══ CONNECT ═══ -->
+          <div class="screen" id="screen-connect">
+            <div class="conn-wrap">
+              <div class="conn-visual" id="conn-visual">
+                <div class="conn-ring conn-ring-1"></div>
+                <div class="conn-ring conn-ring-2"></div>
+                <div class="conn-ring conn-ring-3"></div>
+                <img class="conn-mark" src="brand-assets/merry-official-logo-assets/merry-mark-symbol-300.png" alt="Merry"
+                  onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+                <span class="conn-mark-fallback" style="display:none">M</span>
+              </div>
+
+              <div class="conn-status">
+                <p class="conn-label" id="conn-label">Looking for Merry aids...</p>
+                <p class="conn-sub" id="conn-sub">Make sure your aids are in their case or powered on nearby.</p>
+              </div>
+
+              <div class="conn-aids hidden" id="conn-aids">
+                <div class="conn-aid-card">
+                  <div class="conn-aid-icon">👂</div>
+                  <div class="conn-aid-side">Left aid</div>
+                  <div class="conn-signal full">
+                    <span></span><span></span><span></span><span></span>
+                  </div>
+                </div>
+                <div class="conn-aid-card">
+                  <div class="conn-aid-icon">👂</div>
+                  <div class="conn-aid-side">Right aid</div>
+                  <div class="conn-signal">
+                    <span></span><span></span><span></span><span></span>
+                  </div>
+                </div>
+              </div>
+
+              <button class="conn-cta hidden" id="conn-cta">Connect both aids</button>
+              <button class="conn-skip" id="conn-skip">Skip for now →</button>
+            </div>
+          </div>
+
           <!-- ═══ HOME ═══ -->
-          <div class="screen" id="screen-home">
+          <div class="screen hidden" id="screen-home">
 
             <!-- Merry Noticed -->
             <div style="margin-bottom:14px">
@@ -1308,138 +1627,93 @@
               </div>
             </div>
 
-            <!-- Device status -->
+            <!-- Device status: Sony-style rings -->
             <div class="card">
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
                 <span class="section-eyebrow" style="margin-bottom:0">Devices</span>
                 <span style="font-size:11px;font-weight:800;color:var(--ok);display:flex;align-items:center;gap:4px">
-                  <span style="width:6px;height:6px;border-radius:50%;background:var(--ok);display:inline-block"></span>Both connected
+                  <span style="width:5px;height:5px;border-radius:50%;background:var(--ok);display:inline-block"></span>Both connected
                 </span>
               </div>
-              <div class="device-row">
-                <div class="aid-block">
-                  <div class="aid-block-top">
-                    <div class="aid-dot"></div>
-                    <span class="aid-side-label">Left</span>
-                  </div>
-                  <div class="aid-pct-val">85<span style="font-size:11px;font-weight:700;color:var(--muted)">%</span></div>
-                  <span class="aid-pct-label">Battery</span>
-                  <div class="aid-batt"><div class="aid-batt-fill" style="width:85%"></div></div>
+              <div class="dev-rings-row">
+                <!-- Left aid -->
+                <div class="dev-col">
+                  <svg width="72" height="72" viewBox="0 0 72 72">
+                    <circle cx="36" cy="36" r="28" fill="none" stroke="#E5EEF6" stroke-width="6"/>
+                    <circle cx="36" cy="36" r="28" fill="none" stroke="#1F8B3B" stroke-width="6"
+                      stroke-dasharray="149.5 175.9" stroke-linecap="round"
+                      transform="rotate(-90 36 36)"/>
+                    <text x="36" y="43" text-anchor="middle"
+                      font-family="'Plus Jakarta Sans',sans-serif"
+                      font-size="22" font-weight="900" fill="#0072CE">L</text>
+                  </svg>
+                  <div class="dev-pct">85%</div>
+                  <div class="dev-status">Connected</div>
                 </div>
-                <div class="link-badge">
-                  <div class="link-dot-row">
-                    <div class="link-dot"></div>
-                    <div class="link-dot"></div>
-                    <div class="link-dot"></div>
+                <!-- Center -->
+                <div class="dev-center-col">
+                  <div class="dev-linked-dots">
+                    <span></span><span></span><span></span>
                   </div>
-                  <span class="link-text">Linked</span>
+                  <span class="dev-linked-label">Linked</span>
                 </div>
-                <div class="aid-block right">
-                  <div class="aid-block-top">
-                    <span class="aid-side-label">Right</span>
-                    <div class="aid-dot"></div>
-                  </div>
-                  <div class="aid-pct-val">92<span style="font-size:11px;font-weight:700;color:var(--muted)">%</span></div>
-                  <span class="aid-pct-label">Battery</span>
-                  <div class="aid-batt"><div class="aid-batt-fill" style="width:92%"></div></div>
+                <!-- Right aid -->
+                <div class="dev-col">
+                  <svg width="72" height="72" viewBox="0 0 72 72">
+                    <circle cx="36" cy="36" r="28" fill="none" stroke="#E5EEF6" stroke-width="6"/>
+                    <circle cx="36" cy="36" r="28" fill="none" stroke="#1F8B3B" stroke-width="6"
+                      stroke-dasharray="161.8 175.9" stroke-linecap="round"
+                      transform="rotate(-90 36 36)"/>
+                    <text x="36" y="43" text-anchor="middle"
+                      font-family="'Plus Jakarta Sans',sans-serif"
+                      font-size="22" font-weight="900" fill="#582C83">R</text>
+                  </svg>
+                  <div class="dev-pct">92%</div>
+                  <div class="dev-status">Connected</div>
                 </div>
               </div>
             </div>
 
-            <!-- Comfort Volume: arc gauges -->
+            <!-- Comfort Volume: liquid zones -->
             <div class="card">
-              <div class="vol-card-head">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
                 <span class="section-eyebrow" style="margin-bottom:0">Comfort Volume</span>
-                <span style="font-size:10px;color:var(--faint);font-weight:700">Drag each arc</span>
+                <span style="font-size:10px;color:var(--faint);font-weight:700">Drag up / down</span>
               </div>
-
-              <div class="vol-arcs-layout">
-
-                <!-- Left arc gauge -->
-                <div class="vol-gauge-col">
-                  <div class="vol-gauge" id="gauge-l" aria-label="Left ear volume">
-                    <svg width="88" height="88" viewBox="0 0 88 88">
-                      <defs>
-                        <linearGradient id="gl" x1="0" y1="1" x2="1" y2="0">
-                          <stop offset="0%" stop-color="#3B9EFF"/>
-                          <stop offset="100%" stop-color="#0072CE"/>
-                        </linearGradient>
-                      </defs>
-                      <!-- Track -->
-                      <circle cx="44" cy="44" r="32" fill="none"
-                        stroke="#E5EEF6" stroke-width="8" stroke-linecap="round"
-                        stroke-dasharray="150.8 1000"
-                        transform="rotate(135 44 44)"/>
-                      <!-- Safe zone tint (55–85% = 82.9–128.2 of arc) -->
-                      <circle cx="44" cy="44" r="32" fill="none"
-                        stroke="rgba(31,139,59,.12)" stroke-width="8"
-                        stroke-dasharray="45.3 1000"
-                        stroke-dashoffset="-82.9"
-                        transform="rotate(135 44 44)"/>
-                      <!-- Fill -->
-                      <circle id="arc-l" cx="44" cy="44" r="32" fill="none"
-                        stroke="url(#gl)" stroke-width="8" stroke-linecap="round"
-                        stroke-dasharray="102.5 1000"
-                        transform="rotate(135 44 44)"/>
-                      <!-- Value -->
-                      <text x="44" y="40" text-anchor="middle"
-                        font-family="'Plus Jakarta Sans',sans-serif"
-                        font-size="16" font-weight="800" fill="#1A2330" id="txt-l">68</text>
-                      <text x="44" y="53" text-anchor="middle"
-                        font-family="'Plus Jakarta Sans',sans-serif"
-                        font-size="9" font-weight="700" fill="#9AAAB8">LEFT</text>
-                    </svg>
+              <div class="vol-zones-wrap">
+                <div class="vol-zones-row">
+                  <!-- Left zone -->
+                  <div class="vliq l" id="vliq-l">
+                    <div class="vliq-fill" id="vfill-l" style="height:68%"></div>
+                    <div class="vliq-safe-line"></div>
+                    <div class="vliq-content">
+                      <span class="vliq-letter">Left</span>
+                      <span class="vliq-num" id="vnum-l">68</span>
+                      <span class="vliq-pct">%</span>
+                      <span class="vliq-hint" id="vhint-l">Caution</span>
+                    </div>
+                  </div>
+                  <!-- Center: avg + lock -->
+                  <div class="vliq-center">
+                    <div style="text-align:center">
+                      <div class="vliq-avg-num" id="vliq-avg">70</div>
+                      <div class="vliq-avg-label">avg</div>
+                    </div>
+                    <button class="vliq-lock linked" id="vliq-lock" aria-label="Link both ears">🔗</button>
+                  </div>
+                  <!-- Right zone -->
+                  <div class="vliq r" id="vliq-r">
+                    <div class="vliq-fill" id="vfill-r" style="height:72%"></div>
+                    <div class="vliq-safe-line"></div>
+                    <div class="vliq-content">
+                      <span class="vliq-letter">Right</span>
+                      <span class="vliq-num" id="vnum-r">72</span>
+                      <span class="vliq-pct">%</span>
+                      <span class="vliq-hint" id="vhint-r">Caution</span>
+                    </div>
                   </div>
                 </div>
-
-                <!-- Bridge: master display + lock -->
-                <div class="vol-bridge">
-                  <div class="vol-master-display">
-                    <span class="vol-master-num" id="vol-master-num">70</span>
-                    <span class="vol-master-label">avg</span>
-                  </div>
-                  <button class="vol-lock-btn linked" id="vol-lock" aria-label="Toggle link both ears">🔗</button>
-                </div>
-
-                <!-- Right arc gauge -->
-                <div class="vol-gauge-col">
-                  <div class="vol-gauge" id="gauge-r" aria-label="Right ear volume">
-                    <svg width="88" height="88" viewBox="0 0 88 88">
-                      <defs>
-                        <linearGradient id="gr" x1="0" y1="1" x2="1" y2="0">
-                          <stop offset="0%" stop-color="#8B5CF6"/>
-                          <stop offset="100%" stop-color="#582C83"/>
-                        </linearGradient>
-                      </defs>
-                      <!-- Track -->
-                      <circle cx="44" cy="44" r="32" fill="none"
-                        stroke="#E5EEF6" stroke-width="8" stroke-linecap="round"
-                        stroke-dasharray="150.8 1000"
-                        transform="rotate(135 44 44)"/>
-                      <!-- Safe zone tint -->
-                      <circle cx="44" cy="44" r="32" fill="none"
-                        stroke="rgba(31,139,59,.12)" stroke-width="8"
-                        stroke-dasharray="45.3 1000"
-                        stroke-dashoffset="-82.9"
-                        transform="rotate(135 44 44)"/>
-                      <!-- Fill -->
-                      <circle id="arc-r" cx="44" cy="44" r="32" fill="none"
-                        stroke="url(#gr)" stroke-width="8" stroke-linecap="round"
-                        stroke-dasharray="108.6 1000"
-                        transform="rotate(135 44 44)"/>
-                      <!-- Value -->
-                      <text x="44" y="40" text-anchor="middle"
-                        font-family="'Plus Jakarta Sans',sans-serif"
-                        font-size="16" font-weight="800" fill="#1A2330" id="txt-r">72</text>
-                      <text x="44" y="53" text-anchor="middle"
-                        font-family="'Plus Jakarta Sans',sans-serif"
-                        font-size="9" font-weight="700" fill="#9AAAB8">RIGHT</text>
-                    </svg>
-                  </div>
-                </div>
-
-              </div><!-- /vol-arcs-layout -->
-
+              </div>
               <div class="vol-safe-note">
                 <div class="vol-safe-dot" id="vol-safe-dot"></div>
                 <span id="vol-safe-text">Both within safe range · 55–85% recommended</span>
@@ -1800,9 +2074,10 @@
   };
 
   /* ═══ State ═══ */
-  let currentScreen = "home";
+  let currentScreen = "connect";
   let currentFlow   = null;
   let flowStep      = 0;
+  let flowDone      = false;
   let noiseChoice   = null;
   let currentScene  = "street";
   let comfortVal    = 68;
@@ -1839,7 +2114,7 @@
     const eyebrow  = document.getElementById("header-eyebrow");
     const titleEl  = document.getElementById("header-title");
 
-    if (name === "home") {
+    if (name === "home" || name === "connect") {
       backBtn.classList.add("hidden");
       logoEl.style.display = "";
       logoText.style.display = "none";
@@ -1942,11 +2217,16 @@
 
     const data = FLOWS[key];
 
+    // Reset any state left over from a completed flow
+    flowDone = false;
+    document.getElementById("survey-card").hidden = true;
+
     document.getElementById("flow-breadcrumb").textContent = "You chose";
     document.getElementById("flow-title").textContent = data.title;
     document.getElementById("flow-subtitle").textContent = data.subtitle;
     document.getElementById("flow-primary").textContent = data.primaryFirst;
     document.getElementById("flow-primary").disabled = false;
+    document.getElementById("flow-secondary").textContent = "Send to care instead";
     document.getElementById("success-card").classList.add("hidden");
 
     // Noise type row
@@ -2029,6 +2309,9 @@
 
   /* ═══ Flow primary action ═══ */
   document.getElementById("flow-primary").addEventListener("click", () => {
+    // If flow already done, go to survey
+    if (flowDone) { goTo("survey"); return; }
+
     const data = FLOWS[currentFlow];
     if (!data) return;
 
@@ -2081,14 +2364,16 @@
     document.getElementById("success-title").textContent = data.successTitle;
     document.getElementById("success-copy").textContent  = data.successCopy;
 
+    flowDone = true;
     document.getElementById("flow-primary").textContent = "Done — take a quick survey?";
     document.getElementById("flow-primary").disabled = false;
-    document.getElementById("flow-primary").onclick = () => goTo("survey");
     document.getElementById("flow-secondary").textContent = "Back to home";
-    document.getElementById("flow-secondary").onclick = () => goTo("home");
   }
 
-  document.getElementById("flow-secondary").addEventListener("click", () => goTo("care"));
+  document.getElementById("flow-secondary").addEventListener("click", () => {
+    if (flowDone) { goTo("home"); return; }
+    goTo("care");
+  });
 
   /* ═══ Noise type picker ═══ */
   document.querySelectorAll("[data-noise]").forEach(btn => {
@@ -2100,125 +2385,117 @@
     });
   });
 
-  /* ═══ Comfort Volume — arc gauge drag ═══ */
+  /* ═══ Connection flow ═══ */
+  (function initConnect() {
+    const label  = document.getElementById("conn-label");
+    const sub    = document.getElementById("conn-sub");
+    const aids   = document.getElementById("conn-aids");
+    const cta    = document.getElementById("conn-cta");
+    const skip   = document.getElementById("conn-skip");
+    const visual = document.getElementById("conn-visual");
+
+    // After 2s: aids found
+    setTimeout(() => {
+      label.textContent = "Both Merry aids found.";
+      sub.textContent   = "Ready to connect. Tap the button below.";
+      aids.classList.remove("hidden");
+      cta.classList.remove("hidden");
+    }, 2000);
+
+    cta.addEventListener("click", () => {
+      cta.textContent = "Connecting...";
+      cta.disabled = true;
+      label.textContent = "Connecting to both aids...";
+      sub.textContent   = "This usually takes a few seconds.";
+      // After 1.5s: connected
+      setTimeout(() => {
+        visual.innerHTML = `<div class="conn-done-icon">✓</div>`;
+        label.textContent = "Both aids connected.";
+        sub.textContent   = "Left 85%  ·  Right 92%  ·  Linked";
+        sub.style.color   = "var(--ok)";
+        cta.classList.add("hidden");
+        skip.textContent  = "Start listening →";
+        skip.style.color  = "var(--blue)";
+        skip.style.fontWeight = "800";
+        setTimeout(() => goTo("home"), 1200);
+      }, 1500);
+    });
+
+    skip.addEventListener("click", () => goTo("home"));
+  })();
+
+  /* ═══ Comfort Volume — liquid zone drag ═══ */
   let volLinked = true;
   let valL = 68, valR = 72;
-  const ARC_MAX = 150.8;
 
-  function arcFill(v) { return v / 100 * ARC_MAX; }
   function volSafe(v) { return v >= 55 && v <= 85; }
 
-  function applyArc(side, v) {
+  function applyVol(side, v) {
     v = Math.max(0, Math.min(100, Math.round(v)));
     if (side === "L") valL = v; else valR = v;
 
-    const arcEl = document.getElementById(side === "L" ? "arc-l" : "arc-r");
-    const txtEl = document.getElementById(side === "L" ? "txt-l" : "txt-r");
+    const zoneEl = document.getElementById(side === "L" ? "vliq-l" : "vliq-r");
+    const fillEl = document.getElementById(side === "L" ? "vfill-l" : "vfill-r");
+    const numEl  = document.getElementById(side === "L" ? "vnum-l"  : "vnum-r");
 
-    // Color: safe=brand gradient, warn zone (85-95)=orange, danger (>95)=red
-    let color;
-    if (v <= 85)      color = side === "L" ? "url(#gl)" : "url(#gr)";
-    else if (v <= 95) color = "#E08A00";
-    else              color = "#C0392B";
+    fillEl.style.height = v + "%";
+    numEl.textContent   = v;
+    zoneEl.classList.toggle("warn", v > 85 && v <= 95);
+    zoneEl.classList.toggle("over", v > 95);
 
-    arcEl.setAttribute("stroke-dasharray", `${arcFill(v)} 1000`);
-    arcEl.setAttribute("stroke", color);
-    txtEl.textContent = v;
+    const avg = document.getElementById("vliq-avg");
+    if (avg) avg.textContent = Math.round((valL + valR) / 2);
 
-    // master avg
-    const mn = document.getElementById("vol-master-num");
-    if (mn) mn.textContent = Math.round((valL + valR) / 2);
-
-    // safe note + warning
     const dot  = document.getElementById("vol-safe-dot");
     const txt  = document.getElementById("vol-safe-text");
     const note = document.querySelector(".vol-safe-note");
-    if (!dot || !txt || !note) return;
-
-    const lSafe = volSafe(valL), rSafe = volSafe(valR);
-    const both  = lSafe && rSafe;
-    const over  = valL > 85 || valR > 85;
-    const way   = valL > 95 || valR > 95;
-
-    if (both) {
-      dot.style.background  = "var(--ok)";
-      note.style.color      = "var(--ok)";
-      txt.textContent       = "Both within safe range · 55–85% recommended";
-    } else if (way) {
-      dot.style.background  = "#C0392B";
-      note.style.color      = "#C0392B";
-      txt.textContent       = "⚠ Very loud — not recommended. Reduce if uncomfortable.";
-    } else if (over) {
-      dot.style.background  = "var(--warn)";
-      note.style.color      = "var(--warn)";
-      const who = !lSafe && !rSafe ? "Both ears" : (!lSafe ? "Left" : "Right");
-      txt.textContent       = `${who} above 85% — use with caution`;
-    } else {
-      dot.style.background  = "var(--warn)";
-      note.style.color      = "var(--warn)";
-      txt.textContent       = "Below recommended range · may be too quiet";
+    if (dot && txt && note) {
+      const both = volSafe(valL) && volSafe(valR);
+      const way  = valL > 95 || valR > 95;
+      dot.style.background = way ? "var(--danger)" : !both ? "var(--warn)" : "var(--ok)";
+      note.style.color     = way ? "var(--danger)" : !both ? "var(--warn)" : "var(--ok)";
+      txt.textContent = both ? "Both within safe range · 55–85% recommended"
+        : way ? "⚠ Very loud — reduce if uncomfortable"
+        : (valL > 85 || valR > 85)
+          ? `${(valL > 85 && valR > 85) ? "Both ears" : valL > 85 ? "Left" : "Right"} above 85% — use with caution`
+          : "Below recommended range · may be too quiet";
     }
 
     const cc = document.getElementById("care-comfort-val");
-    if (cc) cc.textContent = `L ${valL}% · R ${valR}%`;
+    if (cc) cc.textContent = `L ${valL}%  ·  R ${valR}%`;
   }
 
-  function getArcValue(e, gaugeEl) {
-    const rect = gaugeEl.getBoundingClientRect();
-    const cx = rect.left + rect.width  / 2;
-    const cy = rect.top  + rect.height / 2;
-    const px = e.touches ? e.touches[0].clientX : e.clientX;
-    const py = e.touches ? e.touches[0].clientY : e.clientY;
-    let ang = Math.atan2(py - cy, px - cx) * 180 / Math.PI;
-    if (ang < 0) ang += 360;
-    ang -= 135;
-    if (ang < 0) ang += 360;
-    if (ang > 270) ang = ang < 315 ? 270 : 0;
-    return Math.round(ang / 270 * 100);
-  }
-
-  function setupArcDrag(gaugeId, side) {
-    const el = document.getElementById(gaugeId);
+  function setupLiquidDrag(zoneId, side) {
+    const el = document.getElementById(zoneId);
     if (!el) return;
-    let active = false;
-    let dragStartVal = 0;   // value of THIS side when drag began
-    let otherStartVal = 0;  // value of OTHER side when drag began
+    let active = false, startY = 0, startVal = 0, otherStart = 0;
 
     el.addEventListener("pointerdown", e => {
-      active        = true;
-      dragStartVal  = side === "L" ? valL : valR;
-      otherStartVal = side === "L" ? valR : valL;
+      active     = true;
+      startY     = e.clientY;
+      startVal   = side === "L" ? valL : valR;
+      otherStart = side === "L" ? valR : valL;
       el.setPointerCapture(e.pointerId);
-      const v = getArcValue(e, el);
-      applyArc(side, v);
-      if (volLinked) {
-        // delta from drag start, applied to other side's start value
-        const delta = v - dragStartVal;
-        applyArc(side === "L" ? "R" : "L", otherStartVal + delta);
-      }
     });
     el.addEventListener("pointermove", e => {
       if (!active) return;
-      const v = getArcValue(e, el);
-      applyArc(side, v);
-      if (volLinked) {
-        const delta = v - dragStartVal;
-        applyArc(side === "L" ? "R" : "L", otherStartVal + delta);
-      }
+      const rect  = el.getBoundingClientRect();
+      const delta = -Math.round((e.clientY - startY) / rect.height * 100);
+      applyVol(side, startVal + delta);
+      if (volLinked) applyVol(side === "L" ? "R" : "L", otherStart + delta);
     });
     el.addEventListener("pointerup",     () => { active = false; });
     el.addEventListener("pointercancel", () => { active = false; });
   }
 
-  setupArcDrag("gauge-l", "L");
-  setupArcDrag("gauge-r", "R");
+  setupLiquidDrag("vliq-l", "L");
+  setupLiquidDrag("vliq-r", "R");
 
-  document.getElementById("vol-lock").addEventListener("click", () => {
+  document.getElementById("vliq-lock").addEventListener("click", () => {
     volLinked = !volLinked;
-    const btn = document.getElementById("vol-lock");
+    const btn = document.getElementById("vliq-lock");
     btn.classList.toggle("linked", volLinked);
     btn.textContent = volLinked ? "🔗" : "↔";
-    // re-linking does NOT equalise values — each stays where it is
   });
 
   /* ═══ Scene selector ═══ */
