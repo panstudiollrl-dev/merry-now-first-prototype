@@ -2704,6 +2704,10 @@
       primaryBtn.disabled = true;
       clarityAutoTimer = setTimeout(() => advanceFlow(), 1200);
     }
+    if (key === "noise") {
+      // Tapping a noise type is the action — the primary button is redundant at step 0
+      document.getElementById("flow-primary").classList.add("hidden");
+    }
   }
 
   /* ═══ Flow visual ═══ */
@@ -2971,6 +2975,7 @@
           const primaryBtn = document.getElementById("flow-primary");
           primaryBtn.textContent = "Applying filter…";
           primaryBtn.disabled = true;
+          primaryBtn.classList.remove("hidden");
           setTimeout(() => advanceFlow(), 1700);
         } else if (currentFlow === "reconnect") {
           // Reconnect steps advance automatically once the simulated detection
@@ -3007,8 +3012,10 @@
           clearTimeout(clarityAutoTimer);
           clarityAutoTimer = setTimeout(() => advanceFlow(), 2000);
         } else {
-          document.getElementById("flow-primary").textContent = flowStep === data.steps.length - 1 ? "Final step →" : "Next step →";
-          document.getElementById("flow-primary").disabled = false;
+          const pb = document.getElementById("flow-primary");
+          pb.textContent = flowStep === data.steps.length - 1 ? "Final step →" : "Next step →";
+          pb.disabled = false;
+          pb.classList.remove("hidden");
         }
       } else if (currentFlow === "noise") {
         // "Confirm comfort" is the moment that actually matters — instead of
