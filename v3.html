@@ -394,6 +394,32 @@
   }
   .cue-x:hover { background: rgba(185,28,28,.12); color: var(--danger); }
 
+  /* Adaptive states: fresh → collapsed (30s) → cleared (60s) */
+  .cue-row { transition: background .14s, transform .14s, box-shadow .14s, opacity .3s, max-height .35s, margin .3s, padding .3s; overflow: hidden; max-height: 80px; }
+  .cue-row.collapsed { padding: 7px 12px; }
+  .cue-row.collapsed .cue-sub  { display: none; }
+  .cue-row.collapsed .cue-arrow { opacity: .35; }
+  .cue-row.collapsed .cue-title { font-size: 12px; }
+  .cue-row.fading { opacity: 0; transform: translateY(-5px); max-height: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0; border-width: 0; }
+
+  .notice-empty {
+    font-size: 12px; color: var(--faint); text-align: center;
+    padding: 16px 8px;
+    border: 1px dashed var(--line);
+    border-radius: 14px;
+  }
+
+  /* ─── Activity log (Care) ─── */
+  .log-entry { display: flex; align-items: flex-start; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--line); }
+  .log-entry:last-child { border-bottom: none; }
+  .log-icon { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; flex-shrink: 0; margin-top: 1px; }
+  .log-icon.ok    { background: rgba(31,139,59,.12);  color: var(--ok); }
+  .log-icon.warn  { background: rgba(212,130,10,.14); color: var(--warn); }
+  .log-icon.muted { background: rgba(107,122,136,.12); color: var(--faint); }
+  .log-title { font-size: 12.5px; font-weight: 800; color: var(--ink); line-height: 1.25; }
+  .log-meta  { font-size: 10.5px; color: var(--faint); margin-top: 2px; line-height: 1.3; }
+  .log-empty { font-size: 12px; color: var(--faint); text-align: center; padding: 10px 0; }
+
   /* ─── HOME: Device card ─── */
   .device-row {
     display: grid;
@@ -774,6 +800,68 @@
   }
   @keyframes recon-wave { 0%,30%{opacity:0;transform:translate(-50%,-50%) scale(.6)} 50%,70%{opacity:.7;transform:translate(-50%,-50%) scale(1)} 100%{opacity:0;transform:translate(-50%,-50%) scale(1.1)} }
 
+  /* Reconnect: interactive guided states */
+  .flow-visual.recon-tall { height: 136px; }
+
+  .recon-aid.searching { animation-name: aid-left, aid-glow; animation-duration: 3s, 1.1s; animation-iteration-count: infinite, infinite; }
+  .recon-aid.right.searching { animation-name: aid-right, aid-glow; }
+  @keyframes aid-glow {
+    0%,100% { box-shadow: 0 4px 10px rgba(0,114,206,.18), 0 0 0 0 rgba(0,163,173,.45); }
+    50%     { box-shadow: 0 4px 10px rgba(0,114,206,.18), 0 0 0 9px rgba(0,163,173,0); }
+  }
+  .recon-aid.woke {
+    left: calc(50% - 26px) !important; right: calc(50% - 26px) !important;
+    animation: none;
+    background: linear-gradient(180deg, #2FAE63, #1F8B3B);
+    box-shadow: 0 4px 10px rgba(31,139,59,.28);
+  }
+  .recon-aid.linked {
+    animation: none;
+    background: linear-gradient(180deg, #2FAE63, #1F8B3B);
+    box-shadow: 0 0 0 4px rgba(31,139,59,.16), 0 4px 10px rgba(31,139,59,.28);
+  }
+  .recon-wave.linked { border-color: rgba(31,139,59,.4); animation-duration: 1.6s; }
+
+  /* Smooth position change when an aid transitions to "woke" state */
+  .recon-aid { transition: left .4s ease, right .4s ease, background .3s ease, box-shadow .3s ease; }
+
+  /* Per-step contextual side-note below the step cards */
+  .recon-tip {
+    display: flex; align-items: flex-start; gap: 8px;
+    background: rgba(0,114,206,.05);
+    border: 1.5px solid rgba(0,114,206,.14);
+    border-radius: 14px;
+    padding: 11px 13px;
+    font-size: 12px; color: var(--muted); line-height: 1.45;
+    margin-bottom: 10px;
+    animation: fade-in-up .25s ease both;
+  }
+  .recon-tip::before { content: "💡"; flex-shrink: 0; font-size: 14px; }
+
+  .recon-tap-hint {
+    position: absolute; right: 10px; top: 8px;
+    font-size: 10px; font-weight: 800;
+    color: var(--blue);
+    background: rgba(0,114,206,.10);
+    border-radius: 999px; padding: 4px 9px;
+    z-index: 3; cursor: pointer;
+    transition: opacity .2s, transform .15s;
+  }
+  .recon-tap-hint:active { transform: scale(.94); }
+  .recon-tap-hint.hidden { display: none; }
+
+  .recon-status {
+    position: absolute; left: 50%; bottom: 8px; transform: translateX(-50%);
+    font-size: 11.5px; font-weight: 800;
+    color: var(--faint);
+    white-space: nowrap;
+    transition: color .25s ease;
+    z-index: 3;
+  }
+  .recon-status.checking { color: var(--blue); }
+  .recon-status.ok       { color: var(--ok); }
+  .recon-status.warn     { color: var(--warn); }
+
   /* Noise: animated bars */
   .noise-bars { display: flex; gap: 4px; align-items: flex-end; }
   .nbar {
@@ -830,6 +918,43 @@
   .flow-visual.bundling .pkg-dot.pkg-scene  { left: 50%; top: 50%; transform: translate(-50%,-50%) !important; }
   .flow-visual.bundling .pkg-dot.pkg-sound  { right: auto; left: 50%; top: 50%; transform: translate(-50%,-50%) !important; }
   .flow-visual.bundling .pkg-center-icon    { opacity: 1; }
+
+  /* Charge: aid settles into its case, then a bolt confirms power flowing in */
+  .charge-scene {
+    position: relative; width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .charge-ring {
+    position: absolute;
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    border: 2px solid rgba(31,139,59,.28);
+    opacity: 0;
+  }
+  .flow-visual.charging .charge-ring { opacity: 1; animation: sonar 2.2s ease-out infinite; }
+  .charge-case-icon {
+    font-size: 30px;
+    position: relative; z-index: 2;
+    filter: grayscale(70%); opacity: .7;
+    transition: filter .6s ease, opacity .6s ease;
+  }
+  .flow-visual.charging .charge-case-icon { filter: grayscale(0%); opacity: 1; }
+  .charge-bolt {
+    position: absolute; right: 31%; top: 24%;
+    font-size: 14px; opacity: 0;
+    transition: opacity .3s ease;
+  }
+  .flow-visual.charging .charge-bolt { opacity: 1; animation: bolt-flicker 1.3s ease-in-out infinite; }
+  @keyframes bolt-flicker { 0%, 100% { opacity: .35; } 50% { opacity: 1; } }
+  .charge-status {
+    position: absolute; bottom: 9px; left: 0; right: 0;
+    text-align: center;
+    font-size: 10.5px; font-weight: 700;
+    color: var(--faint);
+    padding: 0 14px;
+    transition: color .3s ease;
+  }
+  .flow-visual.charging .charge-status { color: #1F8B3B; }
 
   /* ─── Step progress ─── */
   .step-progress {
@@ -895,12 +1020,12 @@
   .step-card-title { font-size: 13px; font-weight: 800; color: var(--ink); }
   .step-card-body  { font-size: 12px; color: var(--muted); line-height: 1.4; padding-left: 32px; }
 
-  /* Noise type picker */
+  /* Noise type picker — lives inside the "Identify noise type" step card */
   .noise-type-row {
     display: grid;
     grid-template-columns: repeat(3,1fr);
     gap: 7px;
-    margin-bottom: 12px;
+    margin-top: 10px;
   }
   .noise-type-btn {
     padding: 10px 6px;
@@ -908,10 +1033,11 @@
     border: 1.5px solid var(--line);
     background: var(--white);
     font-size: 11px; font-weight: 800;
-    color: var(--muted);
+    color: var(--ink);
     cursor: pointer;
     display: flex; flex-direction: column; align-items: center; gap: 5px;
     transition: all .15s;
+    box-shadow: 0 2px 6px rgba(0,0,0,.04);
   }
   .noise-type-btn span { font-size: 18px; }
   .noise-type-btn.selected {
@@ -919,6 +1045,36 @@
     background: rgba(0,163,173,.07);
     color: var(--teal);
   }
+  /* Locked: graying everything out once the user has moved on, while keeping
+     their chosen type clearly visible — re-enabled only via "Choose again" */
+  .noise-type-row.locked .noise-type-btn {
+    cursor: default;
+    pointer-events: none;
+    opacity: .4;
+    filter: grayscale(70%);
+  }
+  .noise-type-row.locked .noise-type-btn.selected {
+    opacity: 1;
+    filter: none;
+    border-color: var(--teal);
+    background: rgba(0,163,173,.07);
+    color: var(--teal);
+  }
+  .noise-change-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    border: none;
+    background: none;
+    color: var(--blue);
+    font-size: 11.5px;
+    font-weight: 800;
+    padding: 8px 2px 4px;
+    margin-bottom: 8px;
+    cursor: pointer;
+  }
+  .noise-change-btn:hover { text-decoration: underline; }
+  .noise-change-btn.hidden { display: none; }
 
   /* Success card */
   .success-card {
@@ -941,6 +1097,62 @@
   }
   .success-card strong { font-size: 13px; color: var(--ok); display: block; margin-bottom: 3px; font-family: "Plus Jakarta Sans", sans-serif; }
   .success-card span { font-size: 12px; color: var(--muted); line-height: 1.35; }
+
+  /* ─── Comfort check: the noise flow's real branch point ─── */
+  .comfort-check {
+    background: rgba(0,114,206,.05);
+    border: 1.5px solid var(--line);
+    border-radius: 16px;
+    padding: 14px;
+    margin-bottom: 12px;
+  }
+  .comfort-check-q {
+    font-size: 13px; font-weight: 800; color: var(--ink);
+    margin-bottom: 10px;
+    font-family: "Plus Jakarta Sans", sans-serif;
+  }
+  .comfort-check-row {
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .comfort-btn {
+    width: 100%;
+    min-height: 44px;
+    border: 1.5px solid var(--line);
+    border-radius: 999px;
+    background: var(--white);
+    color: var(--ink);
+    font-size: 13px; font-weight: 800;
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .comfort-btn:hover { border-color: var(--blue); transform: translateY(-1px); }
+  .comfort-btn.good {
+    border-color: rgba(31,139,59,.35);
+    background: rgba(31,139,59,.07);
+    color: var(--ok);
+  }
+
+  /* Survey invite — optional, low-key, can be ignored */
+  .survey-invite {
+    display: block;
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px dashed rgba(0,114,206,.30);
+    border-radius: 14px;
+    background: transparent;
+    color: var(--blue);
+    font-size: 12px; font-weight: 700;
+    text-align: center;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: background .15s, border-color .15s;
+    animation: fade-in-up .3s ease both;
+  }
+  .survey-invite:hover { background: rgba(0,114,206,.06); border-color: var(--blue); }
+  @keyframes fade-in-up {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
 
   /* ─── Action buttons ─── */
   .btn-primary {
@@ -1295,60 +1507,6 @@
     border: 2px solid rgba(31,139,59,.22);
   }
 
-  /* ─── Device card: Sony-style rings ─── */
-  .dev-rings-row {
-    display: grid;
-    grid-template-columns: 1fr 44px 1fr;
-    align-items: center;
-    gap: 0;
-  }
-
-  .dev-col {
-    display: flex; flex-direction: column;
-    align-items: center; gap: 5px;
-  }
-
-  .dev-pct {
-    font-size: 15px; font-weight: 800;
-    font-family: "Plus Jakarta Sans", sans-serif;
-    color: var(--ink);
-  }
-
-  .dev-status {
-    font-size: 10px; font-weight: 700;
-    color: var(--ok);
-    display: flex; align-items: center; gap: 3px;
-  }
-  .dev-status::before {
-    content: "";
-    width: 5px; height: 5px;
-    border-radius: 50%;
-    background: var(--ok);
-    display: inline-block;
-  }
-
-  .dev-center-col {
-    display: flex; flex-direction: column;
-    align-items: center; gap: 4px;
-  }
-
-  .dev-linked-dots {
-    display: flex; gap: 3px;
-  }
-  .dev-linked-dots span {
-    width: 5px; height: 5px;
-    border-radius: 50%;
-    background: rgba(31,139,59,.4);
-    animation: ring-pulse 2.4s ease-in-out infinite;
-  }
-  .dev-linked-dots span:nth-child(2) { animation-delay: .6s; }
-  .dev-linked-dots span:nth-child(3) { animation-delay: 1.2s; }
-
-  .dev-linked-label {
-    font-size: 9px; font-weight: 800;
-    color: var(--ok); text-transform: uppercase; letter-spacing: .06em;
-  }
-
   /* ─── Volume: large arc gauges ─── */
   .vol-arcs-row {
     display: flex;
@@ -1365,33 +1523,61 @@
     gap: 2px;
   }
 
-  /* Hit target: bigger than visual arc */
+  /* Hit target: taller than wide — open vertical arc, drag up = louder */
   .vol-gauge {
-    width: 120px; height: 120px;
-    cursor: crosshair;
+    width: 116px; height: 174px;
+    cursor: ns-resize;
     touch-action: none;
     user-select: none;
     position: relative;
     display: grid; place-items: center;
   }
 
-  /* Invisible hit overlay covers full square */
+  /* Invisible hit overlay covers the full rounded rectangle */
   .vol-gauge-hit {
     position: absolute;
     inset: 0;
-    border-radius: 50%;
+    border-radius: 36px;
     z-index: 3;
+    cursor: ns-resize;
   }
+  .vol-gauge-hit:active { cursor: grabbing; }
 
-  .vol-gauge svg { pointer-events: none; }
+  .vol-gauge svg { pointer-events: none; overflow: visible; }
 
-  .vol-gauge-ear {
-    font-size: 9px; font-weight: 900;
-    letter-spacing: .1em; text-transform: uppercase;
+  /* Knob — always grab cursor */
+  .vol-knob { cursor: grab; }
+  .vol-knob:active { cursor: grabbing; }
+
+  /* Mirror the right gauge's arc group so it opens the other way: "(" → ")" */
+  .vol-arc-mirror { transform: scale(-1, 1); transform-origin: 50px center; }
+
+  /* Single circle-with-letter icon — replaces redundant "L / LEFT" text */
+  .vol-ear-badge {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: grid; place-items: center;
+    font-size: 11px; font-weight: 900;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    color: #fff;
     margin-top: -2px;
   }
-  .vol-gauge-ear.l { color: var(--blue); }
-  .vol-gauge-ear.r { color: var(--purple); }
+  .vol-ear-badge.l { background: var(--blue); }
+  .vol-ear-badge.r { background: var(--purple); }
+
+  /* Battery now lives right under each ear's badge — identity (L/R) and
+     charge read together as one unit instead of in a separate Devices card */
+  .vol-ear-unit {
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    margin-top: -2px;
+  }
+  .vol-ear-batt {
+    display: flex; align-items: center; gap: 4px;
+  }
+  .mini-batt-pct {
+    font-size: 9px; font-weight: 800; color: var(--faint);
+    font-family: "Plus Jakarta Sans", sans-serif;
+  }
 
   /* Center bridge */
   .vol-bridge {
@@ -1495,7 +1681,6 @@
             <span class="header-eyebrow" id="header-eyebrow" style="display:none"></span>
             <span class="header-title-text" id="header-title" style="display:none"></span>
           </div>
-          <div class="header-avatar">JD</div>
         </div>
 
         <!-- Screens -->
@@ -1543,139 +1728,92 @@
           <!-- ═══ HOME ═══ -->
           <div class="screen hidden" id="screen-home">
 
-            <!-- Merry Noticed -->
+            <!-- Merry Noticed — adaptive: appears when relevant, quietly
+                 collapses, then clears itself until something new comes up -->
             <div style="margin-bottom:14px">
               <div class="noticed-header">
                 <span class="section-eyebrow" style="margin-bottom:0">Merry noticed</span>
-                <span class="notice-count-badge" id="notice-count">3 active</span>
+                <span class="notice-count-badge" id="notice-count">All clear</span>
               </div>
-
-              <!-- Safety -->
-              <div class="cue-row s-border" id="cue-street" data-goto-flow="noise">
-                <span class="cue-dot safety"></span>
-                <div class="cue-msg">
-                  <span class="cue-tag safety">⚠ Safety</span>
-                  <div class="cue-title">Busy street detected.</div>
-                  <div class="cue-sub">Safety sounds should stay audible.</div>
-                </div>
-                <span class="cue-arrow">›</span>
-                <button class="cue-x" data-dismiss="street" aria-label="Dismiss">×</button>
-              </div>
-
-              <!-- Device -->
-              <div class="cue-row d-border" id="cue-aid" data-goto-flow="reconnect">
-                <span class="cue-dot cue-dev"></span>
-                <div class="cue-msg">
-                  <span class="cue-tag cue-dev">⚡ Device</span>
-                  <div class="cue-title">Right aid seems weak.</div>
-                  <div class="cue-sub">Signal lower than usual.</div>
-                </div>
-                <span class="cue-arrow">›</span>
-                <button class="cue-x" data-dismiss="aid" aria-label="Dismiss">×</button>
-              </div>
-
-              <!-- Speech -->
-              <div class="cue-row" id="cue-speech" data-goto-flow="clarity">
-                <span class="cue-dot speech"></span>
-                <div class="cue-msg">
-                  <span class="cue-tag speech">◉ Speech</span>
-                  <div class="cue-title">Speech is nearby.</div>
-                  <div class="cue-sub">Merry can protect front voice.</div>
-                </div>
-                <span class="cue-arrow">›</span>
-                <button class="cue-x" data-dismiss="speech" aria-label="Dismiss">×</button>
+              <div id="noticed-list">
+                <div class="notice-empty" id="noticed-empty">Nothing to flag right now — Merry is listening quietly.</div>
               </div>
             </div>
 
-            <!-- Device status: Sony-style rings -->
+            <!-- Devices & Comfort: merged — battery + connection status live right
+                 alongside the per-ear volume gauge, so L/R identity is shown once,
+                 not duplicated across two cards -->
             <div class="card">
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-                <span class="section-eyebrow" style="margin-bottom:0">Devices</span>
-                <span style="font-size:11px;font-weight:800;color:var(--ok);display:flex;align-items:center;gap:4px">
-                  <span style="width:5px;height:5px;border-radius:50%;background:var(--ok);display:inline-block"></span>Both connected
-                </span>
-              </div>
-              <div class="dev-rings-row">
-                <!-- Left aid -->
-                <div class="dev-col">
-                  <svg width="72" height="72" viewBox="0 0 72 72">
-                    <circle cx="36" cy="36" r="28" fill="none" stroke="#E5EEF6" stroke-width="6"/>
-                    <circle cx="36" cy="36" r="28" fill="none" stroke="#1F8B3B" stroke-width="6"
-                      stroke-dasharray="149.5 175.9" stroke-linecap="round"
-                      transform="rotate(-90 36 36)"/>
-                    <text x="36" y="43" text-anchor="middle"
-                      font-family="'Plus Jakarta Sans',sans-serif"
-                      font-size="22" font-weight="900" fill="#0072CE">L</text>
-                  </svg>
-                  <div class="dev-pct">85%</div>
-                  <div class="dev-status">Connected</div>
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
+                <div>
+                  <span class="section-eyebrow" style="margin-bottom:3px;display:block">Devices &amp; Comfort</span>
+                  <span style="font-size:10px;font-weight:800;color:var(--ok);display:flex;align-items:center;gap:4px">
+                    <span style="width:5px;height:5px;border-radius:50%;background:var(--ok);display:inline-block"></span>Both connected · Linked
+                  </span>
                 </div>
-                <!-- Center -->
-                <div class="dev-center-col">
-                  <div class="dev-linked-dots">
-                    <span></span><span></span><span></span>
-                  </div>
-                  <span class="dev-linked-label">Linked</span>
-                </div>
-                <!-- Right aid -->
-                <div class="dev-col">
-                  <svg width="72" height="72" viewBox="0 0 72 72">
-                    <circle cx="36" cy="36" r="28" fill="none" stroke="#E5EEF6" stroke-width="6"/>
-                    <circle cx="36" cy="36" r="28" fill="none" stroke="#1F8B3B" stroke-width="6"
-                      stroke-dasharray="161.8 175.9" stroke-linecap="round"
-                      transform="rotate(-90 36 36)"/>
-                    <text x="36" y="43" text-anchor="middle"
-                      font-family="'Plus Jakarta Sans',sans-serif"
-                      font-size="22" font-weight="900" fill="#582C83">R</text>
-                  </svg>
-                  <div class="dev-pct">92%</div>
-                  <div class="dev-status">Connected</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Comfort Volume: large arc gauges -->
-            <div class="card">
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-                <span class="section-eyebrow" style="margin-bottom:0">Comfort Volume</span>
-                <span style="font-size:10px;color:var(--faint);font-weight:700">Drag the arc</span>
+                <span style="font-size:10px;color:var(--faint);font-weight:700;margin-top:2px">Drag the arc</span>
               </div>
               <div class="vol-arcs-row">
 
-                <!-- Left arc -->
+                <!-- Left arc: open "(" shape — bottom = quiet, top = loud -->
                 <div class="vol-gauge-wrap">
                   <div class="vol-gauge" id="gauge-l">
                     <div class="vol-gauge-hit"></div>
-                    <svg width="116" height="116" viewBox="0 0 116 116">
+                    <svg width="116" height="174" viewBox="0 0 100 150">
                       <defs>
-                        <linearGradient id="gl" x1="0" y1="1" x2="1" y2="0">
+                        <linearGradient id="gl" x1="0" y1="1" x2="0" y2="0">
                           <stop offset="0%" stop-color="#3B9EFF"/>
                           <stop offset="100%" stop-color="#0072CE"/>
                         </linearGradient>
+                        <!-- Knob dome gradient — shared look for both sides -->
+                        <radialGradient id="knob-grad-l" cx="36%" cy="28%" r="68%">
+                          <stop offset="0%"   stop-color="#ffffff"/>
+                          <stop offset="48%"  stop-color="#e6eef6"/>
+                          <stop offset="100%" stop-color="#c0cfde"/>
+                        </radialGradient>
                       </defs>
                       <!-- Track -->
-                      <circle cx="58" cy="58" r="42" fill="none"
+                      <circle cx="50" cy="75" r="42" fill="none"
                         stroke="#E5EEF6" stroke-width="9" stroke-linecap="round"
-                        stroke-dasharray="197.9 1000" transform="rotate(135 58 58)"/>
-                      <!-- Safe zone tint 55–85% -->
-                      <circle cx="58" cy="58" r="42" fill="none"
-                        stroke="rgba(31,139,59,.13)" stroke-width="9"
-                        stroke-dasharray="59.4 1000" stroke-dashoffset="-108.9"
-                        transform="rotate(135 58 58)"/>
-                      <!-- Fill -->
-                      <circle id="arc-l" cx="58" cy="58" r="42" fill="none"
+                        stroke-dasharray="131.9 1000" transform="rotate(90 50 75)"/>
+                      <!-- Safe zone band 55–85% -->
+                      <circle cx="50" cy="75" r="42" fill="none"
+                        stroke="rgba(31,139,59,.16)" stroke-width="9"
+                        stroke-dasharray="39.6 1000" stroke-dashoffset="-72.5"
+                        transform="rotate(90 50 75)"/>
+                      <!-- Fill, rises from bottom -->
+                      <circle id="arc-l" cx="50" cy="75" r="42" fill="none"
                         stroke="url(#gl)" stroke-width="9" stroke-linecap="round"
-                        stroke-dasharray="134.6 1000" transform="rotate(135 58 58)"/>
-                      <!-- Value -->
-                      <text x="58" y="53" text-anchor="middle"
+                        stroke-dasharray="89.7 1000" transform="rotate(90 50 75)"/>
+                      <!-- Tick marks every 10% — injected by initArcTicks() on load -->
+                      <!-- ↕ Drag knob up/down · snaps every 5% · vibrates on each step (haptic ratchet) -->
+                      <g id="ticks-l" stroke="rgba(255,255,255,0.6)" stroke-linecap="round"></g>
+                      <!-- Draggable knob — sits at arc endpoint, follow value -->
+                      <g id="knob-l" class="vol-knob" transform="translate(14.5,52.5)"
+                         style="filter:drop-shadow(0 1.5px 3px rgba(0,0,0,0.30))">
+                        <circle r="8" fill="url(#knob-grad-l)" stroke="#b8cada" stroke-width="0.8"/>
+                        <!-- Grip rings — tactile knurling feel -->
+                        <circle r="5.6" fill="none" stroke="rgba(0,0,0,0.09)" stroke-width="0.9"/>
+                        <circle r="3.2" fill="none" stroke="rgba(0,0,0,0.09)" stroke-width="0.9"/>
+                        <circle r="1.3" fill="rgba(0,0,0,0.18)"/>
+                      </g>
+                      <!-- Value, centered in the open mouth of the arc -->
+                      <text x="50" y="83" text-anchor="middle"
                         font-family="'Plus Jakarta Sans',sans-serif"
-                        font-size="22" font-weight="800" fill="#1A2330" id="txt-l">68</text>
-                      <text x="58" y="70" text-anchor="middle"
-                        font-family="'Plus Jakarta Sans',sans-serif"
-                        font-size="10" font-weight="700" fill="#9AAAB8">LEFT</text>
+                        font-size="26" font-weight="800" fill="#1A2330" id="txt-l">68</text>
                     </svg>
                   </div>
-                  <span class="vol-gauge-ear l">L</span>
+                  <div class="vol-ear-unit">
+                    <div class="vol-ear-badge l">L</div>
+                    <div class="vol-ear-batt">
+                      <svg class="mini-batt" width="28" height="13" viewBox="0 0 28 13">
+                        <rect x="1" y="1" width="22" height="11" rx="3.5" fill="none" stroke="#C9D6E2" stroke-width="1.6"/>
+                        <rect x="24" y="3.5" width="3" height="6" rx="1.5" fill="#C9D6E2"/>
+                        <rect x="3.3" y="3.3" width="15.5" height="6.4" rx="2.4" fill="#1F8B3B"/>
+                      </svg>
+                      <span class="mini-batt-pct">85%</span>
+                    </div>
+                  </div>
                 </div>
 
                 <!-- Bridge -->
@@ -1687,40 +1825,65 @@
                   <button class="vol-lock-btn linked" id="vol-lock" aria-label="Link both ears">🔗</button>
                 </div>
 
-                <!-- Right arc -->
+                <!-- Right arc: mirrored ")" shape — bottom = quiet, top = loud -->
                 <div class="vol-gauge-wrap">
                   <div class="vol-gauge" id="gauge-r">
                     <div class="vol-gauge-hit"></div>
-                    <svg width="116" height="116" viewBox="0 0 116 116">
+                    <svg width="116" height="174" viewBox="0 0 100 150">
                       <defs>
-                        <linearGradient id="gr" x1="0" y1="1" x2="1" y2="0">
+                        <linearGradient id="gr" x1="0" y1="1" x2="0" y2="0">
                           <stop offset="0%" stop-color="#8B5CF6"/>
                           <stop offset="100%" stop-color="#582C83"/>
                         </linearGradient>
+                        <radialGradient id="knob-grad-r" cx="36%" cy="28%" r="68%">
+                          <stop offset="0%"   stop-color="#ffffff"/>
+                          <stop offset="48%"  stop-color="#e6eef6"/>
+                          <stop offset="100%" stop-color="#c0cfde"/>
+                        </radialGradient>
                       </defs>
-                      <!-- Track -->
-                      <circle cx="58" cy="58" r="42" fill="none"
-                        stroke="#E5EEF6" stroke-width="9" stroke-linecap="round"
-                        stroke-dasharray="197.9 1000" transform="rotate(135 58 58)"/>
-                      <!-- Safe zone tint -->
-                      <circle cx="58" cy="58" r="42" fill="none"
-                        stroke="rgba(31,139,59,.13)" stroke-width="9"
-                        stroke-dasharray="59.4 1000" stroke-dashoffset="-108.9"
-                        transform="rotate(135 58 58)"/>
-                      <!-- Fill -->
-                      <circle id="arc-r" cx="58" cy="58" r="42" fill="none"
-                        stroke="url(#gr)" stroke-width="9" stroke-linecap="round"
-                        stroke-dasharray="142.5 1000" transform="rotate(135 58 58)"/>
-                      <!-- Value -->
-                      <text x="58" y="53" text-anchor="middle"
+                      <g class="vol-arc-mirror">
+                        <!-- Track -->
+                        <circle cx="50" cy="75" r="42" fill="none"
+                          stroke="#E5EEF6" stroke-width="9" stroke-linecap="round"
+                          stroke-dasharray="131.9 1000" transform="rotate(90 50 75)"/>
+                        <!-- Safe zone band 55–85% -->
+                        <circle cx="50" cy="75" r="42" fill="none"
+                          stroke="rgba(31,139,59,.16)" stroke-width="9"
+                          stroke-dasharray="39.6 1000" stroke-dashoffset="-72.5"
+                          transform="rotate(90 50 75)"/>
+                        <!-- Fill, rises from bottom -->
+                        <circle id="arc-r" cx="50" cy="75" r="42" fill="none"
+                          stroke="url(#gr)" stroke-width="9" stroke-linecap="round"
+                          stroke-dasharray="95.0 1000" transform="rotate(90 50 75)"/>
+                        <!-- Tick marks every 10% — injected by initArcTicks() on load -->
+                        <!-- ↕ Drag knob up/down · snaps every 5% · vibrates on each step (haptic ratchet) -->
+                        <g id="ticks-r" stroke="rgba(255,255,255,0.6)" stroke-linecap="round"></g>
+                        <!-- Draggable knob (inside mirror so coords match left) -->
+                        <g id="knob-r" class="vol-knob" transform="translate(17.6,48.2)"
+                           style="filter:drop-shadow(0 1.5px 3px rgba(0,0,0,0.30))">
+                          <circle r="8" fill="url(#knob-grad-r)" stroke="#b8cada" stroke-width="0.8"/>
+                          <circle r="5.6" fill="none" stroke="rgba(0,0,0,0.09)" stroke-width="0.9"/>
+                          <circle r="3.2" fill="none" stroke="rgba(0,0,0,0.09)" stroke-width="0.9"/>
+                          <circle r="1.3" fill="rgba(0,0,0,0.18)"/>
+                        </g>
+                      </g>
+                      <!-- Value, centered in the open mouth of the arc -->
+                      <text x="50" y="83" text-anchor="middle"
                         font-family="'Plus Jakarta Sans',sans-serif"
-                        font-size="22" font-weight="800" fill="#1A2330" id="txt-r">72</text>
-                      <text x="58" y="70" text-anchor="middle"
-                        font-family="'Plus Jakarta Sans',sans-serif"
-                        font-size="10" font-weight="700" fill="#9AAAB8">RIGHT</text>
+                        font-size="26" font-weight="800" fill="#1A2330" id="txt-r">72</text>
                     </svg>
                   </div>
-                  <span class="vol-gauge-ear r">R</span>
+                  <div class="vol-ear-unit">
+                    <div class="vol-ear-badge r">R</div>
+                    <div class="vol-ear-batt">
+                      <svg class="mini-batt" width="28" height="13" viewBox="0 0 28 13">
+                        <rect x="1" y="1" width="22" height="11" rx="3.5" fill="none" stroke="#C9D6E2" stroke-width="1.6"/>
+                        <rect x="24" y="3.5" width="3" height="6" rx="1.5" fill="#C9D6E2"/>
+                        <rect x="3.3" y="3.3" width="16.6" height="6.4" rx="2.4" fill="#1F8B3B"/>
+                      </svg>
+                      <span class="mini-batt-pct">92%</span>
+                    </div>
+                  </div>
                 </div>
 
               </div>
@@ -1730,43 +1893,6 @@
               </div>
             </div>
 
-            <!-- Problem cards -->
-            <div class="screen-heading">
-              <h2>How can Merry help?</h2>
-              <p>Choose what feels wrong right now.</p>
-            </div>
-
-            <div class="problem-grid">
-              <button class="problem-card" data-flow="clarity">
-                <div class="problem-icon">🔊</div>
-                <div>
-                  <div class="problem-name">I can't hear clearly</div>
-                  <div class="problem-hint">Speech feels unclear or distant.</div>
-                </div>
-              </button>
-              <button class="problem-card" data-flow="reconnect">
-                <div class="problem-icon">📡</div>
-                <div>
-                  <div class="problem-name">Won't connect</div>
-                  <div class="problem-hint">One or both sides missing.</div>
-                </div>
-              </button>
-              <button class="problem-card" data-flow="noise">
-                <div class="problem-icon">〰️</div>
-                <div>
-                  <div class="problem-name">Noise or hiss</div>
-                  <div class="problem-hint">Scratchy or too sharp.</div>
-                </div>
-              </button>
-              <button class="problem-card" data-flow="support">
-                <div class="problem-icon">👩‍⚕️</div>
-                <div>
-                  <div class="problem-name">Ask someone</div>
-                  <div class="problem-hint">Send situation to care.</div>
-                </div>
-              </button>
-            </div>
-
           </div><!-- /screen-home -->
 
           <!-- ═══ FLOW ═══ -->
@@ -1774,7 +1900,7 @@
 
             <div class="flow-screen-label">
               <span class="dot-indicator"></span>
-              <span id="flow-breadcrumb">You chose</span>
+              <span id="flow-breadcrumb">You said</span>
             </div>
 
             <h2 class="flow-title" id="flow-title">Make speech clearer.</h2>
@@ -1785,17 +1911,39 @@
               <!-- content injected by JS -->
             </div>
 
+            <!-- Noise type picker (only noise flow) — JS moves this into the
+                 "Identify noise type" step card on render; this is just its
+                 home base in the markup before that first happens -->
+            <div class="noise-type-row hidden" id="noise-type-row">
+              <button class="noise-type-btn" data-noise="hiss"><span>🔊</span>Hiss</button>
+              <button class="noise-type-btn" data-noise="traffic"><span>🚗</span>Traffic</button>
+              <button class="noise-type-btn" data-noise="crowd"><span>👥</span>Crowd</button>
+            </div>
+
             <!-- Step progress -->
             <div class="step-progress" id="step-progress"></div>
 
             <!-- Step cards -->
             <div id="step-cards"></div>
 
-            <!-- Noise type picker (only noise flow) -->
-            <div class="noise-type-row hidden" id="noise-type-row">
-              <button class="noise-type-btn" data-noise="hiss"><span>🔊</span>Hiss</button>
-              <button class="noise-type-btn" data-noise="traffic"><span>🚗</span>Traffic</button>
-              <button class="noise-type-btn" data-noise="crowd"><span>👥</span>Crowd</button>
+            <!-- Reconnect side-note: contextual tip per step, hidden for other flows -->
+            <div class="recon-tip hidden" id="recon-tip"></div>
+
+            <!-- Noise safeguard: only relevant once we're applying/confirming a chosen type -->
+            <button class="noise-change-btn hidden" id="noise-change-btn">↺ Not the right type? Choose again</button>
+
+            <!-- Noise comfort check (only noise flow) — replaces the generic
+                 "Final step" tap with a real branch point: did the filter
+                 actually help? "Yes" folds straight into going home (no
+                 redundant success+survey+home stack); "Not quite" opens a
+                 second choice between retrying or looping in Dr. Elena. -->
+            <div class="comfort-check hidden" id="comfort-check">
+              <p class="comfort-check-q">Does this feel better now?</p>
+              <div class="comfort-check-row">
+                <button class="comfort-btn good" data-comfort="good">🙂 Yes, this feels better</button>
+                <button class="comfort-btn" data-retry="type"><span style="display:inline-block;transform:rotate(-90deg)">↺</span> Try a different type</button>
+                <button class="comfort-btn" data-comfort="meh">🫤 Not quite — tell Dr. Elena</button>
+              </div>
             </div>
 
             <!-- Success card (hidden until done) -->
@@ -1806,6 +1954,13 @@
                 <span id="success-copy">Merry is holding this setting.</span>
               </div>
             </div>
+
+            <!-- Optional survey invite — shown only when Merry decides to ask
+                 (probabilistic / not every session). Tapping it cancels the
+                 auto-home redirect and opens the survey instead. -->
+            <button class="survey-invite hidden" id="survey-invite">
+              🎧 Got 10 seconds to tell Merry how that went?
+            </button>
 
             <!-- Actions -->
             <button class="btn-primary" id="flow-primary">Start</button>
@@ -1874,9 +2029,51 @@
           <div class="screen hidden" id="screen-care">
 
             <div class="screen-heading">
-              <h2>Ask someone</h2>
-              <p>Merry bundles your current situation and sends it to your audiologist — no technical explanation needed.</p>
+              <h2>Care</h2>
+              <p>Tell Merry what's going on right now — Merry can help directly, or bring your care team in when you'd like a person involved.</p>
             </div>
+
+            <!-- How can Merry help — merged in from Now, so Care feels like
+                 a continuation of "what's wrong", not a separate place -->
+            <div style="margin-bottom:6px">
+              <span class="section-eyebrow">How can Merry help?</span>
+            </div>
+            <div class="problem-grid">
+              <button class="problem-card" data-flow="clarity">
+                <div class="problem-icon">🔊</div>
+                <div>
+                  <div class="problem-name">I can't hear clearly</div>
+                  <div class="problem-hint">Speech feels unclear or distant.</div>
+                </div>
+              </button>
+              <button class="problem-card" data-flow="reconnect">
+                <div class="problem-icon">📡</div>
+                <div>
+                  <div class="problem-name">Won't connect</div>
+                  <div class="problem-hint">One or both sides missing.</div>
+                </div>
+              </button>
+              <button class="problem-card" data-flow="noise">
+                <div class="problem-icon">〰️</div>
+                <div>
+                  <div class="problem-name">Noise or hiss</div>
+                  <div class="problem-hint">Scratchy or too sharp.</div>
+                </div>
+              </button>
+              <button class="problem-card" data-flow="support">
+                <div class="problem-icon">👩‍⚕️</div>
+                <div>
+                  <div class="problem-name">Ask someone</div>
+                  <div class="problem-hint">Send situation to care.</div>
+                </div>
+              </button>
+            </div>
+
+            <!-- Ask a real person -->
+            <div style="margin:18px 0 6px">
+              <span class="section-eyebrow">Prefer to talk to someone?</span>
+            </div>
+            <p style="font-size:12px;color:var(--muted);margin:-2px 0 12px;line-height:1.4">Merry bundles your current situation and sends it to your audiologist — no technical explanation needed.</p>
 
             <div class="care-dr-card">
               <div class="dr-avatar">👩‍⚕️</div>
@@ -1928,6 +2125,18 @@
               <div>
                 <strong>Care package sent.</strong>
                 <span>Dr. Elena will review your situation and may follow up today.</span>
+              </div>
+              <button class="btn-primary" style="margin-top:14px" onclick="goTo('home')">← Back to home</button>
+            </div>
+
+            <!-- Activity log: what Merry noticed, what it did, and whether it worked -->
+            <div class="card" style="margin-top:18px">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+                <span class="section-eyebrow" style="margin-bottom:0">Recent activity</span>
+                <span style="font-size:10px;color:var(--faint);font-weight:700">What Merry noticed &amp; did</span>
+              </div>
+              <div id="activity-log">
+                <div class="log-empty" id="activity-log-empty">Nothing logged yet — this fills in as Merry notices things and helps you sort them out.</div>
               </div>
             </div>
 
@@ -1987,6 +2196,7 @@
               <span class="done-emoji">🎧</span>
               <strong>Thank you!</strong>
               <span>Your feedback helps Merry improve. Dr. Elena may also review this session.</span>
+              <button class="btn-primary" style="margin-top:18px" onclick="goTo('home')">← Back to home</button>
             </div>
 
           </div><!-- /screen-survey -->
@@ -2024,9 +2234,9 @@
       subtitle: "Merry checks your mic, boosts front speech, and confirms the improvement — one step at a time.",
       primaryFirst: "Start clarity check",
       steps: [
-        { label: "Check microphone",   body: "Merry is checking your microphone direction and current speech level." },
-        { label: "Boost front speech", body: "Applying a 15% front speech boost and a soft noise gate. Safety sounds stay." },
-        { label: "Confirm",            body: "Can you hear more clearly now? Merry will hold this setting." }
+        { label: "Check microphone",   body: "Merry is checking the microphone direction and how much speech is coming through right now." },
+        { label: "Boost front speech", body: "Merry is boosting speech coming from in front of you and softening background noise. Safety sounds stay." },
+        { label: "Check if it helped", body: "Setting applied — try speaking with someone nearby and see if it sounds clearer." }
       ],
       successTitle: "Speech clarity improved.",
       successCopy:  "Merry is holding this setting. Adjust any time from Comfort Volume.",
@@ -2035,15 +2245,15 @@
     reconnect: {
       label: "Won't connect",
       title: "Reconnect one step at a time.",
-      subtitle: "Merry tells you what to do physically, only when each step is needed.",
-      primaryFirst: "Start guided reconnect",
+      subtitle: "Just follow along — Merry listens and moves to the next step on its own once each action is done.",
+      primaryFirst: "Getting ready…",
       steps: [
-        { label: "Bring aids close", body: "Place both aids within 30 cm of your phone." },
-        { label: "Wake right aid",   body: "Open the case and wait 3 seconds. Merry listens for the right aid." },
-        { label: "Confirm linked",   body: "Merry detected both aids. Connection confirmed." }
+        { label: "Bring both aids close",      body: "Hold both aids within about 30 cm of your phone on a flat surface. Avoid pockets — the signal can't pass through fabric." },
+        { label: "Power cycle in the case",    body: "Place both aids into the charging case and close the lid. After about 5 seconds, open the lid again — the aids will power on and search for your phone automatically." },
+        { label: "Confirm connected",          body: "Merry detected both aids and confirmed the link. You're all set." }
       ],
-      successTitle: "Both aids are linked.",
-      successCopy:  "Left 85% · Right 92%. Connection is strong.",
+      successTitle: "Both aids are connected.",
+      successCopy:  "Connection confirmed. If this keeps happening, try sending a note to Dr. Elena.",
       stage: "reconnect"
     },
     noise: {
@@ -2053,13 +2263,27 @@
       primaryFirst: "Start noise reduction",
       noiseType: true,
       steps: [
-        { label: "Identify noise type",     body: "Tap the type below that's bothering you most." },
-        { label: "Apply targeted filter",   body: "Reducing selected noise frequency. Speech and traffic are protected." },
-        { label: "Confirm comfort",         body: "Does this feel better? Merry can reduce further if needed." }
+        { label: "Identify noise type",     body: "Tap the type above that's bothering you most." },
+        { label: "Apply targeted filter",   body: "Reducing the selected noise. Speech and safety sounds are protected." },
+        { label: "Confirm comfort",         body: "Filter applied — check how it feels and let Merry know below." }
       ],
       successTitle: "Noise softened.",
       successCopy:  "Harsh frequencies reduced. Speech and safety sounds are unchanged.",
       stage: "noise"
+    },
+    charge: {
+      label: "Battery low",
+      title: "Get back to a full charge.",
+      subtitle: "Just follow along — Merry detects each step on its own and moves forward once it confirms.",
+      primaryFirst: "Detecting…",
+      steps: [
+        { label: "Place the aid in its case",    body: "Open the charging case and seat the aid fully inside. It should sit flat and flush — no gap between the aid and the case." },
+        { label: "Connect the case to power",    body: "Plug the charging cable into the charging port on the case. A small indicator light should turn on." },
+        { label: "Confirm charging has started", body: "Merry is checking for a charging signal. Leave the case closed and connected — a full charge usually takes a few hours." }
+      ],
+      successTitle: "Charging has started.",
+      successCopy:  "The aid is seated and the case is powered. Merry will let you know once it's back to full.",
+      stage: "charge"
     },
     support: {
       label: "Ask someone",
@@ -2089,17 +2313,26 @@
   let flowStep      = 0;
   let flowDone      = false;
   let noiseChoice   = null;
+  let noiseTypeRowEl = null; // stable reference — moved into the active step card on each render
   let currentScene  = "street";
   let comfortVal    = 68;
   let surveyAnswers = {};
   let surveyStars   = 0;
-  let dismissedCues = new Set();
+  let reconRetried  = false;
+  let noiseHomeTimer  = null; // holds the auto-home timeout so the survey invite can cancel it
+  let reconAutoTimer   = null; // holds the per-step auto-advance timer for the reconnect flow
+  let chargeAutoTimer  = null; // same for the charge flow
+  let supportAutoTimer = null; // auto-advance timer for the support flow
+  let clarityAutoTimer = null; // same for the clarity flow
 
   /* ═══ Screen router ═══ */
   function goTo(name, opts = {}) {
     const prev = document.getElementById("screen-" + currentScreen);
     const next = document.getElementById("screen-" + name);
     if (!next) return;
+    // Same-screen navigation (e.g. escalating within the flow screen):
+    // skip the hide/show transition entirely — just update currentScreen.
+    if (prev === next) { currentScreen = name; return; }
     prev.classList.add("exit");
     next.classList.remove("hidden");
     requestAnimationFrame(() => {
@@ -2137,14 +2370,14 @@
       eyebrow.style.display = "block";
       titleEl.style.display = "block";
       if (name === "flow" && currentFlow) {
-        eyebrow.textContent = "You chose";
+        eyebrow.textContent = "You said";
         titleEl.textContent = FLOWS[currentFlow].label;
       } else if (name === "scene") {
         eyebrow.textContent = "Scene";
         titleEl.textContent = "Scene-aware sound";
       } else if (name === "care") {
         eyebrow.textContent = "Care";
-        titleEl.textContent = "Ask someone";
+        titleEl.textContent = "How can Merry help?";
       } else if (name === "survey") {
         eyebrow.textContent = "After your session";
         titleEl.textContent = "How did that feel?";
@@ -2157,12 +2390,20 @@
 
   /* ═══ Back button ═══ */
   document.getElementById("back-btn").addEventListener("click", () => {
+    if (reconAutoTimer)   { clearTimeout(reconAutoTimer);   reconAutoTimer   = null; }
+    if (chargeAutoTimer)  { clearTimeout(chargeAutoTimer);  chargeAutoTimer  = null; }
+    if (supportAutoTimer) { clearTimeout(supportAutoTimer); supportAutoTimer = null; }
+    if (clarityAutoTimer) { clearTimeout(clarityAutoTimer); clarityAutoTimer = null; }
     goTo("home");
   });
 
   /* ═══ Bottom nav ═══ */
   document.querySelectorAll(".nav-btn").forEach(btn => {
     btn.addEventListener("click", () => {
+      if (reconAutoTimer)   { clearTimeout(reconAutoTimer);   reconAutoTimer   = null; }
+      if (chargeAutoTimer)  { clearTimeout(chargeAutoTimer);  chargeAutoTimer  = null; }
+      if (supportAutoTimer) { clearTimeout(supportAutoTimer); supportAutoTimer = null; }
+      if (clarityAutoTimer) { clearTimeout(clarityAutoTimer); clarityAutoTimer = null; }
       const target = btn.dataset.nav;
       if (target === "home") goTo("home");
       else if (target === "scene") goTo("scene");
@@ -2170,45 +2411,206 @@
     });
   });
 
-  /* ═══ Dismiss cues ═══ */
-  document.querySelectorAll(".cue-x").forEach(btn => {
-    btn.addEventListener("click", e => {
-      e.stopPropagation();
-      const row = document.getElementById("cue-" + btn.dataset.dismiss);
-      if (!row) return;
-      dismissedCues.add(btn.dataset.dismiss);
-      row.style.transition = "opacity .2s, transform .2s, max-height .25s";
-      row.style.opacity = "0";
-      row.style.transform = "translateX(6px)";
-      row.style.maxHeight = "0";
-      row.style.overflow = "hidden";
-      row.style.marginBottom = "0";
-      row.style.padding = "0";
-      setTimeout(() => { row.remove(); updateNoticeCount(); }, 260);
-    });
-  });
+  /* ═══ Merry noticed — adaptive engine ═══
 
-  function updateNoticeCount() {
-    const remaining = 3 - dismissedCues.size;
-    const el = document.getElementById("notice-count");
-    if (remaining > 0) {
-      el.textContent = remaining + " active";
-      el.style.background = "";
-      el.style.color = "";
-    } else {
-      el.textContent = "All clear";
-      el.style.background = "rgba(31,139,59,.10)";
-      el.style.color = "var(--ok)";
+     Answers the open question from the brief (8.1 / "should the three cues
+     always show, auto-hide, or self-recheck?") with a concrete mechanism:
+
+       fresh (full card, ~30s) → collapsed (quiet one-line, ~30 more s) → gone
+
+     This follows Reeves et al. (2004)'s multimodal design logic:
+       • One channel, one moment at a time — a notice arrives only visually,
+         settles into a quieter rhythm on its own, and never piles up with
+         sound/haptic alerts on top of it. The brief's "1–3 max" cap (8.1) is
+         enforced via NOTICE_MAX so the user is never asked to triage a wall
+         of cues at once.
+       • Vision carries the *spatial* fact ("here is what's going on, and
+         here is how urgent it looks right now" via border colour + size);
+         the *rhythm* of fresh→collapsed→gone carries the time dimension —
+         exactly the channel best suited to convey passing time — instead of
+         forcing the user to remember "did I deal with that yet?".
+       • Self-recheck: a soft randomised loop (scheduleNextNoticeCheck)
+         periodically asks "is anything worth surfacing?" — capped, weighted
+         toward safety/device per the brief's stated priority order.
+  ═══ */
+  const NOTICE_TEMPLATES = [
+    { key: "street",  flow: "noise",     tag: "⚠ Safety", tagClass: "safety",  dotClass: "safety",  borderClass: "s-border", title: "Busy street detected.",    sub: "Safety sounds should stay audible.",          weight: 3 },
+    { key: "crowd",   flow: "noise",     tag: "⚠ Safety", tagClass: "safety",  dotClass: "safety",  borderClass: "s-border", title: "Crowd noise is climbing.",  sub: "Merry can soften it without losing speech.",  weight: 3 },
+    { key: "aid",     flow: "reconnect", tag: "⚡ Device", tagClass: "cue-dev", dotClass: "cue-dev", borderClass: "d-border", title: "Right aid seems weak.",     sub: "Signal lower than usual.",                    weight: 2 },
+    { key: "battery", flow: "charge",    tag: "🔋 Device", tagClass: "cue-dev", dotClass: "cue-dev", borderClass: "d-border", title: "Left aid battery is low.",  sub: "Let Merry guide you through charging it.",     weight: 2 },
+    { key: "speech",  flow: "clarity",   tag: "◉ Speech", tagClass: "speech",  dotClass: "speech",  borderClass: "",         title: "Speech is nearby.",         sub: "Merry can protect front voice.",              weight: 1 },
+    { key: "hiss",    flow: "noise",     tag: "〰️ Noise", tagClass: "speech",  dotClass: "speech",  borderClass: "",         title: "A faint hiss came up.",     sub: "Tap to let Merry take a look.",               weight: 1 }
+  ];
+
+  const NOTICE_MAX         = 2;     // brief 8.1 — never more than a couple at once
+  const NOTICE_COLLAPSE_MS = 30000; // settle into a quiet line after 30s
+  const NOTICE_GONE_MS     = 60000; // clears itself after ~1 minute if untouched
+
+  let activeNotices = [];   // { id, tpl, stage, collapseT, removeT }
+  let noticeSeq     = 0;
+  let pendingNoticeContext = null; // links a flow back to the notice that opened it, so we can log the outcome
+
+  function noticedListEl() { return document.getElementById("noticed-list"); }
+
+  function renderNoticeRow(n) {
+    const t = n.tpl;
+    const row = document.createElement("div");
+    row.className = ("cue-row " + t.borderClass).trim();
+    row.id = "notice-" + n.id;
+    row.innerHTML = `
+      <span class="cue-dot ${t.dotClass}"></span>
+      <div class="cue-msg">
+        <span class="cue-tag ${t.tagClass}">${t.tag}</span>
+        <div class="cue-title">${t.title}</div>
+        <div class="cue-sub">${t.sub}</div>
+      </div>
+      <span class="cue-arrow">›</span>
+      <button class="cue-x" aria-label="Dismiss">×</button>`;
+    row.addEventListener("click", e => {
+      if (e.target.closest(".cue-x")) return;
+      pendingNoticeContext = { id: n.id, tpl: t };
+      startFlow(t.flow);
+    });
+    row.querySelector(".cue-x").addEventListener("click", e => {
+      e.stopPropagation();
+      removeNotice(n.id, "dismissed");
+    });
+    return row;
+  }
+
+  function refreshNoticedEmpty() {
+    const list = noticedListEl();
+    let empty = document.getElementById("noticed-empty");
+    if (activeNotices.length === 0) {
+      if (!empty) {
+        empty = document.createElement("div");
+        empty.className = "notice-empty";
+        empty.id = "noticed-empty";
+        empty.textContent = "Nothing to flag right now — Merry is listening quietly.";
+        list.appendChild(empty);
+      }
+    } else if (empty) {
+      empty.remove();
     }
   }
 
-  /* ═══ Cue rows → flow ═══ */
-  document.querySelectorAll("[data-goto-flow]").forEach(row => {
-    row.addEventListener("click", e => {
-      if (e.target.classList.contains("cue-x")) return;
-      startFlow(row.dataset.gotoFlow);
-    });
-  });
+  function updateNoticeBadge() {
+    const el = document.getElementById("notice-count");
+    if (!el) return;
+    if (activeNotices.length === 0) {
+      el.textContent = "All clear";
+      el.style.background = "rgba(31,139,59,.10)";
+      el.style.color = "var(--ok)";
+    } else {
+      el.textContent = activeNotices.length + " active";
+      el.style.background = "";
+      el.style.color = "";
+    }
+  }
+
+  function spawnNotice() {
+    if (activeNotices.length >= NOTICE_MAX) return;
+    const used = new Set(activeNotices.map(n => n.tpl.key));
+    const pool = NOTICE_TEMPLATES.filter(t => !used.has(t.key));
+    if (!pool.length) return;
+
+    // Weighted pick — safety/device surfaces more often than speech-only cues,
+    // matching the brief's stated priority order (8.1).
+    const total = pool.reduce((s, t) => s + t.weight, 0);
+    let r = Math.random() * total, chosen = pool[0];
+    for (const t of pool) { r -= t.weight; if (r <= 0) { chosen = t; break; } }
+
+    const id = ++noticeSeq;
+    const n = { id, tpl: chosen, stage: "fresh" };
+    activeNotices.push(n);
+
+    const list = noticedListEl();
+    const empty = document.getElementById("noticed-empty");
+    if (empty) empty.remove();
+    list.insertBefore(renderNoticeRow(n), list.firstChild);
+
+    n.collapseT = setTimeout(() => collapseNotice(id), NOTICE_COLLAPSE_MS);
+    n.removeT   = setTimeout(() => removeNotice(id, "expired"), NOTICE_GONE_MS);
+    updateNoticeBadge();
+  }
+
+  function collapseNotice(id) {
+    const n = activeNotices.find(x => x.id === id);
+    if (!n) return;
+    n.stage = "collapsed";
+    const row = document.getElementById("notice-" + id);
+    if (row) row.classList.add("collapsed");
+  }
+
+  function removeNotice(id, reason) {
+    const idx = activeNotices.findIndex(x => x.id === id);
+    if (idx === -1) return;
+    const n = activeNotices[idx];
+    clearTimeout(n.collapseT);
+    clearTimeout(n.removeT);
+    activeNotices.splice(idx, 1);
+
+    const row = document.getElementById("notice-" + id);
+    if (row) {
+      row.classList.add("fading");
+      setTimeout(() => row.remove(), 360);
+    }
+    if (pendingNoticeContext && pendingNoticeContext.id === id) pendingNoticeContext = null;
+
+    logNoticeOutcome(n.tpl, reason);
+    updateNoticeBadge();
+    refreshNoticedEmpty();
+  }
+
+  // Self-recheck loop — irregular cadence so it never feels mechanical;
+  // each tick has a chance (not a guarantee) of surfacing something new.
+  function scheduleNextNoticeCheck() {
+    const delay = 14000 + Math.random() * 14000; // ~14–28s
+    setTimeout(() => {
+      if (activeNotices.length < NOTICE_MAX && Math.random() < 0.65) spawnNotice();
+      scheduleNextNoticeCheck();
+    }, delay);
+  }
+
+  /* ═══ Activity log — what Merry noticed, what it did, did it work ═══ */
+  let noticeLog = []; // { title, action, outcome, mood, time }
+
+  function logNoticeOutcome(tpl, reason) {
+    const stamp = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    let entry;
+    if (reason === "resolved") {
+      entry = { title: tpl.title, action: `Walked through "${FLOWS[tpl.flow].label}" together`, outcome: "Resolved ✓", mood: "ok", time: stamp };
+    } else if (reason === "dismissed") {
+      entry = { title: tpl.title, action: "You dismissed this notice", outcome: "No action taken", mood: "muted", time: stamp };
+    } else {
+      entry = { title: tpl.title, action: "Cleared itself after about a minute", outcome: "Not addressed — Merry will keep watching", mood: "warn", time: stamp };
+    }
+    noticeLog.unshift(entry);
+    if (noticeLog.length > 6) noticeLog.length = 6;
+    renderActivityLog();
+  }
+
+  function renderActivityLog() {
+    const list = document.getElementById("activity-log");
+    if (!list) return;
+    if (!noticeLog.length) {
+      list.innerHTML = `<div class="log-empty" id="activity-log-empty">Nothing logged yet — this fills in as Merry notices things and helps you sort them out.</div>`;
+      return;
+    }
+    list.innerHTML = noticeLog.map(e => `
+      <div class="log-entry">
+        <div class="log-icon ${e.mood}">${e.mood === "ok" ? "✓" : e.mood === "warn" ? "!" : "–"}</div>
+        <div>
+          <div class="log-title">${e.title}</div>
+          <div class="log-meta">${e.action} · <strong style="color:var(--${e.mood === "ok" ? "ok" : e.mood === "warn" ? "warn" : "faint"})">${e.outcome}</strong> · ${e.time}</div>
+        </div>
+      </div>`).join("");
+  }
+
+  // Kick things off: one notice shortly after load (so the home screen isn't
+  // empty on first view), then the self-recheck loop takes over.
+  setTimeout(spawnNotice, 2600);
+  scheduleNextNoticeCheck();
 
   /* ═══ Problem cards ═══ */
   document.querySelectorAll("[data-flow]").forEach(card => {
@@ -2224,32 +2626,84 @@
     currentFlow = key;
     flowStep = 0;
     noiseChoice = null;
+    reconRetried = false;
 
     const data = FLOWS[key];
 
     // Reset any state left over from a completed flow
     flowDone = false;
-    document.getElementById("survey-card").hidden = true;
 
-    document.getElementById("flow-breadcrumb").textContent = "You chose";
+    document.getElementById("flow-breadcrumb").textContent = "You said";
     document.getElementById("flow-title").textContent = data.title;
     document.getElementById("flow-subtitle").textContent = data.subtitle;
     document.getElementById("flow-primary").textContent = data.primaryFirst;
     document.getElementById("flow-primary").disabled = false;
-    document.getElementById("flow-secondary").textContent = "Send to care instead";
+    document.getElementById("flow-primary").classList.remove("hidden");
+    // Support flow: you're already sending to care — no "send to care instead" escape
+    if (key === "support") {
+      document.getElementById("flow-secondary").classList.add("hidden");
+    } else {
+      document.getElementById("flow-secondary").textContent = "Send to care instead";
+      document.getElementById("flow-secondary").classList.remove("hidden");
+    }
+    document.getElementById("flow-primary").classList.remove("hidden");
     document.getElementById("success-card").classList.add("hidden");
+    document.getElementById("comfort-check").classList.add("hidden");
+    document.getElementById("survey-invite").classList.add("hidden");
+    if (noiseHomeTimer)   { clearTimeout(noiseHomeTimer);   noiseHomeTimer   = null; }
+    if (reconAutoTimer)   { clearTimeout(reconAutoTimer);   reconAutoTimer   = null; }
+    if (chargeAutoTimer)  { clearTimeout(chargeAutoTimer);  chargeAutoTimer  = null; }
+    if (supportAutoTimer) { clearTimeout(supportAutoTimer); supportAutoTimer = null; }
+    if (clarityAutoTimer) { clearTimeout(clarityAutoTimer); clarityAutoTimer = null; }
+    document.getElementById("recon-tip").classList.add("hidden");
 
-    // Noise type row
-    const ntr = document.getElementById("noise-type-row");
-    ntr.classList.toggle("hidden", !data.noiseType);
+    // Noise type row — use the stable reference; the node gets moved in/out
+    // of the active step card on each render, so it may be detached from the
+    // DOM right now (getElementById would miss it)
+    if (noiseTypeRowEl) {
+      noiseTypeRowEl.classList.toggle("hidden", !data.noiseType);
+      noiseTypeRowEl.classList.remove("locked");
+      noiseTypeRowEl.style.outline = "";
+    }
     document.querySelectorAll("[data-noise]").forEach(b => b.classList.remove("selected"));
     noiseChoice = null;
+    const changeBtn = document.getElementById("noise-change-btn");
+    if (changeBtn) changeBtn.classList.add("hidden");
 
     renderFlowVisual(key);
     renderStepProgress(data.steps, -1);
     renderStepCards(data.steps, -1);
 
     goTo("flow");
+
+    // Reconnect + Charge: no button to tap — Merry detects each step on its own.
+    // A short visual settling pause lets the user see the scene before it begins.
+    if (key === "reconnect") {
+      const primaryBtn = document.getElementById("flow-primary");
+      primaryBtn.textContent = "Getting ready…";
+      primaryBtn.disabled = true;
+      reconAutoTimer = setTimeout(() => advanceFlow(), 1200);
+    }
+    if (key === "charge") {
+      const primaryBtn = document.getElementById("flow-primary");
+      primaryBtn.textContent = "Detecting…";
+      primaryBtn.disabled = true;
+      chargeAutoTimer = setTimeout(() => advanceFlow(), 1200);
+    }
+    if (key === "support") {
+      // Support is fully automatic — Merry collects status, then sends, no tapping needed
+      const primaryBtn = document.getElementById("flow-primary");
+      primaryBtn.textContent = "Collecting status…";
+      primaryBtn.disabled = true;
+      supportAutoTimer = setTimeout(() => advanceFlow(), 1500);
+    }
+    if (key === "clarity") {
+      // Clarity is fully automatic — Merry checks mic, boosts, then confirms on its own
+      const primaryBtn = document.getElementById("flow-primary");
+      primaryBtn.textContent = "Checking mic…";
+      primaryBtn.disabled = true;
+      clarityAutoTimer = setTimeout(() => advanceFlow(), 1200);
+    }
   }
 
   /* ═══ Flow visual ═══ */
@@ -2264,13 +2718,18 @@
         <div class="sonar-ring" style="width:110px;height:110px"></div>
         <div class="sonar-center" id="sonar-center">🔊</div>`;
     } else if (key === "reconnect") {
+      el.classList.add("recon-tall");
       el.innerHTML = `
         <div class="recon-scene">
-          <div class="recon-wave"></div>
-          <div class="recon-aid left"></div>
-          <div class="recon-aid right"></div>
+          <div class="recon-wave" id="recon-wave"></div>
+          <div class="recon-aid left"  id="recon-aid-l"></div>
+          <div class="recon-aid right" id="recon-aid-r"></div>
           <div class="recon-phone"></div>
+          <div class="recon-tap-hint hidden" id="recon-retry">Tap to check again</div>
+          <div class="recon-status" id="recon-status">Hold your aids nearby — starting in a moment.</div>
         </div>`;
+      updateReconVisual(-1);
+      document.getElementById("recon-retry").addEventListener("click", () => recheckReconStep());
     } else if (key === "noise") {
       el.innerHTML = `
         <div class="noise-bars">
@@ -2286,7 +2745,118 @@
           <div class="pkg-dot pkg-sound">🔊</div>
           <div class="pkg-center-icon">📦</div>
         </div>`;
+    } else if (key === "charge") {
+      el.innerHTML = `
+        <div class="charge-scene">
+          <div class="charge-ring"></div>
+          <div class="charge-case-icon" id="charge-case-icon">🔋</div>
+          <div class="charge-bolt" id="charge-bolt">⚡</div>
+          <div class="charge-status" id="charge-status">Hold your aids nearby — detecting in a moment.</div>
+        </div>`;
     }
+  }
+
+  /* ═══ Reconnect: interactive guided animation ═══
+     Mirrors the brief's 4.4 spec — Merry narrates physical steps one at a
+     time, with simulated detection feedback ("Right aid woke up", "Both
+     aids are linked", "Doesn't look close enough — try again") and a
+     tap-to-recheck affordance so the guidance feels responsive, not scripted.
+  ═══ */
+  let reconGen = 0; // invalidates stale timeouts when the step changes or user re-checks
+
+  function setReconStatus(text, mood) {
+    const el = document.getElementById("recon-status");
+    if (!el) return;
+    el.textContent = text;
+    el.className = "recon-status" + (mood ? " " + mood : "");
+  }
+
+  function updateReconVisual(stepIndex) {
+    const aidL  = document.getElementById("recon-aid-l");
+    const aidR  = document.getElementById("recon-aid-r");
+    const wave  = document.getElementById("recon-wave");
+    const retry = document.getElementById("recon-retry");
+    if (!aidL || !aidR || !wave || !retry) return;
+
+    const myGen = ++reconGen;
+
+    aidL.className = "recon-aid left";
+    aidR.className = "recon-aid right";
+    wave.className = "recon-wave";
+    retry.classList.add("hidden");
+
+    const tip = document.getElementById("recon-tip");
+    const setTip = (text) => { if (tip) { tip.textContent = text; tip.classList.remove("hidden"); } };
+
+    if (stepIndex < 0) {
+      setReconStatus("Hold your aids nearby — starting in a moment.", "checking");
+      if (tip) tip.classList.add("hidden");
+      return;
+    }
+
+    if (stepIndex === 0) {
+      // Bring aids close — both search simultaneously
+      aidL.classList.add("searching");
+      aidR.classList.add("searching");
+      setReconStatus("Looking for both aids…", "checking");
+      setTip("Keep aids on a flat surface near your phone. Avoid pockets — the signal can't pass through fabric reliably.");
+      // Simulate detection: after ~3.5s both aids are found and settle into "woke" position
+      setTimeout(() => {
+        if (myGen !== reconGen) return;
+        aidL.className = "recon-aid left woke";
+        aidR.className = "recon-aid right woke";
+        setReconStatus("✓ Both aids detected nearby.", "ok");
+      }, 3500);
+
+    } else if (stepIndex === 1) {
+      // Power cycle — both aids go into the case (sleeping) then come back out (woke).
+      // Both aids reset simultaneously; left and right both animate through searching.
+      aidL.className = "recon-aid left searching";
+      aidR.className = "recon-aid right searching";
+      setReconStatus("Close the case lid and wait a moment…", "checking");
+      setTip("Place both aids in the case and close the lid. After about 5 seconds, open the lid — the aids will power on and reconnect automatically.");
+      setTimeout(() => {
+        if (myGen !== reconGen) return;
+        aidL.className = "recon-aid left woke";
+        aidR.className = "recon-aid right woke";
+        setReconStatus("✓ Both aids powered back on — searching for connection.", "ok");
+      }, 3500);
+
+    } else if (stepIndex === 2) {
+      // Confirm linked — both already woke, now verified as linked (stronger green ring)
+      aidL.className = "recon-aid left linked";
+      aidR.className = "recon-aid right linked";
+      wave.classList.add("linked");
+      setReconStatus("Confirming connection…", "checking");
+      setTip("Merry is running a quick handshake between both aids and your phone. This usually takes just a second.");
+      setTimeout(() => {
+        if (myGen !== reconGen) return;
+        setReconStatus("✓ Both aids are linked.", "ok");
+      }, 2500);
+    }
+  }
+
+  // "Tap to check again" — lets the user actively retry detection rather
+  // than waiting on a timer; mirrors the brief's "好像沒有靠近，再試試看" feedback loop.
+  function recheckReconStep() {
+    // Guard with the gen counter (not flowStep) — flowStep has already advanced
+    // past 0 by the time this fires, since the primary button increments it
+    // immediately on click. The retry hint only ever shows during step 0's
+    // detection state, and is hidden again the moment the visual re-renders.
+    if (currentFlow !== "reconnect") return;
+    const aidL  = document.getElementById("recon-aid-l");
+    const aidR  = document.getElementById("recon-aid-r");
+    const retry = document.getElementById("recon-retry");
+    const myGen = ++reconGen;
+    reconRetried = true;
+    retry.classList.add("hidden");
+    aidL.className = "recon-aid left searching";
+    aidR.className = "recon-aid right searching";
+    setReconStatus("Checking again…", "checking");
+    setTimeout(() => {
+      if (myGen !== reconGen) return;
+      setReconStatus("Good — both aids detected nearby.", "ok");
+    }, 1300);
   }
 
   /* ═══ Step progress ═══ */
@@ -2307,27 +2877,48 @@
     const el = document.getElementById("step-cards");
     el.innerHTML = steps.map((s, i) => {
       const cls = i < activeIndex ? "done" : i === activeIndex ? "active" : "";
+      // Noise flow's first card ("Identify noise type") holds the live picker —
+      // it's interactive from the moment the flow opens (activeIndex starts at -1),
+      // so it must never get the "waiting / dimmed" treatment other upcoming steps get.
+      const isLiveNoisePicker = currentFlow === "noise" && i === 0;
+      const isWaiting = i > activeIndex && !isLiveNoisePicker;
       return `<div class="step-card">
         <div class="step-card-head">
           <div class="step-card-num ${cls}">${i < activeIndex ? "✓" : i + 1}</div>
-          <div class="step-card-title" style="${i > activeIndex ? "color:var(--faint)" : ""}">${s.label}</div>
+          <div class="step-card-title" style="${isWaiting ? "color:var(--faint)" : ""}">${s.label}</div>
         </div>
-        <div class="step-card-body" style="${i > activeIndex ? "opacity:.45" : ""}">${i <= activeIndex ? s.body : "Waiting…"}</div>
+        <div class="step-card-body" style="${isWaiting ? "opacity:.45" : ""}">${i <= activeIndex || isLiveNoisePicker ? s.body : "Waiting…"}</div>
       </div>`;
     }).join("");
+
+    // Noise flow: the type picker physically lives inside "Identify noise type" —
+    // re-attach it after every rebuild (innerHTML wipes whatever was nested in there)
+    if (currentFlow === "noise" && noiseTypeRowEl) {
+      const firstBody = el.querySelector(".step-card:first-child .step-card-body");
+      if (firstBody) {
+        noiseTypeRowEl.classList.remove("hidden");
+        firstBody.appendChild(noiseTypeRowEl);
+      }
+    }
   }
 
-  /* ═══ Flow primary action ═══ */
-  document.getElementById("flow-primary").addEventListener("click", () => {
-    // If flow already done, go to survey
-    if (flowDone) { goTo("survey"); return; }
+  /* ═══ Flow primary action ═══
+     Pulled into a function so the noise-type picker can trigger the same
+     advancement automatically (tap a type → flow moves on by itself —
+     no separate scroll-and-tap needed). */
+  function advanceFlow() {
+    // If flow already done: charge + reconnect → home; others → survey
+    if (flowDone) {
+      goTo(currentFlow === "charge" || currentFlow === "reconnect" ? "home" : "survey");
+      return;
+    }
 
     const data = FLOWS[currentFlow];
     if (!data) return;
 
     // Noise: require type selection before step 1
     if (currentFlow === "noise" && flowStep === 0 && !noiseChoice) {
-      const ntr = document.getElementById("noise-type-row");
+      const ntr = noiseTypeRowEl || document.getElementById("noise-type-row");
       ntr.style.outline = "2px solid var(--danger)";
       ntr.style.borderRadius = "14px";
       setTimeout(() => ntr.style.outline = "", 1200);
@@ -2335,8 +2926,10 @@
     }
 
     if (flowStep < data.steps.length) {
-      renderStepProgress(data.steps, flowStep);
-      renderStepCards(data.steps, flowStep);
+      const activeIdx = flowStep; // index of the step card that becomes active in this render
+      renderStepProgress(data.steps, activeIdx);
+      renderStepCards(data.steps, activeIdx);
+      if (currentFlow === "reconnect") updateReconVisual(flowStep);
       flowStep++;
 
       // Update visual
@@ -2346,16 +2939,187 @@
       if (currentFlow === "support" && flowStep >= 2) {
         document.getElementById("flow-visual").classList.add("bundling");
       }
+      if (currentFlow === "charge") {
+        const visual = document.getElementById("flow-visual");
+        const status = document.getElementById("charge-status");
+        const CHARGE_STATUS = [
+          "✓ Aid detected in case — watching for cable…",
+          "✓ Cable connected — checking for a charging signal…",
+          "✓ Charging confirmed. Leave it closed and connected."
+        ];
+        visual.classList.toggle("charging", activeIdx >= 0);
+        if (status) status.textContent = CHARGE_STATUS[activeIdx] || CHARGE_STATUS[0];
+      }
+
+      // Noise: show the "wrong type? go back" safeguard only while the user
+      // is looking at "Apply targeted filter" or "Confirm comfort" (steps 2–3) —
+      // step 1 ("Identify noise type") is free to choose, no safeguard needed there
+      if (currentFlow === "noise") {
+        const changeBtn = document.getElementById("noise-change-btn");
+        if (changeBtn) changeBtn.classList.toggle("hidden", !(activeIdx === 1 || activeIdx === 2));
+        // Gray the picker out once we've moved on — the chosen type stays
+        // visibly highlighted so the user can confirm it, but tapping is
+        // disabled until "Choose again" lights it back up
+        if (noiseTypeRowEl) noiseTypeRowEl.classList.toggle("locked", activeIdx >= 1);
+      }
 
       if (flowStep < data.steps.length) {
-        document.getElementById("flow-primary").textContent = flowStep === data.steps.length - 1 ? "Final step →" : "Next step →";
+        if (currentFlow === "noise" && activeIdx === 1) {
+          // "Apply targeted filter" is Merry's job, not the user's — it runs
+          // on its own. Show that it's working, then move on by itself so the
+          // user is never asked to tap "next" on something that isn't theirs to do.
+          const primaryBtn = document.getElementById("flow-primary");
+          primaryBtn.textContent = "Applying filter…";
+          primaryBtn.disabled = true;
+          setTimeout(() => advanceFlow(), 1700);
+        } else if (currentFlow === "reconnect") {
+          // Reconnect steps advance automatically once the simulated detection
+          // completes — no button tap needed. 5 s gives the user time to read
+          // the instruction and physically do what's described.
+          const primaryBtn = document.getElementById("flow-primary");
+          const labels = ["Looking for aids…", "Listening for right aid…", "Confirming link…"];
+          primaryBtn.textContent = labels[activeIdx] || "Listening…";
+          primaryBtn.disabled = true;
+          clearTimeout(reconAutoTimer);
+          reconAutoTimer = setTimeout(() => advanceFlow(), 5000);
+        } else if (currentFlow === "charge") {
+          // Charge steps advance automatically once Merry simulates detecting
+          // each physical action (aid seated → cable connected → charging signal).
+          const primaryBtn = document.getElementById("flow-primary");
+          const labels = ["Detecting aid in case…", "Detecting cable connection…", "Checking for charging signal…"];
+          primaryBtn.textContent = labels[activeIdx] || "Detecting…";
+          primaryBtn.disabled = true;
+          clearTimeout(chargeAutoTimer);
+          chargeAutoTimer = setTimeout(() => advanceFlow(), 5000);
+        } else if (currentFlow === "support") {
+          // Step 0 (Collect status) done — move straight to Send step automatically
+          const primaryBtn = document.getElementById("flow-primary");
+          primaryBtn.textContent = "Sending to Dr. Elena…";
+          primaryBtn.disabled = true;
+          clearTimeout(supportAutoTimer);
+          supportAutoTimer = setTimeout(() => advanceFlow(), 1200);
+        } else if (currentFlow === "clarity") {
+          // All clarity steps are automatic — Merry checks, boosts, confirms on its own
+          const primaryBtn = document.getElementById("flow-primary");
+          const labels = ["Boosting speech…", "Confirming…"];
+          primaryBtn.textContent = labels[activeIdx] || "Working…";
+          primaryBtn.disabled = true;
+          clearTimeout(clarityAutoTimer);
+          clarityAutoTimer = setTimeout(() => advanceFlow(), 2000);
+        } else {
+          document.getElementById("flow-primary").textContent = flowStep === data.steps.length - 1 ? "Final step →" : "Next step →";
+          document.getElementById("flow-primary").disabled = false;
+        }
+      } else if (currentFlow === "noise") {
+        // "Confirm comfort" is the moment that actually matters — instead of
+        // auto-completing into a generic success card, ask for real and branch
+        // on the answer (see showComfortCheck).
+        showComfortCheck();
       } else {
         document.getElementById("flow-primary").textContent = "Checking…";
         document.getElementById("flow-primary").disabled = true;
         setTimeout(completeFlow, 1100);
       }
     }
+  }
+
+  /* ═══ Noise: comfort check — the real branch point ═══
+     "Yes" folds the success state and "back to home" into a single beat
+     (no redundant success-card → survey-prompt → home stack). "Not quite"
+     opens a second, smaller choice: try again, or loop in Dr. Elena —
+     either way the user always has somewhere to go next. */
+  function showComfortCheck() {
+    document.getElementById("flow-primary").classList.add("hidden");
+    document.getElementById("flow-secondary").classList.add("hidden");
+    document.getElementById("noise-change-btn").classList.add("hidden");
+    document.getElementById("comfort-check").classList.remove("hidden");
+  }
+
+  function hideComfortCheck() {
+    document.getElementById("comfort-check").classList.add("hidden");
+    document.getElementById("flow-primary").classList.remove("hidden");
+    document.getElementById("flow-secondary").classList.remove("hidden");
+  }
+
+  document.getElementById("survey-invite").addEventListener("click", () => {
+    // Cancel the auto-home redirect — the user chose to give feedback instead.
+    clearTimeout(noiseHomeTimer);
+    document.getElementById("survey-invite").classList.add("hidden");
+    goTo("survey");
   });
+
+  document.querySelectorAll("#comfort-check [data-comfort]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      if (btn.dataset.comfort === "good") {
+        // Comfortable = done. Show a short confirming beat, then auto-home.
+        // "Feeling better" and "leaving" are one motion — no mandatory survey.
+        // Occasionally Merry will offer a lightweight invite below the card;
+        // tapping it cancels the redirect and opens survey instead.
+        hideComfortCheck();
+        flowDone = true;
+        if (pendingNoticeContext && pendingNoticeContext.tpl.flow === currentFlow) {
+          removeNotice(pendingNoticeContext.id, "resolved");
+        }
+        document.getElementById("flow-visual").classList.add("smoothing");
+        document.getElementById("success-card").classList.remove("hidden");
+        document.getElementById("success-title").textContent = FLOWS.noise.successTitle;
+        document.getElementById("success-copy").textContent  = "Merry will keep this setting — heading back home.";
+
+        // ~50% of the time, offer a low-key survey invite below the card.
+        // In a production build this would be driven by session frequency logic
+        // (e.g. at most once every 3 resolved sessions) — for the prototype
+        // we use a coin flip so the path is visible during review.
+        const offerSurvey = Math.random() < 0.5;
+        const invite = document.getElementById("survey-invite");
+        invite.classList.toggle("hidden", !offerSurvey);
+
+        // Schedule the auto-home redirect; store the timer so the invite
+        // can cancel it if the user taps before the timeout fires.
+        noiseHomeTimer = setTimeout(() => {
+          invite.classList.add("hidden");
+          goTo("home");
+        }, 1600);
+      } else {
+        // Not comfortable — escalate directly to Dr. Elena with context
+        hideComfortCheck();
+        escalateNoiseToCare();
+      }
+    });
+  });
+
+  document.querySelectorAll("#comfort-check [data-retry]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      if (btn.dataset.retry === "type") {
+        // Loop back to "Identify noise type" with the picker unlocked again —
+        // reuses the same safeguard reset so the state stays consistent.
+        hideComfortCheck();
+        document.getElementById("noise-change-btn").click();
+      } else {
+        hideComfortCheck();
+        escalateNoiseToCare();
+      }
+    });
+  });
+
+  /* Hands the situation to Dr. Elena with the context Merry already has —
+     no need to make the user re-explain what they just tried. */
+  function escalateNoiseToCare() {
+    const typeLabel = { hiss: "the hiss", traffic: "the traffic noise", crowd: "the crowd noise" }[noiseChoice] || "the background noise";
+    startFlow("support");
+    document.getElementById("flow-subtitle").textContent =
+      `Merry already tried softening ${typeLabel} for you, but it still didn't feel right. Merry is bundling your sound environment and device status for Dr. Elena now.`;
+    // Merry already has the status — cancel the "Collecting" timer, jump straight to Send
+    clearTimeout(supportAutoTimer);
+    flowStep = 1;
+    renderStepProgress(FLOWS.support.steps, 1);
+    renderStepCards(FLOWS.support.steps, 1);
+    const primaryBtn = document.getElementById("flow-primary");
+    primaryBtn.textContent = "Sending to Dr. Elena…";
+    primaryBtn.disabled = true;
+    supportAutoTimer = setTimeout(() => advanceFlow(), 1200);
+  }
+
+  document.getElementById("flow-primary").addEventListener("click", advanceFlow);
 
   function completeFlow() {
     const data = FLOWS[currentFlow];
@@ -2368,6 +3132,8 @@
     if (sonar) { sonar.textContent = "✓"; sonar.style.background = "var(--ok)"; }
     if (currentFlow === "noise")   visual.classList.add("smoothing");
     if (currentFlow === "support") visual.classList.add("bundling");
+    const changeBtn = document.getElementById("noise-change-btn");
+    if (changeBtn) changeBtn.classList.add("hidden");
 
     // Show success
     document.getElementById("success-card").classList.remove("hidden");
@@ -2375,24 +3141,104 @@
     document.getElementById("success-copy").textContent  = data.successCopy;
 
     flowDone = true;
-    document.getElementById("flow-primary").textContent = "Done — take a quick survey?";
+    const sec = document.getElementById("flow-secondary");
+    if (currentFlow === "charge") {
+      // Charging confirmed — just go home, no escalation needed
+      document.getElementById("flow-primary").textContent = "← Back to home";
+      sec.classList.add("hidden");
+    } else if (currentFlow === "reconnect") {
+      // Reconnect done — home is primary; offer care escalation if issue persists
+      document.getElementById("flow-primary").textContent = "← Back to home";
+      sec.textContent = "Still having issues? Tell Dr. Elena";
+      sec.classList.remove("hidden");
+    } else if (currentFlow === "support") {
+      // Care package sent — survey option + back home
+      document.getElementById("flow-primary").textContent = "Done — take a quick survey?";
+      sec.textContent = "← Back to home";
+      sec.classList.remove("hidden");
+    } else {
+      // clarity and others
+      document.getElementById("flow-primary").textContent = "Done — take a quick survey?";
+      sec.textContent = "← Back to home";
+      sec.classList.remove("hidden");
+    }
     document.getElementById("flow-primary").disabled = false;
-    document.getElementById("flow-secondary").textContent = "Back to home";
+
+    // If this flow was started from a "Merry noticed" cue, close the loop:
+    // clear the notice and log it as resolved (brief: log what we did + outcome)
+    if (pendingNoticeContext && pendingNoticeContext.tpl.flow === currentFlow) {
+      removeNotice(pendingNoticeContext.id, "resolved");
+    }
   }
 
   document.getElementById("flow-secondary").addEventListener("click", () => {
-    if (flowDone) { goTo("home"); return; }
+    if (reconAutoTimer)   { clearTimeout(reconAutoTimer);   reconAutoTimer   = null; }
+    if (chargeAutoTimer)  { clearTimeout(chargeAutoTimer);  chargeAutoTimer  = null; }
+    if (supportAutoTimer) { clearTimeout(supportAutoTimer); supportAutoTimer = null; }
+    if (clarityAutoTimer) { clearTimeout(clarityAutoTimer); clarityAutoTimer = null; }
+    if (flowDone) {
+      // After reconnect, "Still having issues?" → start support flow (not just care tab)
+      if (currentFlow === "reconnect") { startFlow("support"); return; }
+      // All other post-completion secondaries → back home
+      goTo("home"); return;
+    }
+    // Mid-flow escape: go to care tab directly
     goTo("care");
   });
 
-  /* ═══ Noise type picker ═══ */
+  /* ═══ Noise type picker ═══
+     Picking a type IS the decision — it should move the flow on by itself,
+     not require a separate scroll-down-and-tap "Start noise reduction".
+     A short pause lets the selection register visually before we advance
+     (sequencing the visual feedback before the step transition — one channel
+     at a time, per the multimodal-design principle). */
+  noiseTypeRowEl = document.getElementById("noise-type-row");
+
   document.querySelectorAll("[data-noise]").forEach(btn => {
     btn.addEventListener("click", () => {
+      if (noiseTypeRowEl.classList.contains("locked")) return; // grayed out — must hit "Choose again" first
       document.querySelectorAll("[data-noise]").forEach(b => b.classList.remove("selected"));
       btn.classList.add("selected");
       noiseChoice = btn.dataset.noise;
-      document.getElementById("noise-type-row").style.outline = "";
+      noiseTypeRowEl.style.outline = "";
+
+      // Picking the type completes "Identify noise type" AND lands the user
+      // straight on "Apply targeted filter" — no separate "Next step" tap.
+      // Two advances fire back-to-back (same tick) so the user never sees the
+      // in-between "Identify noise type — active" frame; they land on step 2 directly.
+      if (currentFlow === "noise" && flowStep === 0) {
+        setTimeout(() => { advanceFlow(); advanceFlow(); }, 280);
+      }
     });
+  });
+
+  /* Safeguard: tapped the wrong type? Jump back to step 1 and re-pick. */
+  document.getElementById("noise-change-btn").addEventListener("click", () => {
+    if (currentFlow !== "noise" || flowDone || flowStep === 0) return;
+
+    flowStep = 0;
+    noiseChoice = null;
+    document.querySelectorAll("[data-noise]").forEach(b => b.classList.remove("selected"));
+    document.getElementById("flow-visual").classList.remove("smoothing");
+    document.getElementById("noise-change-btn").classList.add("hidden");
+
+    // Also reachable from the comfort check's "Try a different type" — make
+    // sure its panel is closed and the normal actions are back in view
+    document.getElementById("comfort-check").classList.add("hidden");
+    document.getElementById("flow-primary").classList.remove("hidden");
+    document.getElementById("flow-secondary").classList.remove("hidden");
+
+    renderStepProgress(FLOWS.noise.steps, -1);
+    renderStepCards(FLOWS.noise.steps, -1);
+
+    // Light the picker back up so they can choose again
+    noiseTypeRowEl.classList.remove("locked");
+    noiseTypeRowEl.style.outline = "2px solid var(--teal)";
+    setTimeout(() => noiseTypeRowEl.style.outline = "", 900);
+
+    const primaryBtn = document.getElementById("flow-primary");
+    primaryBtn.disabled = false;
+    primaryBtn.textContent = FLOWS.noise.primaryFirst;
   });
 
   /* ═══ Connection flow ═══
@@ -2432,7 +3278,9 @@
         sub.style.color   = "";
         aids.classList.remove("hidden");
         cta.classList.remove("hidden");
-        skip.style.display = "none"; // can't skip if not connected
+        skip.textContent = "Continue without aids →";
+        skip.style.color = "var(--muted)";
+        skip.style.display = ""; // keep skip visible — user always has an exit
       }, 2000);
 
       cta.addEventListener("click", () => {
@@ -2453,15 +3301,52 @@
     skip.addEventListener("click", () => goTo("home"));
   })();
 
-  /* ═══ Comfort Volume — liquid zone drag ═══ */
+  /* ═══ Comfort Volume — open vertical arcs, drag up = louder ═══ */
   let volLinked = true;
   let valL = 68, valR = 72;
 
-  const ARC_MAX = 197.9; // 270° arc length for r=42
+  const ARC_MAX = 131.9; // half-circumference (180°) for r=42
+  const ARC_CX = 50, ARC_CY = 75, ARC_R = 42;
+
+  // XY position on the arc for a given value (0–100)
+  // Arc starts at bottom (6 o'clock) and goes clockwise to top (12 o'clock)
+  function arcKnobPos(v) {
+    const t = Math.PI / 2 + (v / 100) * Math.PI;
+    return {
+      x: +(ARC_CX + ARC_R * Math.cos(t)).toFixed(2),
+      y: +(ARC_CY + ARC_R * Math.sin(t)).toFixed(2)
+    };
+  }
+
+  // Inject tick marks (every 10%) into the tick groups — called once on load
+  function initArcTicks() {
+    ["l", "r"].forEach(s => {
+      const g = document.getElementById("ticks-" + s);
+      if (!g) return;
+      let html = "";
+      for (let p = 0; p <= 100; p += 10) {
+        const t   = Math.PI / 2 + (p / 100) * Math.PI;
+        const cos = Math.cos(t), sin = Math.sin(t);
+        const major = (p % 50 === 0);
+        const r1 = major ? 35 : 37.5, r2 = major ? 49 : 46.5;
+        const sw = major ? "1.5" : "1";
+        const x1 = (ARC_CX + r1 * cos).toFixed(1), y1 = (ARC_CY + r1 * sin).toFixed(1);
+        const x2 = (ARC_CX + r2 * cos).toFixed(1), y2 = (ARC_CY + r2 * sin).toFixed(1);
+        html += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke-width="${sw}"/>`;
+      }
+      g.innerHTML = html;
+    });
+  }
+
   function volSafe(v) { return v >= 55 && v <= 85; }
 
-  function applyArc(side, v) {
+  function applyArc(side, v, haptic) {
+    // Ratchet snap to nearest 5% when dragging
+    if (haptic) v = Math.round(v / 5) * 5;
     v = Math.max(0, Math.min(100, Math.round(v)));
+    const prev = side === "L" ? valL : valR;
+    // Haptic tick on each new ratchet position
+    if (haptic && v !== prev && navigator.vibrate) navigator.vibrate(8);
     if (side === "L") valL = v; else valR = v;
 
     const arcEl = document.getElementById(side === "L" ? "arc-l" : "arc-r");
@@ -2483,33 +3368,33 @@
     const txt  = document.getElementById("vol-safe-text");
     const note = document.querySelector(".vol-safe-note");
     if (dot && txt && note) {
-      const both = volSafe(valL) && volSafe(valR);
-      const way  = valL > 95 || valR > 95;
-      dot.style.background = way ? "var(--danger)" : !both ? "var(--warn)" : "var(--ok)";
-      note.style.color     = way ? "var(--danger)" : !both ? "var(--warn)" : "var(--ok)";
-      txt.textContent = both ? "Both within safe range · 55–85% recommended"
-        : way ? "⚠ Very loud — reduce if uncomfortable"
-        : (valL > 85 || valR > 85)
-          ? `${(valL > 85 && valR > 85) ? "Both ears" : valL > 85 ? "Left" : "Right"} above 85% — use with caution`
-          : "Below recommended range · may be too quiet";
+      // Only flag the "very loud" extreme — gentler day-to-day levels (a bit
+      // soft, a bit above 85%) no longer trigger a warning tone.
+      const way = valL > 95 || valR > 95;
+      dot.style.background = way ? "var(--danger)" : "var(--ok)";
+      note.style.color     = way ? "var(--danger)" : "var(--ok)";
+      txt.textContent = way
+        ? "⚠ Very loud — reduce if uncomfortable"
+        : "Both within safe range · 55–85% recommended";
     }
 
     const cc = document.getElementById("care-comfort-val");
     if (cc) cc.textContent = `L ${valL}%  ·  R ${valR}%`;
+
+    // Move knob to arc endpoint for this value
+    const knobEl = document.getElementById("knob-" + side.toLowerCase());
+    if (knobEl) {
+      const p = arcKnobPos(v);
+      knobEl.setAttribute("transform", `translate(${p.x},${p.y})`);
+    }
   }
 
+  // Vertical drag: top of the gauge = loud (100), bottom = quiet (0) — matches the arc's visual direction
   function getArcValue(e, gaugeEl) {
     const rect = gaugeEl.getBoundingClientRect();
-    const cx = rect.left + rect.width  / 2;
-    const cy = rect.top  + rect.height / 2;
-    const px = e.touches ? e.touches[0].clientX : e.clientX;
     const py = e.touches ? e.touches[0].clientY : e.clientY;
-    let ang = Math.atan2(py - cy, px - cx) * 180 / Math.PI;
-    if (ang < 0) ang += 360;
-    ang -= 135;
-    if (ang < 0) ang += 360;
-    if (ang > 270) ang = ang < 315 ? 270 : 0;
-    return Math.round(ang / 270 * 100);
+    const v = (rect.bottom - py) / rect.height * 100;
+    return Math.round(Math.max(0, Math.min(100, v)));
   }
 
   function setupArcDrag(gaugeId, side) {
@@ -2527,14 +3412,14 @@
       otherStart = side === "L" ? valR : valL;
       target.setPointerCapture(e.pointerId);
       const v = getArcValue(e, el);
-      applyArc(side, v);
-      if (volLinked) applyArc(side === "L" ? "R" : "L", Math.max(0, Math.min(100, otherStart + (v - dragStart))));
+      applyArc(side, v, true);
+      if (volLinked) applyArc(side === "L" ? "R" : "L", Math.max(0, Math.min(100, otherStart + (v - dragStart))), true);
     });
     target.addEventListener("pointermove", e => {
       if (!active) return;
       const v = getArcValue(e, el);
-      applyArc(side, v);
-      if (volLinked) applyArc(side === "L" ? "R" : "L", Math.max(0, Math.min(100, otherStart + (v - dragStart))));
+      applyArc(side, v, true);
+      if (volLinked) applyArc(side === "L" ? "R" : "L", Math.max(0, Math.min(100, otherStart + (v - dragStart))), true);
     });
     target.addEventListener("pointerup",     () => { active = false; });
     target.addEventListener("pointercancel", () => { active = false; });
@@ -2542,6 +3427,10 @@
 
   setupArcDrag("gauge-l", "L");
   setupArcDrag("gauge-r", "R");
+  initArcTicks();
+  // Sync knobs to initial values
+  applyArc("L", valL);
+  applyArc("R", valR);
 
   const volLockBtn = document.getElementById("vol-lock");
   if (volLockBtn) {
