@@ -14,16 +14,16 @@
   :root {
     --blue:    #0072CE;
     --purple:  #582C83;
-    --teal:    #00A3AD;
+    --teal:    #3B9EFF;
     --ink:     #1A2330;
     --muted:   #6B7A88;
     --faint:   #9AAAB8;
     --bg:      #F5F9FF;
     --white:   #FFFFFF;
     --line:    #D8E6F0;
-    --ok:      #1F8B3B;
-    --warn:    #D4820A;
-    --danger:  #B91C1C;
+    --ok:      #0072CE;
+    --warn:    #582C83;
+    --danger:  #582C83;
     --grad:    linear-gradient(135deg,#0072CE 0%,#582C83 100%);
     --soft:    linear-gradient(135deg,#EAF5FF 0%,#EDF0FF 60%,#F0EAF8 100%);
     --card-shadow: 0 4px 16px rgba(26,35,48,.08);
@@ -207,18 +207,18 @@
   .music-style.active { border-color: var(--blue); background: rgba(0,114,206,.08); color: var(--blue); }
   .adaptive-panel { margin-bottom: 18px; padding: 16px; border: 1px solid rgba(0,114,206,.13); border-radius: 18px; background: linear-gradient(180deg,#F7FCFF 0%,#EFF7FF 100%); }
   .adaptive-stage { display: grid; place-items: center; gap: 12px; padding: 10px 0 14px; text-align: center; }
-  .adaptive-record-btn { width: 92px; height: 92px; border-radius: 50%; border: 4px solid var(--white); background: var(--teal); color: var(--white); display: grid; place-items: center; cursor: pointer; box-shadow: 0 8px 22px rgba(0,163,173,.25), inset 0 -8px 18px rgba(0,0,0,.10); transition: transform .18s, background .18s; }
+  .adaptive-record-btn { width: 92px; height: 92px; border-radius: 50%; border: 4px solid var(--white); background: var(--blue); color: var(--white); display: grid; place-items: center; cursor: pointer; box-shadow: 0 8px 22px rgba(0,114,206,.25), inset 0 -8px 18px rgba(0,0,0,.10); transition: transform .18s, background .18s; }
   .adaptive-record-btn.recording { background: var(--purple); animation: recordPulse 1.2s infinite; }
   .adaptive-record-btn.done { background: var(--blue); }
   .adaptive-record-btn svg { width: 38px; height: 38px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
   .adaptive-status { font-size: 14px; font-weight: 900; color: var(--ink); }
   .adaptive-hint { max-width: 250px; font-size: 11.5px; color: var(--muted); line-height: 1.45; }
   .adaptive-wave { display: flex; align-items: center; justify-content: center; gap: 4px; height: 48px; margin: 6px 0 12px; }
-  .adaptive-wave span { width: 3px; border-radius: 3px; background: var(--teal); height: calc(12px + var(--i) * 2px); opacity: .7; }
+  .adaptive-wave span { width: 3px; border-radius: 3px; background: var(--blue); height: calc(12px + var(--i) * 2px); opacity: .7; }
   .adaptive-panel.recording .adaptive-wave span { animation: waveDance .75s infinite ease-in-out; animation-delay: calc(var(--i) * -45ms); }
   .adaptive-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .adaptive-action { min-height: 44px; border: none; border-radius: 999px; background: var(--white); color: var(--blue); font-size: 13px; font-weight: 900; cursor: pointer; box-shadow: 0 3px 10px rgba(26,35,48,.08); }
-  .adaptive-action.primary { background: var(--teal); color: var(--white); }
+  .adaptive-action.primary { background: var(--blue); color: var(--white); }
   .adaptive-action:disabled { opacity: .45; cursor: not-allowed; }
   .adaptive-preset { display: none; margin-top: 12px; padding: 12px; border-radius: 14px; background: var(--white); border: 1px solid var(--line); }
   .adaptive-preset.show { display: block; }
@@ -319,7 +319,7 @@
 
   .care-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
   .care-action-card { min-height: 116px; padding: 14px; border: 1px solid var(--line); border-radius: 16px; background: var(--white); box-shadow: var(--card-shadow); display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; }
-  .care-action-icon { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; background: rgba(0,163,173,.10); color: var(--teal); margin-bottom: 10px; }
+  .care-action-icon { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; background: rgba(0,114,206,.08); color: var(--blue); margin-bottom: 10px; }
   .care-action-icon svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
   .care-action-title { font-size: 14px; font-weight: 900; color: var(--ink); }
   .care-action-meta { margin-top: 4px; font-size: 11px; color: var(--muted); line-height: 1.35; }
@@ -327,10 +327,17 @@
   .audiogram-title { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; font-size: 13px; font-weight: 900; color: var(--ink); }
   .audiogram-date { font-size: 10.5px; color: var(--faint); font-weight: 800; }
   .audiogram-svg { width: 100%; height: 142px; display: block; }
+  .audiogram-history { display: grid; gap: 8px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); }
+  .audiogram-history-title { font-size: 11px; font-weight: 900; color: var(--faint); text-transform: uppercase; letter-spacing: .04em; }
+  .audiogram-history-item { width: 100%; min-height: 52px; display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; padding: 10px 11px; border: 1px solid var(--line); border-radius: 12px; background: #F9FCFF; color: inherit; text-align: left; cursor: pointer; }
+  .audiogram-history-item:hover { border-color: rgba(0,114,206,.28); background: rgba(0,114,206,.04); }
+  .audiogram-history-main { font-size: 12px; font-weight: 900; color: var(--ink); }
+  .audiogram-history-sub { margin-top: 2px; font-size: 10.5px; color: var(--muted); line-height: 1.3; }
+  .audiogram-history-badge { padding: 5px 8px; border-radius: 999px; background: rgba(88,44,131,.08); color: var(--purple); font-size: 10px; font-weight: 900; white-space: nowrap; }
   .log-entry { cursor: pointer; border-radius: 12px; padding: 9px 8px; margin: 0 -8px; transition: background .15s; }
   .log-entry:hover { background: rgba(0,114,206,.05); }
   .log-location { margin-top: 3px; font-size: 10.5px; color: var(--muted); line-height: 1.35; }
-  .log-chip { display: inline-flex; align-items: center; min-height: 20px; padding: 0 8px; border-radius: 999px; background: rgba(0,163,173,.10); color: var(--teal); font-size: 10.5px; font-weight: 900; margin-top: 5px; }
+  .log-chip { display: inline-flex; align-items: center; min-height: 20px; padding: 0 8px; border-radius: 999px; background: rgba(88,44,131,.08); color: var(--purple); font-size: 10.5px; font-weight: 900; margin-top: 5px; }
   .analysis-drawer { position: absolute; left: 0; right: 0; bottom: 0; z-index: 75; max-height: 82%; overflow-y: auto; padding: 10px 20px 28px; border-radius: 24px 24px 0 0; background: var(--white); box-shadow: 0 -12px 36px rgba(26,35,48,.18); transform: translateY(105%); transition: transform .3s cubic-bezier(.4,0,.2,1); scrollbar-width: none; }
   .analysis-drawer.open { transform: translateY(0); }
   .analysis-title { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
@@ -338,19 +345,25 @@
   .analysis-close { width: 34px; height: 34px; border: none; border-radius: 50%; background: var(--soft); color: var(--ink); font-size: 18px; cursor: pointer; flex-shrink: 0; }
   .analysis-meta { font-size: 11px; color: var(--muted); line-height: 1.45; margin-bottom: 14px; }
   .pie-wrap { display: grid; place-items: center; margin: 10px 0 18px; }
-  .pie-chart { width: 210px; height: 210px; border-radius: 50%; background: conic-gradient(var(--teal) 0 36%, var(--blue) 36% 57%, var(--purple) 57% 73%, #3B9EFF 73% 84%, #85D8DE 84% 92%, #D9C8EA 92% 100%); box-shadow: inset 0 0 0 18px rgba(255,255,255,.55), 0 8px 20px rgba(26,35,48,.10); }
+  .pie-chart { width: 210px; height: 210px; border-radius: 50%; background: conic-gradient(#0072CE 0 36%, #582C83 36% 57%, #3B9EFF 57% 73%, #8B5CF6 73% 84%, #B7A2D8 84% 92%, #DCD2EC 92% 100%); box-shadow: inset 0 0 0 18px rgba(255,255,255,.55), 0 8px 20px rgba(26,35,48,.10); }
   .analysis-list { display: grid; gap: 7px; }
   .analysis-row { display: grid; grid-template-columns: 10px 1fr auto; align-items: center; gap: 8px; font-size: 11.5px; color: var(--muted); }
   .analysis-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--blue); }
   .analysis-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .analysis-percent { font-weight: 900; color: var(--ink); }
+  .analysis-upload-card { margin-top: 18px; padding: 14px; border-radius: 16px; background: linear-gradient(135deg,#F7FCFF 0%,#F2F0FA 100%); border: 1px solid rgba(0,114,206,.12); }
+  .analysis-upload-title { font-size: 13px; font-weight: 900; color: var(--ink); margin-bottom: 4px; }
+  .analysis-upload-copy { font-size: 11px; line-height: 1.45; color: var(--muted); margin-bottom: 12px; }
+  .analysis-upload-btn { width: 100%; min-height: 46px; border: none; border-radius: 999px; background: var(--grad); color: var(--white); font-size: 13px; font-weight: 900; cursor: pointer; box-shadow: 0 8px 18px rgba(88,44,131,.20); }
+  .analysis-upload-btn.uploaded { background: rgba(0,114,206,.08); color: var(--blue); box-shadow: none; cursor: default; }
+  .analysis-upload-btn:disabled { opacity: .72; cursor: wait; }
 
   /* Activity log */
   .log-entry { display: flex; align-items: flex-start; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--line); }
   .log-entry:last-child { border-bottom: none; }
   .log-icon { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; flex-shrink: 0; margin-top: 1px; }
-  .log-icon.ok { background: rgba(31,139,59,.12); color: var(--ok); }
-  .log-icon.warn { background: rgba(212,130,10,.14); color: var(--warn); }
+  .log-icon.ok { background: rgba(0,114,206,.10); color: var(--blue); }
+  .log-icon.warn { background: rgba(88,44,131,.10); color: var(--purple); }
   .log-icon.muted { background: rgba(107,122,136,.12); color: var(--faint); }
   .log-title { font-size: 12.5px; font-weight: 800; color: var(--ink); line-height: 1.25; }
   .log-meta { font-size: 10.5px; color: var(--faint); margin-top: 2px; line-height: 1.3; }
@@ -444,7 +457,7 @@
                       </g>
                       <path d="M 40 85 L 120 85 L 120 110 Q 120 130 100 130 L 60 130 Q 40 130 40 110 Z" fill="url(#case-base-grad)" stroke="#D8E6F0" stroke-width="2"/>
                       <circle cx="80" cy="105" r="3" fill="#E2E8F0" stroke="#CBD5E1" stroke-width="1"/>
-                      <circle cx="80" cy="105" r="2" fill="#1F8B3B" filter="drop-shadow(0 0 3px #1F8B3B)">
+                      <circle cx="80" cy="105" r="2" fill="#0072CE" filter="drop-shadow(0 0 3px #0072CE)">
                         <animate attributeName="opacity" values="0; 0; 1; 1; 0; 0" keyTimes="0; 0.14; 0.15; 0.85; 0.86; 1" dur="5s" repeatCount="indefinite"/>
                       </circle>
                     </g>
@@ -461,8 +474,8 @@
 
                 <div class="conn-done-icon hidden" id="conn-icon-done">
                   <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="40" cy="40" r="36" fill="rgba(31,139,59,0.12)" stroke="rgba(31,139,59,0.22)" stroke-width="2"/>
-                    <path d="M26 40 L35 49 L54 28" stroke="#1F8B3B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="40" cy="40" r="36" fill="rgba(0,114,206,0.12)" stroke="rgba(88,44,131,0.22)" stroke-width="2"/>
+                    <path d="M26 40 L35 49 L54 28" stroke="#0072CE" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
                 </div>
               </div>
@@ -600,7 +613,7 @@
                         <filter id="shadow-l"><feDropShadow dx="0" dy="1.5" stdDeviation="1.5" flood-color="#000000" flood-opacity="0.3"/></filter>
                       </defs>
                       <path d="M 50 117 A 42 42 0 0 1 50 33" stroke="#E5EEF6" stroke-width="9" stroke-linecap="round"/>
-                      <path d="M 8.52 68.43 A 42 42 0 0 1 30.93 37.58" stroke="rgba(31,139,59,0.16)" stroke-width="9" stroke-linecap="round"/>
+                      <path d="M 8.52 68.43 A 42 42 0 0 1 30.93 37.58" stroke="rgba(0,114,206,0.12)" stroke-width="9" stroke-linecap="round"/>
                       <path id="arc-l" d="M 50 117 A 42 42 0 0 1 14.54 52.5" stroke="url(#gl)" stroke-width="9" stroke-linecap="round"/>
 
                       <g id="knob-l" class="vol-knob" filter="url(#shadow-l)" transform="translate(14.54, 52.5)">
@@ -615,7 +628,7 @@
                     <svg width="45" height="16" viewBox="0 0 45 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <rect x="1" y="2.5" width="22" height="11" rx="3.5" stroke="#C9D6E2" stroke-width="1.6"/>
                       <rect x="24" y="5" width="3" height="6" rx="1.5" fill="#C9D6E2"/>
-                      <rect x="3.3" y="4.8" width="15.5" height="6.4" rx="2.4" fill="#1F8B3B"/>
+                      <rect x="3.3" y="4.8" width="15.5" height="6.4" rx="2.4" fill="#0072CE"/>
                       <text x="30" y="12" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="800" fill="#9AAAB8">85%</text>
                     </svg>
                   </div>
@@ -647,7 +660,7 @@
                         <filter id="shadow-r"><feDropShadow dx="0" dy="1.5" stdDeviation="1.5" flood-color="#000000" flood-opacity="0.3"/></filter>
                       </defs>
                       <path d="M 50 117 A 42 42 0 0 0 50 33" stroke="#E5EEF6" stroke-width="9" stroke-linecap="round"/>
-                      <path d="M 91.48 68.43 A 42 42 0 0 0 69.07 37.58" stroke="rgba(31,139,59,0.16)" stroke-width="9" stroke-linecap="round"/>
+                      <path d="M 91.48 68.43 A 42 42 0 0 0 69.07 37.58" stroke="rgba(88,44,131,0.12)" stroke-width="9" stroke-linecap="round"/>
                       <path id="arc-r" d="M 50 117 A 42 42 0 0 0 82.36 48.23" stroke="url(#gr)" stroke-width="9" stroke-linecap="round"/>
 
                       <g id="knob-r" class="vol-knob" filter="url(#shadow-r)" transform="translate(82.36, 48.23)">
@@ -662,7 +675,7 @@
                     <svg width="45" height="16" viewBox="0 0 45 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <rect x="1" y="2.5" width="22" height="11" rx="3.5" stroke="#C9D6E2" stroke-width="1.6"/>
                       <rect x="24" y="5" width="3" height="6" rx="1.5" fill="#C9D6E2"/>
-                      <rect x="3.3" y="4.8" width="16.6" height="6.4" rx="2.4" fill="#1F8B3B"/>
+                      <rect x="3.3" y="4.8" width="16.6" height="6.4" rx="2.4" fill="#582C83"/>
                       <text x="30" y="12" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="800" fill="#9AAAB8">92%</text>
                     </svg>
                   </div>
@@ -731,6 +744,10 @@
                 <g fill="#582C83"><circle cx="58" cy="42" r="5"/><circle cx="102" cy="49" r="5"/><circle cx="146" cy="45" r="5"/><circle cx="190" cy="44" r="5"/><circle cx="234" cy="54" r="5"/><circle cx="274" cy="52" r="5"/></g>
                 <g fill="#0072CE"><circle cx="58" cy="62" r="5"/><circle cx="102" cy="65" r="5"/><circle cx="146" cy="52" r="5"/><circle cx="190" cy="72" r="5"/><circle cx="234" cy="82" r="5"/><circle cx="274" cy="67" r="5"/></g>
               </svg>
+              <div class="audiogram-history">
+                <div class="audiogram-history-title">聽力圖歷史紀錄</div>
+                <div id="audiogram-history-list"></div>
+              </div>
             </div>
 
             <div class="card" style="margin-top:18px">
@@ -874,6 +891,11 @@
             <div class="pie-chart" id="analysis-pie"></div>
           </div>
           <div class="analysis-list" id="analysis-list"></div>
+          <div class="analysis-upload-card">
+            <div class="analysis-upload-title">是否上傳這筆歷史 ASD？</div>
+            <div class="analysis-upload-copy" id="analysis-upload-copy">上傳後，聽力中心可看到這次場景辨識比例、時間與 GPS 位置。</div>
+            <button class="analysis-upload-btn" id="analysis-upload-btn">上傳此 ASD 紀錄</button>
+          </div>
         </section>
 
         <div class="snapshot-drawer" id="snapshot-drawer">
@@ -1008,22 +1030,32 @@
 
   /* ═══ Activity Log + ASD Acoustic Analysis ═══ */
   const asdCategories = [
-    { key: "music", name: "音樂", code: "01_Music", color: "#00A3AD" },
-    { key: "wind", name: "風聲", code: "02_Wind", color: "#85D8DE" },
+    { key: "music", name: "音樂", code: "01_Music", color: "#0072CE" },
+    { key: "wind", name: "風聲", code: "02_Wind", color: "#3B9EFF" },
     { key: "traffic", name: "交通/低頻噪音", code: "03_Traffic", color: "#0072CE" },
-    { key: "reverb", name: "迴聲/大房間", code: "04_ReverberantEnvironment", color: "#3B9EFF" },
-    { key: "quiet", name: "安靜", code: "05_QuietIndoors", color: "#BEEBF0" },
+    { key: "reverb", name: "迴聲/大房間", code: "04_ReverberantEnvironment", color: "#8B5CF6" },
+    { key: "quiet", name: "安靜", code: "05_QuietIndoors", color: "#B7A2D8" },
     { key: "cocktail", name: "雞尾酒會", code: "06_CocktailParty", color: "#582C83" },
     { key: "alert", name: "警報與提示聲", code: "07_Alert_Warning", color: "#7B4CB2" },
     { key: "impact", name: "突發衝擊聲", code: "08_Explosive_Impact", color: "#A48AD1" },
-    { key: "construction", name: "施工現場", code: "09_Construction", color: "#D9C8EA" },
-    { key: "home", name: "居家環境", code: "10_Home_Environment", color: "#9AAAB8" }
+    { key: "construction", name: "施工現場", code: "09_Construction", color: "#DCD2EC" },
+    { key: "home", name: "居家環境", code: "10_Home_Environment", color: "#6B7A88" }
   ];
   const locationSamples = [
     { place: "臺北市立聯合醫院 婦幼院區", gps: "25.0328, 121.5192" },
     { place: "捷運中山站周邊", gps: "25.0522, 121.5205" },
     { place: "信義區辦公室", gps: "25.0330, 121.5654" },
     { place: "住家客廳", gps: "25.0421, 121.5430" }
+  ];
+  const hearingTestHistory = [
+    { date: "2026.06.24", left: 38, right: 42, level: "第二級", note: "右耳高頻較上次下降 6dB" },
+    { date: "2026.05.18", left: 36, right: 39, level: "第二級", note: "語音清晰度穩定" },
+    { date: "2026.04.02", left: 35, right: 37, level: "第一級", note: "雙耳差距 2dB" }
+  ];
+  const audiogramHistory = [
+    { date: "2026.06.24", leftAvg: 38, rightAvg: 42, slope: "2k-8k 高頻下降", grade: "輕中度落差" },
+    { date: "2026.05.18", leftAvg: 36, rightAvg: 39, slope: "4k 以上略降", grade: "輕度落差" },
+    { date: "2026.04.02", leftAvg: 35, rightAvg: 37, slope: "曲線穩定", grade: "輕度落差" }
   ];
   const asdSeeds = {
     care: [2, 1, 6, 4, 45, 8, 2, 1, 2, 29],
@@ -1049,7 +1081,7 @@
     const date = now.toLocaleDateString("zh-TW", {month: "2-digit", day: "2-digit"});
     const location = details.location || locationSamples[activityLog.length % locationSamples.length];
     const analysis = details.analysis || getAsdAnalysis(details.mode || currentMode || "noisy");
-    activityLog.unshift({ title, desc, mood, time, date, location, analysis, mode: details.mode || currentMode });
+    activityLog.unshift({ title, desc, mood, time, date, location, analysis, mode: details.mode || currentMode, uploaded: !!details.uploaded, history: details.history || [] });
     renderActivityLog();
   }
   function renderActivityLog() {
@@ -1066,6 +1098,8 @@
           <div class="log-meta">${e.desc} · ${e.date} ${e.time}</div>
           <div class="log-location">GPS ${e.location.gps} · ${e.location.place}</div>
           <div class="log-chip">ASD 最高：${top.name} ${top.percent}%</div>
+          ${(e.history || []).map(value => `<div class="log-chip">${value}</div>`).join("")}
+          ${e.uploaded ? '<div class="log-chip">已上傳至聽力中心</div>' : ''}
         </div>
       </div>`;
     }).join("");
@@ -1086,10 +1120,14 @@
   const analysisList = document.getElementById("analysis-list");
   const analysisTitle = document.getElementById("analysis-title");
   const analysisMeta = document.getElementById("analysis-meta");
+  const analysisUploadBtn = document.getElementById("analysis-upload-btn");
+  const analysisUploadCopy = document.getElementById("analysis-upload-copy");
+  let currentAnalysisIndex = -1;
 
   function openAnalysis(index) {
     const entry = activityLog[index];
     if (!entry) return;
+    currentAnalysisIndex = index;
     let cursor = 0;
     const gradientStops = entry.analysis.map(item => {
       const start = cursor;
@@ -1106,9 +1144,31 @@
         <span class="analysis-percent">${item.percent}%</span>
       </div>
     `).join("");
+    renderAnalysisUploadState(entry);
     settingsBackdrop.classList.add("open");
     analysisDrawer.classList.add("open");
   }
+
+  function renderAnalysisUploadState(entry) {
+    analysisUploadBtn.disabled = false;
+    analysisUploadBtn.classList.toggle("uploaded", entry.uploaded);
+    analysisUploadBtn.textContent = entry.uploaded ? "已上傳至聽力中心" : "上傳此 ASD 紀錄";
+    analysisUploadCopy.textContent = entry.uploaded
+      ? "這筆歷史 ASD 已同步，聽力中心可檢視場景比例、時間與 GPS 位置。"
+      : "上傳後，聽力中心可看到這次場景辨識比例、時間與 GPS 位置。";
+  }
+
+  analysisUploadBtn.addEventListener("click", () => {
+    const entry = activityLog[currentAnalysisIndex];
+    if (!entry || entry.uploaded) return;
+    analysisUploadBtn.disabled = true;
+    analysisUploadBtn.textContent = "上傳中...";
+    setTimeout(() => {
+      entry.uploaded = true;
+      renderAnalysisUploadState(entry);
+      renderActivityLog();
+    }, 900);
+  });
 
   function bindLogEntries() {
     document.querySelectorAll(".log-entry").forEach(entry => {
@@ -1498,11 +1558,43 @@
   });
 
   document.getElementById("hearing-test-btn").addEventListener("click", () => {
-    addActivity("開啟聽力檢測", "進入問卷、環境音與左右耳測試流程。", "ok", { mode: "care" });
+    const h = hearingTestHistory[activityLog.length % hearingTestHistory.length];
+    addActivity("聽力檢測歷史值", `最近檢測 ${h.date}，${h.note}。`, "ok", {
+      mode: "care",
+      history: [`檢測：L ${h.left} / R ${h.right} dB HL`, `分級：${h.level}`]
+    });
   });
+
+  function addAudiogramHistoryLog(a) {
+    addActivity("聽力圖歷史值", `最近聽力圖 ${a.date}，${a.slope}。`, "ok", {
+      mode: "care",
+      history: [`平均：L ${a.leftAvg} / R ${a.rightAvg} dB HL`, `判讀：${a.grade}`]
+    });
+  }
+
+  function renderAudiogramHistory() {
+    const list = document.getElementById("audiogram-history-list");
+    if (!list) return;
+    list.innerHTML = audiogramHistory.map((item, index) => `
+      <button class="audiogram-history-item" data-audiogram-index="${index}">
+        <span>
+          <span class="audiogram-history-main">${item.date} · L ${item.leftAvg} / R ${item.rightAvg} dB HL</span>
+          <span class="audiogram-history-sub">${item.slope} · ${item.grade}</span>
+        </span>
+        <span class="audiogram-history-badge">查看</span>
+      </button>
+    `).join("");
+    list.querySelectorAll(".audiogram-history-item").forEach(button => {
+      button.addEventListener("click", () => {
+        addAudiogramHistoryLog(audiogramHistory[Number(button.dataset.audiogramIndex)]);
+      });
+    });
+  }
+
   document.getElementById("audiogram-btn").addEventListener("click", () => {
-    addActivity("查看聽力圖", "使用者查看最近一次左右耳聽力圖。", "ok", { mode: "care" });
+    addAudiogramHistoryLog(audiogramHistory[0]);
   });
+  renderAudiogramHistory();
 
   /* ═══ ABSOLUTE PATH Comfort Volume (Gauges) ═══ */
   let volLinked = true; let valL = 68, valR = 72;
