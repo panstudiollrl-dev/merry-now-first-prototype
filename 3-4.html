@@ -1041,11 +1041,6 @@
     { date: "2026.05.18", left: 36, right: 39, level: "第二級", note: "語音清晰度穩定" },
     { date: "2026.04.02", left: 35, right: 37, level: "第一級", note: "雙耳差距 2dB" }
   ];
-  const audiogramHistory = [
-    { date: "2026.06.24", leftAvg: 38, rightAvg: 42, slope: "2k-8k 高頻下降", grade: "輕中度落差" },
-    { date: "2026.05.18", leftAvg: 36, rightAvg: 39, slope: "4k 以上略降", grade: "輕度落差" },
-    { date: "2026.04.02", leftAvg: 35, rightAvg: 37, slope: "曲線穩定", grade: "輕度落差" }
-  ];
   const asdSeeds = {
     care: [2, 1, 6, 4, 45, 8, 2, 1, 2, 29],
     quiet: [2, 2, 5, 3, 60, 6, 1, 1, 1, 19],
@@ -1552,17 +1547,6 @@
       mode: "care",
       history: [`檢測：L ${h.left} / R ${h.right} dB HL`, `分級：${h.level}`]
     });
-  });
-
-  function addAudiogramHistoryLog(a) {
-    addActivity("聽力圖歷史值", `最近聽力圖 ${a.date}，${a.slope}。`, "ok", {
-      mode: "care",
-      history: [`平均：L ${a.leftAvg} / R ${a.rightAvg} dB HL`, `判讀：${a.grade}`]
-    });
-  }
-
-  document.getElementById("audiogram-btn").addEventListener("click", () => {
-    addAudiogramHistoryLog(audiogramHistory[0]);
   });
 
   /* ═══ ABSOLUTE PATH Comfort Volume (Gauges) ═══ */
