@@ -327,13 +327,6 @@
   .audiogram-title { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; font-size: 13px; font-weight: 900; color: var(--ink); }
   .audiogram-date { font-size: 10.5px; color: var(--faint); font-weight: 800; }
   .audiogram-svg { width: 100%; height: 142px; display: block; }
-  .audiogram-history { display: grid; gap: 8px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); }
-  .audiogram-history-title { font-size: 11px; font-weight: 900; color: var(--faint); text-transform: uppercase; letter-spacing: .04em; }
-  .audiogram-history-item { width: 100%; min-height: 52px; display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; padding: 10px 11px; border: 1px solid var(--line); border-radius: 12px; background: #F9FCFF; color: inherit; text-align: left; cursor: pointer; }
-  .audiogram-history-item:hover { border-color: rgba(0,114,206,.28); background: rgba(0,114,206,.04); }
-  .audiogram-history-main { font-size: 12px; font-weight: 900; color: var(--ink); }
-  .audiogram-history-sub { margin-top: 2px; font-size: 10.5px; color: var(--muted); line-height: 1.3; }
-  .audiogram-history-badge { padding: 5px 8px; border-radius: 999px; background: rgba(88,44,131,.08); color: var(--purple); font-size: 10px; font-weight: 900; white-space: nowrap; }
   .log-entry { cursor: pointer; border-radius: 12px; padding: 9px 8px; margin: 0 -8px; transition: background .15s; }
   .log-entry:hover { background: rgba(0,114,206,.05); }
   .log-location { margin-top: 3px; font-size: 10.5px; color: var(--muted); line-height: 1.35; }
@@ -696,7 +689,7 @@
               <div class="dr-avatar">M</div>
               <div>
                 <div class="dr-name">Merry 聽力中心</div>
-                <div class="dr-title">聽力檢測、聽力圖與聲場紀錄</div>
+                <div class="dr-title">環境音檢測、聽力圖與聲場紀錄</div>
                 <div class="dr-status"><span style="width:7px;height:7px;border-radius:50%;background:var(--ok);display:inline-block"></span>服務時間：今日營業中</div>
               </div>
             </div>
@@ -705,8 +698,8 @@
               <button class="care-action-card" id="hearing-test-btn">
                 <span class="care-action-icon"><svg viewBox="0 0 24 24"><path d="M7 14c0-4.5 2.8-8 6.3-8 2.8 0 5.2 2.2 5.2 5 0 4.5-5.2 4-5.2 8"/><path d="M13 19c0 1.4-1 2.5-2.4 2.5"/></svg></span>
                 <span>
-                  <span class="care-action-title">聽力檢測</span>
-                  <span class="care-action-meta">問卷、環境音檢查、左右耳測試</span>
+                  <span class="care-action-title">環境音檢測</span>
+                  <span class="care-action-meta">自適應錄音、ASD 場域比例與上傳紀錄</span>
                 </span>
               </button>
               <button class="care-action-card" id="audiogram-btn">
@@ -744,10 +737,6 @@
                 <g fill="#582C83"><circle cx="58" cy="42" r="5"/><circle cx="102" cy="49" r="5"/><circle cx="146" cy="45" r="5"/><circle cx="190" cy="44" r="5"/><circle cx="234" cy="54" r="5"/><circle cx="274" cy="52" r="5"/></g>
                 <g fill="#0072CE"><circle cx="58" cy="62" r="5"/><circle cx="102" cy="65" r="5"/><circle cx="146" cy="52" r="5"/><circle cx="190" cy="72" r="5"/><circle cx="234" cy="82" r="5"/><circle cx="274" cy="67" r="5"/></g>
               </svg>
-              <div class="audiogram-history">
-                <div class="audiogram-history-title">聽力圖歷史紀錄</div>
-                <div id="audiogram-history-list"></div>
-              </div>
             </div>
 
             <div class="card" style="margin-top:18px">
@@ -1559,7 +1548,7 @@
 
   document.getElementById("hearing-test-btn").addEventListener("click", () => {
     const h = hearingTestHistory[activityLog.length % hearingTestHistory.length];
-    addActivity("聽力檢測歷史值", `最近檢測 ${h.date}，${h.note}。`, "ok", {
+    addActivity("環境音檢測歷史值", `最近檢測 ${h.date}，${h.note}。`, "ok", {
       mode: "care",
       history: [`檢測：L ${h.left} / R ${h.right} dB HL`, `分級：${h.level}`]
     });
@@ -1572,29 +1561,9 @@
     });
   }
 
-  function renderAudiogramHistory() {
-    const list = document.getElementById("audiogram-history-list");
-    if (!list) return;
-    list.innerHTML = audiogramHistory.map((item, index) => `
-      <button class="audiogram-history-item" data-audiogram-index="${index}">
-        <span>
-          <span class="audiogram-history-main">${item.date} · L ${item.leftAvg} / R ${item.rightAvg} dB HL</span>
-          <span class="audiogram-history-sub">${item.slope} · ${item.grade}</span>
-        </span>
-        <span class="audiogram-history-badge">查看</span>
-      </button>
-    `).join("");
-    list.querySelectorAll(".audiogram-history-item").forEach(button => {
-      button.addEventListener("click", () => {
-        addAudiogramHistoryLog(audiogramHistory[Number(button.dataset.audiogramIndex)]);
-      });
-    });
-  }
-
   document.getElementById("audiogram-btn").addEventListener("click", () => {
     addAudiogramHistoryLog(audiogramHistory[0]);
   });
-  renderAudiogramHistory();
 
   /* ═══ ABSOLUTE PATH Comfort Volume (Gauges) ═══ */
   let volLinked = true; let valL = 68, valR = 72;
