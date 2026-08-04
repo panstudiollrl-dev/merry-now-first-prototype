@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LOTO Training Kit Prototype</title>
+<style>
+:root{
+  --bg:#0b0f14; --panel:#131a22; --panel2:#19222d; --line:#2a3644;
+  --text:#eef4fb; --muted:#94a3b8; --accent:#5cc8ff;
+  --green:#32d583; --yellow:#fdb022; --red:#f04438; --blue:#53b1fd;
+}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at top,#182533 0,#0b0f14 45%);color:var(--text);
+font-family:Inter,"Noto Sans TC",system-ui,sans-serif;min-height:100vh}
+header{height:68px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:#0c1219dd;backdrop-filter:blur(10px);position:sticky;top:0;z-index:9}
+.brand{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.04em}
+.mark{width:34px;height:34px;border:2px solid var(--accent);border-radius:9px;display:grid;place-items:center;color:var(--accent)}
+.small{font-size:12px;color:var(--muted)}
+.header-actions{display:flex;gap:10px}
+button{font:inherit}
+.btn{border:1px solid var(--line);background:var(--panel2);color:var(--text);padding:9px 14px;border-radius:9px;cursor:pointer}
+.btn:hover{border-color:#55718d}.btn.primary{background:var(--accent);color:#071018;border-color:transparent;font-weight:800}
+.app{max-width:1500px;margin:auto;padding:22px;display:grid;grid-template-columns:280px 1fr 320px;gap:18px}
+.card{background:linear-gradient(180deg,#151d27,#10171f);border:1px solid var(--line);border-radius:14px;box-shadow:0 18px 50px #0005}
+.card h3{font-size:14px;margin:0;padding:16px 18px;border-bottom:1px solid var(--line);letter-spacing:.04em}
+.steps{padding:10px}
+.step{display:grid;grid-template-columns:31px 1fr;gap:10px;padding:10px;border-radius:10px;color:var(--muted);font-size:13px}
+.step .num{width:26px;height:26px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-weight:700}
+.step.active{background:#153045;color:white}.step.active .num{background:var(--accent);color:#071018;border-color:transparent}
+.step.done{color:#b9f5d5}.step.done .num{border-color:var(--green);color:var(--green)}
+.score{margin:14px;border-top:1px solid var(--line);padding-top:14px}
+.progress{height:7px;background:#26323e;border-radius:99px;overflow:hidden;margin:8px 0}.progress i{display:block;height:100%;width:0;background:var(--green);transition:.3s}
+.board{padding:18px}
+.board-title{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:15px}
+.board-title h1{font-size:21px;margin:0}.board-title p{font-size:12px;color:var(--muted);margin:5px 0 0}
+.status-chip{font-size:12px;border:1px solid #75461c;background:#382814;color:#ffdca8;border-radius:99px;padding:7px 11px}
+.rig{position:relative;aspect-ratio:1/1;max-height:760px;margin:auto;border:10px solid #303b46;border-radius:8px;background:
+linear-gradient(90deg,#ffffff05 1px,transparent 1px),linear-gradient(#ffffff05 1px,transparent 1px),#c2c7c9;
+background-size:40px 40px;color:#10151b;overflow:hidden;box-shadow:inset 0 0 0 2px #717b82}
+.rig-label{position:absolute;top:15px;left:18px;font-weight:900;letter-spacing:.12em;font-size:13px}
+.tower{position:absolute;right:28px;top:24px;width:72px;padding:10px;background:#2a3035;border-radius:10px;box-shadow:0 5px 15px #0006}
+.lamp{height:42px;border-radius:8px;margin:5px;border:3px solid #15191d;opacity:.18;box-shadow:inset 0 -8px 10px #0005}
+.lamp.red{background:var(--red)}.lamp.yellow{background:var(--yellow)}.lamp.green{background:var(--green)}
+.lamp.on{opacity:1;box-shadow:0 0 20px currentColor,inset 0 -8px 10px #0004}
+.unit{position:absolute;background:#eef0f1;border:2px solid #58626a;border-radius:7px;box-shadow:0 7px 14px #0003;padding:10px;cursor:pointer;transition:.15s}
+.unit:hover{transform:translateY(-2px);box-shadow:0 9px 18px #0004}.unit strong{display:block;font-size:13px}.unit span{font-size:11px;color:#52606b}
+.unit.selected{outline:4px solid #5cc8ff88}.unit.safe{border-color:#0e9f6e;background:#e8fff4}.unit.danger{border-color:#d92d20;background:#fff0ef}
+.main{left:7%;top:20%;width:24%;height:28%}.air{left:7%;bottom:14%;width:24%;height:25%}.machine{left:38%;top:25%;width:38%;height:50%;background:#d8dde0}
+.energy{left:42%;top:8%;width:25%;height:11%}.estop{right:8%;bottom:8%;width:15%;height:15%;display:grid;place-items:center}
+.knob{width:65px;height:65px;border-radius:50%;background:#e33;border:8px solid #b30;box-shadow:0 5px 0 #711;text-align:center;padding-top:14px;font-size:10px;font-weight:900}
+.switch{width:70px;height:100px;margin:11px auto;background:#242a30;border-radius:5px;position:relative}.switch:after{content:"";position:absolute;width:44px;height:64px;background:#e9b72d;left:13px;top:11px;border-radius:4px;transform:rotate(-8deg);transform-origin:bottom}
+.valve{width:80px;height:80px;border-radius:50%;border:13px solid #4a94c7;margin:10px auto;position:relative}.valve:after{content:"";position:absolute;left:27px;top:-18px;height:90px;width:8px;background:#315b7a}
+.machine-window{height:58%;margin:12px;background:#27313a;border:8px solid #68737c;display:grid;place-items:center;color:#9eb0be;font-size:12px}
+.motor{width:70%;height:45%;border-radius:50%;border:12px solid #52616c;animation:none}.motor.spin{animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.lock{position:absolute;width:30px;height:37px;border-radius:4px;background:#d92d20;border:2px solid #7a1c16;display:none}
+.lock:before{content:"";position:absolute;width:18px;height:18px;border:4px solid #ccd3d8;border-bottom:0;border-radius:12px 12px 0 0;left:4px;top:-18px}.lock.show{display:block}
+#lockMain{left:25%;top:37%}#lockAir{left:25%;bottom:27%}
+.tag{position:absolute;background:#fff;border:2px solid #111;padding:4px;font-size:8px;font-weight:900;display:none}.tag.show{display:block}
+#tagMain{left:28%;top:39%}#tagAir{left:28%;bottom:25%}
+.control{padding:14px}
+.readout{padding:13px;border:1px solid var(--line);border-radius:10px;background:#0c1218;margin-bottom:12px}
+.readout .label{font-size:11px;color:var(--muted)}.readout .value{font-size:18px;font-weight:800;margin-top:4px}
+.action-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.action{min-height:64px;border:1px solid var(--line);background:#19232d;color:white;border-radius:10px;text-align:left;padding:10px;cursor:pointer}
+.action:hover{border-color:var(--accent)}.action b{display:block;font-size:12px}.action span{font-size:10px;color:var(--muted)}
+.action.full{grid-column:1/-1}.action.safe{border-color:#1fa971;background:#123126}.action.warn{border-color:#bd7b16;background:#392913}
+.log{height:170px;overflow:auto;border-top:1px solid var(--line);padding:10px 2px 0;margin-top:12px;font-size:11px;color:var(--muted)}
+.log div{padding:5px 2px;border-bottom:1px dashed #26313b}.log b{color:#dbe7f2}
+.modal{display:none;position:fixed;inset:0;background:#000b;z-index:30;place-items:center;padding:20px}.modal.show{display:grid}
+.modal-box{max-width:520px;width:100%;background:#151e28;border:1px solid var(--line);border-radius:16px;padding:24px}.modal h2{margin-top:0}
+.result{font-size:44px;font-weight:900;color:var(--green)}
+@media(max-width:1050px){.app{grid-template-columns:230px 1fr}.right{grid-column:1/-1}.control{display:grid;grid-template-columns:260px 1fr;gap:12px}.log{height:220px;margin:0;border:0}}
+@media(max-width:720px){.app{display:block;padding:10px}.card{margin-bottom:12px}.left{display:none}.control{display:block}.rig{aspect-ratio:1/1}.header-actions .btn:first-child{display:none}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><div class="mark">L</div><div>LOTO LAB <div class="small">Interactive Training Prototype · V0.1</div></div></div>
+  <div class="header-actions"><button class="btn" onclick="toggleInstructor()">Instructor View</button><button class="btn primary" onclick="resetSim()">重新開始</button></div>
+</header>
+
+<main class="app">
+<section class="card left">
+  <h3>訓練程序 · PROCEDURE</h3>
+  <div class="steps" id="steps"></div>
+  <div class="score">
+    <div class="small">完成度 <span id="percent" style="float:right">0%</span></div>
+    <div class="progress"><i id="bar"></i></div>
+    <div class="small">錯誤操作：<b id="errors">0</b></div>
+  </div>
+</section>
+
+<section class="card board">
+  <div class="board-title">
+    <div><h1>複合能源設備維修情境</h1><p>Electrical 480V · Pneumatic 6 bar · Stored mechanical energy</p></div>
+    <div class="status-chip" id="statusChip">設備運轉中</div>
+  </div>
+  <div class="rig">
+    <div class="rig-label">2 m × 2 m TRAINING PANEL</div>
+    <div class="tower"><div class="lamp red" id="red"></div><div class="lamp yellow" id="yellow"></div><div class="lamp green on" id="green"></div></div>
+    <div class="unit main" onclick="selectUnit('main')"><strong>MAIN DISCONNECT</strong><span>480 V Electrical</span><div class="switch"></div></div>
+    <div class="unit energy" onclick="selectUnit('stored')"><strong>STORED ENERGY</strong><span>Flywheel / capacitor indicator</span></div>
+    <div class="unit air" onclick="selectUnit('air')"><strong>PNEUMATIC ISOLATOR</strong><span>6 bar compressed air</span><div class="valve"></div></div>
+    <div class="unit machine" onclick="selectUnit('machine')"><strong>PROCESS MACHINE M-01</strong><span>Service access chamber</span><div class="machine-window"><div class="motor spin" id="motor">ROTATING</div></div></div>
+    <div class="unit estop" onclick="doAction('estop')"><div class="knob">E-STOP</div></div>
+    <div class="lock" id="lockMain"></div><div class="tag" id="tagMain">DANGER<br>DO NOT OPERATE</div>
+    <div class="lock" id="lockAir"></div><div class="tag" id="tagAir">DANGER<br>DO NOT OPERATE</div>
+  </div>
+</section>
+
+<section class="card right">
+  <h3>操作台 · TRAINER CONSOLE</h3>
+  <div class="control">
+    <div>
+      <div class="readout"><div class="label">CURRENT OBJECT</div><div class="value" id="object">整體設備</div></div>
+      <div class="readout"><div class="label">SYSTEM MESSAGE</div><div class="value" id="message" style="font-size:14px">請先通知受影響人員並正常停機。</div></div>
+    </div>
+    <div>
+      <div class="action-grid">
+        <button class="action" onclick="doAction('notify')"><b>通知人員</b><span>Notify affected employees</span></button>
+        <button class="action" onclick="doAction('shutdown')"><b>正常停機</b><span>Machine stop procedure</span></button>
+        <button class="action" onclick="doAction('isolateElec')"><b>切斷主電源</b><span>Open disconnect</span></button>
+        <button class="action" onclick="doAction('isolateAir')"><b>關閉氣源</b><span>Close and bleed valve</span></button>
+        <button class="action" onclick="doAction('lock')"><b>掛鎖掛牌</b><span>Apply personal LOTO</span></button>
+        <button class="action" onclick="doAction('release')"><b>釋放殘能</b><span>Release / block / dissipate</span></button>
+        <button class="action full warn" onclick="doAction('tryout')"><b>TRYOUT：嘗試啟動</b><span>Verify zero-energy state, then return controls to OFF</span></button>
+        <button class="action full safe" onclick="doAction('service')"><b>進入維修區</b><span>Begin simulated maintenance task</span></button>
+        <button class="action" onclick="doAction('inspect')"><b>清點與復位</b><span>Inspect area and guards</span></button>
+        <button class="action" onclick="doAction('unlock')"><b>移除個人鎖</b><span>Authorized owner only</span></button>
+        <button class="action full" onclick="doAction('restore')"><b>通知並復電</b><span>Clear personnel and restore energy</span></button>
+      </div>
+      <div class="log" id="log"></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<div class="modal" id="modal"><div class="modal-box">
+  <div class="small">SCENARIO COMPLETE</div><div class="result" id="result">100</div>
+  <h2>訓練完成</h2><p id="summary"></p>
+  <button class="btn primary" onclick="resetSim();closeModal()">再練習一次</button>
+</div></div>
+
+<script>
+const stepNames=["辨識能源與通知人員","正常停機","隔離所有能源","掛鎖與掛牌","釋放／阻擋殘留能量","Tryout 驗證零能量","執行維修","清場、解鎖與復電"];
+let s, selected="all";
+function initial(){return {notify:false,shutdown:false,elec:false,air:false,lock:false,release:false,verified:false,service:false,inspect:false,unlock:false,restore:false,errors:0}}
+function renderSteps(){
+ let idx=currentStep(); document.getElementById("steps").innerHTML=stepNames.map((x,i)=>`<div class="step ${i<idx?'done':i===idx?'active':''}"><div class="num">${i<idx?'✓':i+1}</div><div>${x}</div></div>`).join("");
+ let p=Math.round((Math.min(idx,8)/8)*100);bar.style.width=p+"%";percent.textContent=p+"%";errors.textContent=s.errors;
+}
+function currentStep(){if(!s.notify)return 0;if(!s.shutdown)return 1;if(!(s.elec&&s.air))return 2;if(!s.lock)return 3;if(!s.release)return 4;if(!s.verified)return 5;if(!s.service)return 6;if(!s.restore)return 7;return 8}
+function addLog(txt,ok=true){let t=new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'});log.innerHTML=`<div><b>${t}</b> · ${ok?'✓':'⚠'} ${txt}</div>`+log.innerHTML}
+function fail(txt){s.errors++;message.textContent=txt;addLog(txt,false);flash("red");renderSteps()}
+function good(txt){message.textContent=txt;addLog(txt,true);renderSteps()}
+function flash(c){let e=document.getElementById(c);e.classList.add("on");setTimeout(()=>updateLights(),700)}
+function selectUnit(u){selected=u;document.querySelectorAll(".unit").forEach(x=>x.classList.remove("selected"));event.currentTarget.classList.add("selected");object.textContent={main:"主電源隔離開關",air:"氣壓隔離與洩壓閥",stored:"殘留能量模組",machine:"製程設備 M-01"}[u]}
+function doAction(a){
+ if(a==="notify"){s.notify=true;good("已通知受影響人員：設備即將進行 LOTO。")}
+ else if(a==="shutdown"){if(!s.notify)return fail("順序錯誤：停機前應先通知受影響人員。");s.shutdown=true;motor.classList.remove("spin");good("設備已依正常程序停止。")}
+ else if(a==="estop"){motor.classList.remove("spin");fail("E-STOP 不等於能源隔離；緊急停止後仍須執行完整 LOTO。")}
+ else if(a==="isolateElec"){if(!s.shutdown)return fail("不可直接切斷：請先正常停機。");s.elec=true;good("480 V 主電源已切至 OFF。")}
+ else if(a==="isolateAir"){if(!s.shutdown)return fail("不可直接隔離：請先正常停機。");s.air=true;good("氣源隔離閥已關閉；管路仍可能有殘壓。")}
+ else if(a==="lock"){if(!(s.elec&&s.air))return fail("尚未隔離所有能源點，不能完成掛鎖。");s.lock=true;lockMain.classList.add("show");tagMain.classList.add("show");lockAir.classList.add("show");tagAir.classList.add("show");good("個人鎖與警示牌已套用至兩個能源隔離點。")}
+ else if(a==="release"){if(!s.lock)return fail("應先完成隔離與掛鎖，再釋放或阻擋殘能。");s.release=true;good("氣壓已洩放，飛輪停止，儲能元件讀值為零。")}
+ else if(a==="tryout"){if(!(s.lock&&s.release))return fail("Tryout 失敗：系統仍存在未控制能源。");s.verified=true;good("啟動指令無反應；零能量狀態驗證成功，控制器已回到 OFF。")}
+ else if(a==="service"){if(!s.verified)return fail("禁止進入：尚未完成 Tryout 零能量驗證。");s.service=true;good("維修作業模擬完成。")}
+ else if(a==="inspect"){if(!s.service)return fail("尚未完成維修工作。");s.inspect=true;good("工具已清點、護罩復位、人員已撤離危險區。")}
+ else if(a==="unlock"){if(!s.inspect)return fail("移除鎖具前，必須先完成設備與人員檢查。");s.unlock=true;lockMain.classList.remove("show");tagMain.classList.remove("show");lockAir.classList.remove("show");tagAir.classList.remove("show");good("個人鎖由其持有人移除。")}
+ else if(a==="restore"){if(!s.unlock)return fail("鎖具尚未移除，不得復電。");s.restore=true;s.elec=false;s.air=false;motor.classList.add("spin");good("受影響人員已獲通知，能源恢復，設備回到正常狀態。");setTimeout(showResult,500)}
+ updateLights();updateStatus()
+}
+function updateLights(){
+ red.classList.remove("on");yellow.classList.remove("on");green.classList.remove("on");
+ if(s.lock&&s.release){red.classList.add("on")} else if(s.shutdown||s.elec||s.air){yellow.classList.add("on")} else {green.classList.add("on")}
+}
+function updateStatus(){
+ statusChip.textContent=s.lock&&s.release?"安全隔離中":s.shutdown||s.elec||s.air?"停機／隔離進行中":"設備運轉中";
+ statusChip.style.background=s.lock&&s.release?"#183b2d":s.shutdown?"#382814":"#183221";
+ statusChip.style.color=s.lock&&s.release?"#a7f3d0":s.shutdown?"#ffdca8":"#b7f7d3";
+}
+function showResult(){let score=Math.max(60,100-s.errors*8);result.textContent=score;summary.textContent=`共發生 ${s.errors} 次程序錯誤。此紀錄可在正式版本中連結員工 ID、訓練時間、設備編號與主管簽核。`;modal.classList.add("show")}
+function closeModal(){modal.classList.remove("show")}
+function resetSim(){s=initial();selected="all";motor.classList.add("spin");document.querySelectorAll(".lock,.tag").forEach(x=>x.classList.remove("show"));document.querySelectorAll(".unit").forEach(x=>x.classList.remove("selected"));log.innerHTML="";object.textContent="整體設備";message.textContent="請先通知受影響人員並正常停機。";updateLights();updateStatus();renderSteps();addLog("新訓練情境已載入。")}
+function toggleInstructor(){alert("Instructor View 可擴充：故障注入、跳步測試、能源點設定、學員紀錄與評分規則。")}
+resetSim();
+</script>
+</body>
+</html>
