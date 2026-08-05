@@ -1,0 +1,1544 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Merry Hearing v5 - Minimal Prototype</title>
+  <link rel="icon" href="data:,">
+
+  <style>
+  :root {
+    --page: #eef1ec;
+    --page-2: #dfe5e2;
+    --device: #0c0f0d;
+    --screen: #11140f;
+    --screen-2: #181d17;
+    --surface: rgba(245, 247, 240, .08);
+    --surface-strong: rgba(245, 247, 240, .14);
+    --line: rgba(245, 247, 240, .14);
+    --line-strong: rgba(245, 247, 240, .28);
+    --text: #f4f6ef;
+    --text-soft: rgba(244, 246, 239, .68);
+    --text-faint: rgba(244, 246, 239, .42);
+    --ink: #1d241f;
+    --merry-blue: #0072CE;
+    --merry-purple: #582C83;
+    --merry-teal: #00A3AD;
+    --blue: #5c84ff;
+    --green: #00A3AD;
+    --mint: #d8f2e8;
+    --amber: #e2be67;
+    --white: #ffffff;
+    --shadow: 0 32px 90px rgba(16, 24, 20, .28);
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 24px 16px;
+    background:
+      linear-gradient(135deg, rgba(255,255,255,.82), rgba(255,255,255,0) 46%),
+      linear-gradient(180deg, var(--page) 0%, var(--page-2) 100%);
+    color: var(--ink);
+    font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+  }
+
+  button,
+  input {
+    font: inherit;
+  }
+
+  button {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .icon-sprite {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+  }
+
+  .page {
+    width: min(100%, 980px);
+    display: grid;
+    grid-template-columns: minmax(260px, 393px) minmax(260px, 1fr);
+    gap: 52px;
+    align-items: center;
+  }
+
+  .poster-copy {
+    max-width: 420px;
+  }
+
+  .poster-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: rgba(29,36,31,.58);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+
+  .poster-kicker::before {
+    content: "";
+    width: 28px;
+    height: 1px;
+    background: rgba(29,36,31,.32);
+  }
+
+  .poster-copy h1 {
+    max-width: 390px;
+    color: #141914;
+    font-size: 42px;
+    line-height: 1.02;
+    letter-spacing: 0;
+    font-weight: 760;
+    margin-bottom: 18px;
+  }
+
+  .poster-copy p {
+    max-width: 360px;
+    color: rgba(29,36,31,.62);
+    font-size: 15px;
+    line-height: 1.72;
+  }
+
+  .poster-principles {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 32px;
+  }
+
+  .principle {
+    min-height: 84px;
+    padding: 14px;
+    border: 1px solid rgba(29,36,31,.10);
+    background: rgba(255,255,255,.42);
+    border-radius: 8px;
+  }
+
+  .principle svg {
+    width: 22px;
+    height: 22px;
+    color: #26322b;
+    margin-bottom: 12px;
+  }
+
+  .principle span {
+    display: block;
+    color: rgba(29,36,31,.70);
+    font-size: 12px;
+    font-weight: 720;
+    line-height: 1.35;
+  }
+
+  .device {
+    position: relative;
+    width: min(393px, calc(100vw - 32px));
+    aspect-ratio: 393 / 852;
+    padding: 14px;
+    border-radius: 46px;
+    background:
+      linear-gradient(145deg, #1b201c, #050605 56%, #171b17);
+    box-shadow:
+      var(--shadow),
+      inset 0 0 0 1px rgba(255,255,255,.08),
+      inset 0 -20px 38px rgba(255,255,255,.025);
+  }
+
+  .device::before {
+    content: "";
+    position: absolute;
+    inset: 7px;
+    border-radius: 40px;
+    border: 1px solid rgba(255,255,255,.07);
+    pointer-events: none;
+  }
+
+  .device-screen {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 34px;
+    background:
+      linear-gradient(180deg, rgba(116,210,177,.10), rgba(116,210,177,0) 24%),
+      linear-gradient(180deg, var(--screen-2), var(--screen) 58%, #0d100c);
+    color: var(--text);
+  }
+
+  .dynamic-island {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    z-index: 20;
+    width: 118px;
+    height: 34px;
+    border-radius: 999px;
+    transform: translateX(-50%);
+    background: #060806;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.04);
+  }
+
+  .status-bar {
+    height: 52px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 0 24px 8px;
+    color: var(--text);
+    position: relative;
+    z-index: 5;
+  }
+
+  .status-time {
+    font-size: 14px;
+    font-weight: 760;
+    letter-spacing: 0;
+  }
+
+  .status-icons {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: rgba(244,246,239,.88);
+  }
+
+  .status-icons svg {
+    display: block;
+  }
+
+  .app {
+    height: calc(100% - 52px);
+    display: flex;
+    flex-direction: column;
+    padding: 0 22px 18px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .app-header {
+    min-height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .brand {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .brand-mark {
+    font-size: 17px;
+    font-weight: 820;
+    letter-spacing: .08em;
+  }
+
+  .brand-sub {
+    color: var(--text-faint);
+    font-size: 11px;
+    font-weight: 680;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+
+  .connection {
+    min-width: 104px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: rgba(255,255,255,.045);
+    color: var(--text-soft);
+    font-size: 12px;
+    font-weight: 720;
+  }
+
+  .connection-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 0 4px rgba(116,210,177,.12);
+  }
+
+  .hero-copy {
+    padding: 6px 0 8px;
+  }
+
+  .scene-label {
+    color: var(--green);
+    font-size: 12px;
+    font-weight: 760;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+  }
+
+  .hero-title {
+    margin-top: 8px;
+    font-size: 30px;
+    line-height: 1.05;
+    font-weight: 760;
+    letter-spacing: 0;
+  }
+
+  .hero-text {
+    min-height: 44px;
+    margin-top: 10px;
+    color: var(--text-soft);
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  .sound-field {
+    position: relative;
+    flex: 1;
+    min-height: 354px;
+    display: grid;
+    place-items: center;
+    margin: 0 -6px 8px;
+  }
+
+  .field-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .field-ring {
+    fill: none;
+    stroke: transparent;
+    stroke-width: 1;
+  }
+
+  .field-axis {
+    stroke: transparent;
+    stroke-width: 1;
+    stroke-dasharray: 3 7;
+  }
+
+  .focus-wedge {
+    fill: url(#merryFocusGradient);
+    stroke: rgba(0,163,173,.42);
+    stroke-width: 1.2;
+    opacity: .82;
+    transition: opacity .2s ease, transform .35s ease;
+    transform-origin: 165px 172px;
+  }
+
+  .noise-wave {
+    fill: none;
+    stroke: rgba(92,132,255,.35);
+    stroke-width: 1.2;
+    stroke-linecap: round;
+    opacity: .62;
+    transition: opacity .2s ease;
+  }
+
+  .scene-bubble {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 5;
+    width: 70px;
+    height: 70px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 36% 25%, rgba(255,255,255,.17), transparent 38%),
+      rgba(255,255,255,.045);
+    color: var(--text-soft);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    cursor: pointer;
+    box-shadow: 0 12px 28px rgba(0,0,0,.10);
+    transform: translate3d(var(--bubble-x, 0px), var(--bubble-y, 0px), 0) scale(var(--bubble-scale, 1));
+    will-change: transform;
+    transition: background .18s ease, border-color .18s ease, color .18s ease, opacity .18s ease;
+  }
+
+  .scene-bubble svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .scene-bubble span {
+    font-size: 11px;
+    font-weight: 760;
+    line-height: 1;
+  }
+
+  .scene-bubble.is-active {
+    --bubble-scale: 1.08;
+    border-color: rgba(0,163,173,.54);
+    background:
+      radial-gradient(circle at 34% 24%, rgba(255,255,255,.26), transparent 34%),
+      linear-gradient(135deg, rgba(0,114,206,.22), rgba(0,163,173,.17) 48%, rgba(88,44,131,.20)),
+      rgba(255,255,255,.055);
+    color: var(--text);
+    box-shadow: 0 12px 28px rgba(0,0,0,.18);
+  }
+
+  .scene-care {
+    opacity: .78;
+  }
+
+  .scene-care.is-active {
+    opacity: 1;
+  }
+
+  .field-center {
+    position: relative;
+    z-index: 3;
+    width: 148px;
+    height: 148px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(0,163,173,.14);
+    border-radius: 50%;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.04)),
+      rgba(255,255,255,.035);
+    box-shadow:
+      0 22px 52px rgba(0,0,0,.22);
+    backdrop-filter: blur(12px);
+    cursor: default;
+    touch-action: none;
+    user-select: none;
+    outline: none;
+  }
+
+  .field-center::before {
+    content: "";
+    position: absolute;
+    inset: 2px;
+    border-radius: 50%;
+    background: linear-gradient(180deg, rgba(24,29,23,.84), rgba(17,20,15,.96));
+    box-shadow: inset 0 0 0 1px rgba(0,163,173,.08);
+  }
+
+  .reservoir {
+    position: absolute;
+    inset: 11px;
+    z-index: 1;
+    border-radius: 50%;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .reservoir-half {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    overflow: hidden;
+  }
+
+  .reservoir-half.left {
+    left: 0;
+  }
+
+  .reservoir-half.right {
+    right: 0;
+  }
+
+  .reservoir-water {
+    position: absolute;
+    bottom: -1px;
+    width: 116%;
+    min-height: 2px;
+    box-shadow: inset 0 14px 28px rgba(216,242,232,.10);
+    transition: height .14s ease-out;
+  }
+
+  .reservoir-half.left .reservoir-water {
+    left: -8%;
+    height: var(--left-water, 68%);
+    background: linear-gradient(145deg, rgba(0,114,206,.74), rgba(0,163,173,.64));
+  }
+
+  .reservoir-half.right .reservoir-water {
+    right: -8%;
+    height: var(--right-water, 72%);
+    background: linear-gradient(215deg, rgba(88,44,131,.72), rgba(0,163,173,.60));
+  }
+
+  .reservoir-water::before,
+  .reservoir-water::after {
+    content: "";
+    position: absolute;
+    left: -4%;
+    top: -8px;
+    width: 108%;
+    height: 16px;
+    border-radius: 50%;
+  }
+
+  .reservoir-water::before {
+    background: rgba(0,163,173,.82);
+    box-shadow: 0 -1px 0 rgba(216,242,232,.32);
+    transform: rotate(-2deg);
+  }
+
+  .reservoir-water::after {
+    top: -4px;
+    left: 18%;
+    width: 72%;
+    height: 10px;
+    background: rgba(0,114,206,.22);
+    transform: rotate(3deg);
+  }
+
+  .channel-control {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .channel-track,
+  .channel-progress,
+  .channel-hit,
+  .master-track,
+  .master-progress,
+  .master-hit {
+    fill: none;
+    stroke-linecap: round;
+  }
+
+  .channel-track {
+    stroke: rgba(244,246,239,.16);
+    stroke-width: 9;
+  }
+
+  .channel-progress {
+    stroke-width: 9;
+    transition: stroke-dasharray .16s ease;
+  }
+
+  .channel-progress.left {
+    stroke: rgba(0,114,206,.58);
+  }
+
+  .channel-progress.right {
+    stroke: rgba(88,44,131,.62);
+  }
+
+  .channel-hit {
+    stroke: transparent;
+    stroke-width: 44;
+    pointer-events: stroke;
+    cursor: ns-resize;
+  }
+
+  .master-track {
+    stroke: rgba(244,246,239,.30);
+    stroke-width: 2;
+  }
+
+  .master-progress {
+    stroke: rgba(216,242,232,.82);
+    stroke-width: 2.5;
+  }
+
+  .master-hit {
+    stroke: transparent;
+    stroke-width: 34;
+    pointer-events: stroke;
+    cursor: ns-resize;
+  }
+
+  .control-handle {
+    fill: rgba(244,246,239,.94);
+    stroke: rgba(255,255,255,.78);
+    stroke-width: 1.2;
+    filter: drop-shadow(0 5px 12px rgba(0,0,0,.28));
+    pointer-events: none;
+    transition: cx .16s ease, cy .16s ease;
+  }
+
+  .control-label {
+    fill: #18201b;
+    font-size: 8px;
+    font-weight: 900;
+    text-anchor: middle;
+    dominant-baseline: middle;
+    pointer-events: none;
+    transition: x .16s ease, y .16s ease;
+  }
+
+  .channel-tick {
+    stroke: rgba(244,246,239,.22);
+    stroke-width: 1.2;
+    stroke-linecap: round;
+  }
+
+  .field-center:focus-visible {
+    box-shadow:
+      0 22px 52px rgba(0,0,0,.22),
+      0 0 0 3px rgba(0,163,173,.24);
+  }
+
+  .ear-meter {
+    position: absolute;
+    z-index: 4;
+    bottom: 2px;
+    width: 86px;
+    min-height: 54px;
+    padding: 9px 10px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: rgba(255,255,255,.045);
+    color: var(--text-soft);
+  }
+
+  .ear-meter.left {
+    left: 0;
+  }
+
+  .ear-meter.right {
+    right: 0;
+  }
+
+  .ear-meter-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    margin-bottom: 7px;
+  }
+
+  .ear-meter-head svg {
+    width: 18px;
+    height: 18px;
+    color: var(--text-soft);
+  }
+
+  .ear-meter-head strong {
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 760;
+  }
+
+  .ear-meter-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    color: var(--text-faint);
+    font-size: 10px;
+    font-weight: 760;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+
+  .ear-battery {
+    position: relative;
+    width: 34px;
+    height: 5px;
+    border-radius: 999px;
+    background: rgba(244,246,239,.15);
+    overflow: hidden;
+  }
+
+  .ear-battery span {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: var(--battery, 80%);
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--merry-blue), var(--merry-teal));
+  }
+
+  .field-note {
+    position: absolute;
+    left: 50%;
+    bottom: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 28px;
+    padding: 0 11px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: rgba(255,255,255,.06);
+    color: var(--text-soft);
+    font-size: 11px;
+    font-weight: 720;
+    transform: translateX(-50%);
+  }
+
+  .field-note svg {
+    width: 15px;
+    height: 15px;
+    color: var(--green);
+  }
+
+  .session-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 4px;
+  }
+
+  .summary-cell {
+    min-width: 0;
+    min-height: 58px;
+    padding: 10px 9px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: rgba(255,255,255,.05);
+  }
+
+  .summary-cell span {
+    display: block;
+    color: var(--text-faint);
+    font-size: 10px;
+    font-weight: 760;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .summary-cell strong {
+    display: block;
+    color: var(--text);
+    font-size: 13px;
+    line-height: 1.2;
+    font-weight: 760;
+    white-space: nowrap;
+  }
+
+  .summary-cell.battery-cell strong {
+    font-size: 12px;
+    line-height: 1.32;
+    white-space: normal;
+  }
+
+  .summary-cell svg {
+    width: 17px;
+    height: 17px;
+    color: var(--green);
+  }
+
+  .summary-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .snapshot {
+    margin-top: 10px;
+    height: 52px;
+    width: 100%;
+    border: 1px solid rgba(116,210,177,.46);
+    border-radius: 999px;
+    background: rgba(116,210,177,.12);
+    color: var(--mint);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 760;
+    cursor: pointer;
+    transition: background .18s ease, transform .18s ease;
+  }
+
+  .snapshot svg {
+    width: 21px;
+    height: 21px;
+  }
+
+  .snapshot:active {
+    transform: scale(.985);
+  }
+
+  .snapshot.is-sent {
+    border-color: rgba(226,190,103,.50);
+    background: rgba(226,190,103,.13);
+    color: #ffe2a1;
+  }
+
+  .home-indicator {
+    width: 118px;
+    height: 4px;
+    border-radius: 999px;
+    background: rgba(244,246,239,.30);
+    align-self: center;
+    margin-top: 12px;
+    flex-shrink: 0;
+  }
+
+  .ui-icon {
+    display: block;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .screen[data-scene="conversation"] .focus-wedge {
+    opacity: .88;
+    transform: scaleX(.72) scaleY(1.12);
+  }
+
+  .screen[data-scene="noisy"] .focus-wedge {
+    opacity: .64;
+    transform: rotate(-18deg) scale(1.18);
+  }
+
+  .screen[data-scene="noisy"] .noise-wave {
+    opacity: .32;
+  }
+
+  .screen[data-scene="quiet"] .focus-wedge {
+    opacity: .50;
+    transform: scale(.84);
+  }
+
+  .screen[data-scene="quiet"] .noise-wave {
+    opacity: .24;
+  }
+
+  .screen[data-scene="care"] .focus-wedge {
+    opacity: .78;
+    transform: rotate(12deg) scale(.96);
+  }
+
+  .screen[data-scene="care"] .noise-wave {
+    opacity: .46;
+  }
+
+  @media (max-width: 780px) {
+    body {
+      align-items: start;
+    }
+
+    .page {
+      grid-template-columns: 1fr;
+      gap: 22px;
+      justify-items: center;
+    }
+
+    .poster-copy {
+      max-width: 393px;
+      order: 2;
+      text-align: left;
+    }
+
+    .poster-copy h1 {
+      font-size: 30px;
+    }
+
+    .poster-principles {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 420px) {
+    body {
+      padding: 10px 8px 18px;
+    }
+
+    .device {
+      width: calc(100vw - 16px);
+      padding: 10px;
+      border-radius: 38px;
+    }
+
+    .device-screen {
+      border-radius: 29px;
+    }
+
+    .app {
+      padding: 0 18px 15px;
+    }
+
+    .hero-title {
+      font-size: 27px;
+    }
+
+    .scene-bubble {
+      height: 70px;
+    }
+  }
+  </style>
+</head>
+
+<body>
+  <svg class="icon-sprite" aria-hidden="true">
+    <symbol id="icon-ear-aid" viewBox="0 0 32 32">
+      <path d="M17.2 4.7c-4.6 0-8.1 3.8-8.1 8.4 0 3.2 1.7 5.8 4.3 7.2l-.8 4.9h5.6c0-1.8-.4-3-.4-4.1 2.1-.9 3.6-3.2 3.6-5.9 0-1.2-.3-2.3-.8-3.2.7-.9 1-2.1 1-3.2 0-2.3-1.7-4.1-4.4-4.1Z"/>
+      <path d="M15 11.3c1.8-.7 3.5.2 3.8 1.8.4 1.9-.9 3.5-2.8 3.9"/>
+      <path d="M24.3 9.2c1.5 1.8 2.1 4.1 1.6 6.4"/>
+      <path d="M27.2 6.7c2.2 3.1 2.9 7 1.8 10.7"/>
+    </symbol>
+
+    <symbol id="icon-conversation" viewBox="0 0 32 32">
+      <path d="M6.3 12.6c0-3.6 3.2-6.4 7.4-6.4 4.1 0 7.4 2.8 7.4 6.4S17.8 19 13.7 19c-.8 0-1.5-.1-2.2-.3L7 21l1.4-4.1c-1.3-1.1-2.1-2.6-2.1-4.3Z"/>
+      <path d="M18.9 15.8c3.4.3 6 2.6 6 5.5 0 1.5-.7 2.8-1.8 3.8l1.1 3.3-3.7-1.9c-.6.2-1.2.2-1.9.2-2.6 0-4.9-1.2-6-3"/>
+      <path d="M11.1 12.3h5.2"/>
+      <path d="M11.1 15.2h3.4"/>
+    </symbol>
+
+    <symbol id="icon-quiet" viewBox="0 0 32 32">
+      <path d="M7.3 19.4c5.1-2.9 12.3-2.9 17.4 0"/>
+      <path d="M9.6 22.7c3.8-2 9-2 12.8 0"/>
+      <path d="M13.3 8.1c.6 3.2-.2 6.1-2.5 8.6"/>
+      <path d="M20.7 8.1c-.6 3.2.2 6.1 2.5 8.6"/>
+    </symbol>
+
+    <symbol id="icon-street" viewBox="0 0 32 32">
+      <path d="M8.2 26.5 13.4 5.7"/>
+      <path d="M23.8 26.5 18.6 5.7"/>
+      <path d="M11 18h10"/>
+      <path d="M9.7 23.2h12.6"/>
+      <path d="M6.6 8.9 4.7 6.8"/>
+      <path d="M25.4 8.9l1.9-2.1"/>
+      <path d="M7.1 14.3H4.2"/>
+      <path d="M24.9 14.3h2.9"/>
+    </symbol>
+
+    <symbol id="icon-noise" viewBox="0 0 32 32">
+      <path d="M5 20c2.3 0 2.3-8 4.7-8s2.4 8 4.8 8 2.4-8 4.8-8 2.4 8 4.9 8H27"/>
+      <path d="M5 25h22"/>
+      <path d="M5 7h22"/>
+    </symbol>
+
+    <symbol id="icon-focus" viewBox="0 0 32 32">
+      <circle cx="16" cy="16" r="4.4"/>
+      <path d="M16 3.8v4.1"/>
+      <path d="M16 24.1v4.1"/>
+      <path d="M3.8 16h4.1"/>
+      <path d="M24.1 16h4.1"/>
+      <path d="M7.4 7.4l2.9 2.9"/>
+      <path d="M21.7 21.7l2.9 2.9"/>
+      <path d="M24.6 7.4l-2.9 2.9"/>
+      <path d="M10.3 21.7l-2.9 2.9"/>
+    </symbol>
+
+    <symbol id="icon-care" viewBox="0 0 32 32">
+      <path d="M9.4 6.2v6.5c0 3.4 2.9 6.1 6.6 6.1s6.6-2.7 6.6-6.1V6.2"/>
+      <path d="M7.4 6.2h4"/>
+      <path d="M20.6 6.2h4"/>
+      <path d="M16 18.8v2.6c0 2.9 2.3 5.2 5.2 5.2s5.2-2.3 5.2-5.2"/>
+      <circle cx="26.4" cy="20.6" r="2"/>
+    </symbol>
+
+    <symbol id="icon-snapshot" viewBox="0 0 32 32">
+      <rect x="7" y="5.5" width="18" height="21" rx="3.2"/>
+      <path d="M11.4 11h9.2"/>
+      <path d="M11.4 15.5h7.2"/>
+      <path d="M11.4 20h4.2"/>
+      <path d="M20.2 21.8l2 2.1 4.4-5.1"/>
+    </symbol>
+
+    <symbol id="icon-link" viewBox="0 0 32 32">
+      <path d="M12.3 18.9 19.7 11"/>
+      <path d="M13.8 9.1l1-1.1c2.2-2.3 5.8-2.4 8.1-.2s2.4 5.8.2 8.1l-2 2.1c-2.2 2.3-5.8 2.4-8.1.2"/>
+      <path d="M18.2 22.9l-1 1.1c-2.2 2.3-5.8 2.4-8.1.2s-2.4-5.8-.2-8.1l2-2.1c2.2-2.3 5.8-2.4 8.1-.2"/>
+    </symbol>
+
+    <symbol id="icon-battery-small" viewBox="0 0 32 32">
+      <rect x="5.5" y="11.5" width="20" height="9" rx="3"/>
+      <path d="M26.5 14.4h1.8v3.2h-1.8"/>
+      <path d="M9 14.3h11.8"/>
+    </symbol>
+
+    <symbol id="icon-check" viewBox="0 0 32 32">
+      <path d="M7.2 16.8 13 22.3 24.8 9.7"/>
+    </symbol>
+  </svg>
+
+  <main class="page">
+    <section class="device" aria-label="Merry Hearing v5 minimal app prototype">
+      <div class="device-screen screen" data-scene="noisy">
+        <div class="dynamic-island" aria-hidden="true"></div>
+
+        <div class="status-bar">
+          <span class="status-time">9:41</span>
+          <div class="status-icons" aria-hidden="true">
+            <svg width="18" height="12" viewBox="0 0 18 12">
+              <rect x="1" y="7" width="3" height="4" rx="1" fill="currentColor" opacity=".38"/>
+              <rect x="5.7" y="5" width="3" height="6" rx="1" fill="currentColor" opacity=".55"/>
+              <rect x="10.4" y="2.8" width="3" height="8.2" rx="1" fill="currentColor" opacity=".76"/>
+              <rect x="15.1" y=".5" width="2" height="10.5" rx="1" fill="currentColor"/>
+            </svg>
+            <svg width="17" height="12" viewBox="0 0 17 12">
+              <path d="M8.5 9.2a1.6 1.6 0 1 0 0 3.2 1.6 1.6 0 0 0 0-3.2Z" fill="currentColor"/>
+              <path d="M5.7 7a4.2 4.2 0 0 1 5.6 0" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+              <path d="M2.8 4.4a8.2 8.2 0 0 1 11.4 0" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" opacity=".45"/>
+            </svg>
+            <svg width="25" height="12" viewBox="0 0 25 12">
+              <rect x=".7" y=".8" width="20.8" height="10.4" rx="3.4" fill="none" stroke="currentColor" opacity=".36"/>
+              <rect x="22.4" y="3.6" width="1.8" height="4.8" rx=".9" fill="currentColor" opacity=".42"/>
+              <rect x="2.5" y="2.6" width="15.8" height="6.8" rx="2.2" fill="currentColor"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="app">
+          <header class="app-header">
+            <div class="brand">
+              <span class="brand-mark">MERRY</span>
+              <span class="brand-sub">Hearing</span>
+            </div>
+            <div class="connection">
+              <span class="connection-dot"></span>
+              <span>已連接</span>
+            </div>
+          </header>
+
+          <section class="hero-copy" aria-live="polite">
+            <span class="scene-label" id="modeLabel">Algorithm Scene</span>
+            <h1 class="hero-title" id="heroTitle">吵雜被收進外圈</h1>
+            <p class="hero-text" id="heroText">Merry 偵測到背景升高，中央聲場保留前方語音，雜訊退到外圈。</p>
+          </section>
+
+          <section class="sound-field" aria-label="Merry sound bubble control">
+            <svg class="field-svg" viewBox="0 0 330 354" aria-hidden="true">
+              <defs>
+                <radialGradient id="merryFocusGradient" cx="50%" cy="20%" r="85%">
+                  <stop offset="0%" stop-color="#00A3AD" stop-opacity=".34"/>
+                  <stop offset="54%" stop-color="#0072CE" stop-opacity=".20"/>
+                  <stop offset="100%" stop-color="#582C83" stop-opacity=".18"/>
+                </radialGradient>
+              </defs>
+              <circle class="field-ring" cx="165" cy="172" r="112"/>
+              <circle class="field-ring" cx="165" cy="172" r="78"/>
+              <path class="field-axis" d="M165 42v264"/>
+              <path class="field-axis" d="M42 172h246"/>
+              <path class="focus-wedge" d="M165 172 L116 62 Q165 36 214 62 Z"/>
+              <path class="noise-wave" d="M44 233c24-18 46-18 69 0s45 18 68 0 45-18 69 0 30 13 38 8"/>
+              <path class="noise-wave" d="M69 254c17-12 33-12 50 0s34 12 51 0 34-12 51 0 25 9 36 3"/>
+            </svg>
+
+            <button class="scene-bubble scene-quiet" type="button" data-scene="quiet" aria-label="Algorithm scene quiet">
+              <svg class="ui-icon"><use href="#icon-quiet"></use></svg>
+              <span>安靜</span>
+            </button>
+
+            <button class="scene-bubble scene-noisy is-active" type="button" data-scene="noisy" aria-label="Algorithm scene noisy">
+              <svg class="ui-icon"><use href="#icon-noise"></use></svg>
+              <span>吵雜</span>
+            </button>
+
+            <button class="scene-bubble scene-conversation" type="button" data-scene="conversation" aria-label="Algorithm scene conversation">
+              <svg class="ui-icon"><use href="#icon-conversation"></use></svg>
+              <span>對話</span>
+            </button>
+
+            <button class="scene-bubble scene-care" type="button" data-scene="care" aria-label="Algorithm scene care">
+              <svg class="ui-icon"><use href="#icon-care"></use></svg>
+              <span>聽力師</span>
+            </button>
+
+            <div class="field-center" id="volumeOrb" role="slider" tabindex="0" aria-label="總音量，上下拖曳調整" aria-orientation="vertical" aria-valuemin="0" aria-valuemax="100" aria-valuenow="70">
+              <div class="reservoir" aria-hidden="true">
+                <div class="reservoir-half left"><div class="reservoir-water"></div></div>
+                <div class="reservoir-half right"><div class="reservoir-water"></div></div>
+              </div>
+              <svg class="channel-control" viewBox="0 0 148 148" aria-hidden="true">
+                <path class="channel-track" d="M 61.4 128.6 A 56 56 0 0 1 29.3 107.7" pathLength="100"/>
+                <path class="channel-track" d="M 86.6 128.6 A 56 56 0 0 0 118.7 107.7" pathLength="100"/>
+                <path id="leftArc" class="channel-progress left" d="M 61.4 128.6 A 56 56 0 0 1 29.3 107.7" pathLength="100"/>
+                <path id="rightArc" class="channel-progress right" d="M 86.6 128.6 A 56 56 0 0 0 118.7 107.7" pathLength="100"/>
+                <path class="channel-hit" data-channel="left" d="M 61.4 128.6 A 56 56 0 0 1 29.3 107.7" pathLength="100"/>
+                <path class="channel-hit" data-channel="right" d="M 86.6 128.6 A 56 56 0 0 0 118.7 107.7" pathLength="100"/>
+                <path class="channel-tick" d="M 42 112 l -6 7"/>
+                <path class="channel-tick" d="M 106 112 l 6 7"/>
+                <line class="master-track" x1="74" y1="28" x2="74" y2="102"/>
+                <line id="masterProgress" class="master-progress" x1="74" y1="50" x2="74" y2="102"/>
+                <line id="masterHit" class="master-hit" x1="74" y1="24" x2="74" y2="106"/>
+                <circle id="leftHandle" class="control-handle" cx="58" cy="124" r="9"/>
+                <circle id="rightHandle" class="control-handle" cx="98" cy="124" r="9"/>
+                <circle id="masterHandle" class="control-handle" cx="74" cy="50" r="9"/>
+                <text id="leftHandleLabel" class="control-label" x="58" y="124">L</text>
+                <text id="rightHandleLabel" class="control-label" x="98" y="124">R</text>
+                <text id="masterHandleLabel" class="control-label" x="74" y="50">C</text>
+              </svg>
+            </div>
+
+            <div class="field-note">
+              <svg class="ui-icon"><use href="#icon-noise"></use></svg>
+              <span id="noiseLevel">背景 42 dB</span>
+            </div>
+          </section>
+
+          <section class="session-summary" aria-label="Listening summary">
+            <div class="summary-cell">
+              <div class="summary-head">
+                <span>場景</span>
+                <svg class="ui-icon"><use href="#icon-focus"></use></svg>
+              </div>
+              <strong id="sceneSummary">吵雜</strong>
+            </div>
+            <div class="summary-cell battery-cell">
+              <div class="summary-head">
+                <span>電量</span>
+                <svg class="ui-icon"><use href="#icon-battery-small"></use></svg>
+              </div>
+              <strong>左耳 85%<br>右耳 92%</strong>
+            </div>
+            <div class="summary-cell">
+              <div class="summary-head">
+                <span>連線</span>
+                <svg class="ui-icon"><use href="#icon-link"></use></svg>
+              </div>
+              <strong>穩定</strong>
+            </div>
+          </section>
+
+          <button class="snapshot" type="button" id="snapshotBtn">
+            <svg class="ui-icon" id="snapshotIcon"><use href="#icon-snapshot"></use></svg>
+            <span id="snapshotText">快照給聽力師</span>
+          </button>
+
+          <div class="home-indicator" aria-hidden="true"></div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="poster-copy" aria-label="Design notes">
+      <span class="poster-kicker">v5 direction</span>
+      <h1>讓 v4 的演算法泡泡長進圓盤裡。</h1>
+      <p>
+        scene 泡泡保留 v4 的語言：安靜、吵雜、對話、聽力師，由 Merry 的演算法浮現。
+        中央圓盤則承接 v4 泡泡音量概念，L/R 弧線嵌在底部，各自調整左右聲道。
+      </p>
+
+      <div class="poster-principles">
+        <div class="principle">
+          <svg class="ui-icon"><use href="#icon-ear-aid"></use></svg>
+          <span>不使用 emoji，改用品牌可延伸的線條 icon。</span>
+        </div>
+        <div class="principle">
+          <svg class="ui-icon"><use href="#icon-focus"></use></svg>
+          <span>v4 scene 泡泡保留為演算法狀態，不做固定按鈕。</span>
+        </div>
+        <div class="principle">
+          <svg class="ui-icon"><use href="#icon-care"></use></svg>
+          <span>透明 focus zone 使用 Merry 藍、青、紫延展。</span>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <script>
+  const sceneData = {
+    quiet: {
+      label: "Algorithm Scene",
+      title: "安靜場景穩定",
+      text: "Merry 偵測到環境平穩，透明聲場縮小，只保留細節和舒適感。",
+      noise: "背景 34 dB",
+      summary: "安靜",
+      left: 60,
+      right: 62
+    },
+    noisy: {
+      label: "Algorithm Scene",
+      title: "吵雜被收進外圈",
+      text: "Merry 偵測到背景升高，中央聲場保留前方語音，雜訊退到外圈。",
+      noise: "背景 -12 dB",
+      summary: "吵雜",
+      left: 68,
+      right: 72
+    },
+    conversation: {
+      label: "Algorithm Scene",
+      title: "對話靠近中",
+      text: "前方語音被拉進主泡泡，背景維持在外圈，不需要切換頁面。",
+      noise: "背景 42 dB",
+      summary: "對話",
+      left: 70,
+      right: 72
+    },
+    care: {
+      label: "Care Signal",
+      title: "可整理給聽力師",
+      text: "Merry 將目前場景、音量與左右耳電量整理成快照，不打斷當下聆聽。",
+      noise: "快照待命",
+      summary: "聽力師",
+      left: 68,
+      right: 72
+    }
+  };
+
+  const screen = document.querySelector(".screen");
+  const soundField = document.querySelector(".sound-field");
+  const sceneBubbles = Array.from(document.querySelectorAll(".scene-bubble"));
+  const modeLabel = document.getElementById("modeLabel");
+  const heroTitle = document.getElementById("heroTitle");
+  const heroText = document.getElementById("heroText");
+  const noiseLevel = document.getElementById("noiseLevel");
+  const leftArc = document.getElementById("leftArc");
+  const rightArc = document.getElementById("rightArc");
+  const leftHandle = document.getElementById("leftHandle");
+  const rightHandle = document.getElementById("rightHandle");
+  const leftHandleLabel = document.getElementById("leftHandleLabel");
+  const rightHandleLabel = document.getElementById("rightHandleLabel");
+  const masterHandle = document.getElementById("masterHandle");
+  const masterHandleLabel = document.getElementById("masterHandleLabel");
+  const masterProgress = document.getElementById("masterProgress");
+  const masterHit = document.getElementById("masterHit");
+  const channelHits = Array.from(document.querySelectorAll(".channel-hit"));
+  const sceneSummary = document.getElementById("sceneSummary");
+  const volumeOrb = document.getElementById("volumeOrb");
+  const snapshotBtn = document.getElementById("snapshotBtn");
+  const snapshotText = document.getElementById("snapshotText");
+  const snapshotIcon = document.getElementById("snapshotIcon");
+
+  let leftValue = 68;
+  let rightValue = 72;
+  let dragStartY = 0;
+  let dragStartChannelValue = 70;
+  let draggingChannel = null;
+  let dragStartMasterValue = 70;
+  let draggingMaster = false;
+
+  function clamp(value, min, max) {
+    return Math.max(min, Math.min(max, value));
+  }
+
+  function averageVolume() {
+    return Math.round((leftValue + rightValue) / 2);
+  }
+
+  function renderVolumes() {
+    const avg = averageVolume();
+    volumeOrb.style.setProperty("--left-water", `${leftValue}%`);
+    volumeOrb.style.setProperty("--right-water", `${rightValue}%`);
+    volumeOrb.setAttribute("aria-valuenow", avg);
+    volumeOrb.setAttribute("aria-valuetext", `總音量 ${avg}，左耳 ${leftValue}，右耳 ${rightValue}`);
+    leftArc.style.strokeDasharray = `${leftValue} 100`;
+    rightArc.style.strokeDasharray = `${rightValue} 100`;
+    setChannelHandle("left", leftValue);
+    setChannelHandle("right", rightValue);
+    setMasterHandle(avg);
+  }
+
+  function setVolume(master) {
+    const target = clamp(Math.round(master), 0, 100);
+    const difference = clamp(rightValue - leftValue, -16, 16);
+    let nextLeft = target - difference / 2;
+    let nextRight = target + difference / 2;
+
+    if (nextLeft < 0) {
+      nextRight -= nextLeft;
+      nextLeft = 0;
+    }
+    if (nextRight > 100) {
+      nextLeft -= nextRight - 100;
+      nextRight = 100;
+    }
+
+    leftValue = clamp(Math.round(nextLeft), 0, 100);
+    rightValue = clamp(Math.round(nextRight), 0, 100);
+    renderVolumes();
+  }
+
+  function setChannel(channel, value) {
+    const next = clamp(Math.round(value), 0, 100);
+    if (channel === "left") leftValue = next;
+    if (channel === "right") rightValue = next;
+    renderVolumes();
+  }
+
+  function setChannelHandle(channel, value) {
+    const pct = clamp(value, 0, 100) / 100;
+    const radius = 56;
+    const cx = 74;
+    const cy = 74;
+    const start = channel === "left" ? 103 : 77;
+    const end = channel === "left" ? 143 : 37;
+    const angle = (start + (end - start) * pct) * Math.PI / 180;
+    const x = cx + Math.cos(angle) * radius;
+    const y = cy + Math.sin(angle) * radius;
+    const handle = channel === "left" ? leftHandle : rightHandle;
+    const label = channel === "left" ? leftHandleLabel : rightHandleLabel;
+    handle.setAttribute("cx", x.toFixed(1));
+    handle.setAttribute("cy", y.toFixed(1));
+    label.setAttribute("x", x.toFixed(1));
+    label.setAttribute("y", y.toFixed(1));
+  }
+
+  function setMasterHandle(value) {
+    const pct = clamp(value, 0, 100) / 100;
+    const y = 102 - pct * 74;
+    masterHandle.setAttribute("cy", y.toFixed(1));
+    masterHandleLabel.setAttribute("y", y.toFixed(1));
+    masterProgress.setAttribute("y1", y.toFixed(1));
+  }
+
+  function setScene(scene, options = {}) {
+    const data = sceneData[scene];
+    if (!data) return;
+    const preserveVolume = options.preserveVolume ?? true;
+
+    screen.dataset.scene = scene;
+    modeLabel.textContent = data.label;
+    heroTitle.textContent = data.title;
+    heroText.textContent = data.text;
+    noiseLevel.textContent = data.noise;
+    sceneSummary.textContent = data.summary;
+
+    if (!preserveVolume) {
+      leftValue = data.left;
+      rightValue = data.right;
+    }
+    renderVolumes();
+
+    sceneBubbles.forEach((button) => {
+      button.classList.toggle("is-active", button.dataset.scene === scene);
+    });
+
+    snapshotBtn.classList.remove("is-sent");
+    snapshotIcon.innerHTML = '<use href="#icon-snapshot"></use>';
+    snapshotText.textContent = "快照給聽力師";
+  }
+
+  sceneBubbles.forEach((button) => {
+    button.addEventListener("click", () => setScene(button.dataset.scene));
+  });
+
+  function startChannelDrag(channel, event, captureTarget) {
+    draggingChannel = channel;
+    dragStartY = event.clientY;
+    dragStartChannelValue = draggingChannel === "left" ? leftValue : rightValue;
+    volumeOrb.focus();
+    captureTarget.setPointerCapture(event.pointerId);
+    event.stopPropagation();
+    event.preventDefault();
+  }
+
+  function moveChannelDrag(event) {
+    if (!draggingChannel) return;
+    const delta = (dragStartY - event.clientY) * .52;
+    setChannel(draggingChannel, dragStartChannelValue + delta);
+    event.stopPropagation();
+    event.preventDefault();
+  }
+
+  function endChannelDrag() {
+    draggingChannel = null;
+  }
+
+  function startMasterDrag(event, captureTarget) {
+    draggingMaster = true;
+    dragStartY = event.clientY;
+    dragStartMasterValue = averageVolume();
+    volumeOrb.focus();
+    captureTarget.setPointerCapture(event.pointerId);
+    event.stopPropagation();
+    event.preventDefault();
+  }
+
+  function moveMasterDrag(event) {
+    if (!draggingMaster) return;
+    const rect = volumeOrb.getBoundingClientRect();
+    const delta = (dragStartY - event.clientY) * (100 / rect.height);
+    setVolume(dragStartMasterValue + delta);
+    event.stopPropagation();
+    event.preventDefault();
+  }
+
+  function endMasterDrag() {
+    draggingMaster = false;
+  }
+
+  channelHits.forEach((hit) => {
+    hit.addEventListener("pointerdown", (event) => {
+      startChannelDrag(hit.dataset.channel, event, hit);
+    });
+
+    hit.addEventListener("pointermove", moveChannelDrag);
+    hit.addEventListener("pointerup", endChannelDrag);
+    hit.addEventListener("pointercancel", endChannelDrag);
+  });
+
+  masterHit.addEventListener("pointerdown", (event) => {
+    startMasterDrag(event, masterHit);
+  });
+
+  masterHit.addEventListener("pointermove", moveMasterDrag);
+  masterHit.addEventListener("pointerup", endMasterDrag);
+  masterHit.addEventListener("pointercancel", endMasterDrag);
+
+  volumeOrb.addEventListener("keydown", (event) => {
+    const current = averageVolume();
+    if (event.key === "ArrowUp") {
+      setVolume(current + 2);
+      event.preventDefault();
+    }
+    if (event.key === "ArrowDown") {
+      setVolume(current - 2);
+      event.preventDefault();
+    }
+    if (event.key === "PageUp") {
+      setVolume(current + 8);
+      event.preventDefault();
+    }
+    if (event.key === "PageDown") {
+      setVolume(current - 8);
+      event.preventDefault();
+    }
+  });
+
+  const bubbleStates = sceneBubbles.map((el, index) => {
+    const angles = [-.22, Math.PI, -Math.PI / 2, Math.PI / 2];
+    const speeds = [
+      { x: .12, y: .17 },
+      { x: .16, y: -.11 },
+      { x: -.14, y: .12 },
+      { x: -.10, y: -.15 }
+    ];
+    return {
+      el,
+      x: 0,
+      y: 0,
+      vx: speeds[index].x,
+      vy: speeds[index].y,
+      angle: angles[index],
+      seeded: false
+    };
+  });
+
+  function seedSceneBubbles() {
+    const rect = soundField.getBoundingClientRect();
+    const cx = rect.width / 2;
+    const cy = rect.height / 2;
+    const radius = Math.min(rect.width / 2 - 36, 128);
+    bubbleStates.forEach((bubble) => {
+      bubble.x = cx + Math.cos(bubble.angle) * radius;
+      bubble.y = cy + Math.sin(bubble.angle) * radius;
+      bubble.seeded = true;
+    });
+  }
+
+  function reflectVelocity(bubble, nx, ny) {
+    const dot = bubble.vx * nx + bubble.vy * ny;
+    bubble.vx -= 2 * dot * nx;
+    bubble.vy -= 2 * dot * ny;
+  }
+
+  function stepSceneBubbles() {
+    const rect = soundField.getBoundingClientRect();
+    if (!rect.width || !rect.height) {
+      requestAnimationFrame(stepSceneBubbles);
+      return;
+    }
+
+    if (!bubbleStates.every((bubble) => bubble.seeded)) seedSceneBubbles();
+
+    const bubbleRadius = 35;
+    const cx = rect.width / 2;
+    const cy = rect.height / 2;
+    const innerRadius = volumeOrb.offsetWidth / 2 + bubbleRadius + 9;
+    const outerRadius = Math.min(rect.width / 2 - bubbleRadius - 2, innerRadius + 26);
+
+    bubbleStates.forEach((bubble) => {
+      bubble.x += bubble.vx;
+      bubble.y += bubble.vy;
+
+      const dx = bubble.x - cx;
+      const dy = bubble.y - cy;
+      const dist = Math.max(.001, Math.hypot(dx, dy));
+      const nx = dx / dist;
+      const ny = dy / dist;
+
+      if (dist < innerRadius) {
+        bubble.x = cx + nx * innerRadius;
+        bubble.y = cy + ny * innerRadius;
+        if (bubble.vx * nx + bubble.vy * ny < 0) reflectVelocity(bubble, nx, ny);
+      }
+
+      if (dist > outerRadius) {
+        bubble.x = cx + nx * outerRadius;
+        bubble.y = cy + ny * outerRadius;
+        if (bubble.vx * nx + bubble.vy * ny > 0) reflectVelocity(bubble, nx, ny);
+      }
+    });
+
+    for (let i = 0; i < bubbleStates.length; i += 1) {
+      for (let j = i + 1; j < bubbleStates.length; j += 1) {
+        const a = bubbleStates[i];
+        const b = bubbleStates[j];
+        const dx = b.x - a.x;
+        const dy = b.y - a.y;
+        const dist = Math.max(.001, Math.hypot(dx, dy));
+        const minDist = bubbleRadius * 2 + 4;
+        if (dist >= minDist) continue;
+
+        const nx = dx / dist;
+        const ny = dy / dist;
+        const overlap = (minDist - dist) / 2;
+        a.x -= nx * overlap;
+        a.y -= ny * overlap;
+        b.x += nx * overlap;
+        b.y += ny * overlap;
+
+        const av = a.vx * nx + a.vy * ny;
+        const bv = b.vx * nx + b.vy * ny;
+        const impulse = bv - av;
+        a.vx += impulse * nx;
+        a.vy += impulse * ny;
+        b.vx -= impulse * nx;
+        b.vy -= impulse * ny;
+      }
+    }
+
+    bubbleStates.forEach((bubble) => {
+      bubble.vx = clamp(bubble.vx, -.34, .34);
+      bubble.vy = clamp(bubble.vy, -.34, .34);
+      bubble.el.style.setProperty("--bubble-x", `${(bubble.x - bubbleRadius).toFixed(1)}px`);
+      bubble.el.style.setProperty("--bubble-y", `${(bubble.y - bubbleRadius).toFixed(1)}px`);
+    });
+
+    requestAnimationFrame(stepSceneBubbles);
+  }
+
+  window.addEventListener("resize", () => {
+    bubbleStates.forEach((bubble) => { bubble.seeded = false; });
+  });
+
+  snapshotBtn.addEventListener("click", () => {
+    snapshotBtn.classList.add("is-sent");
+    snapshotIcon.innerHTML = '<use href="#icon-check"></use>';
+    snapshotText.textContent = "快照已送出";
+  });
+
+  setScene("noisy", { preserveVolume: false });
+  requestAnimationFrame(stepSceneBubbles);
+  </script>
+</body>
+</html>
